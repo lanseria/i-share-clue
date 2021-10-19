@@ -1,7 +1,8 @@
 interface R<T> {
-  code: number;
-  data: T;
-  msg: string;
+  errorType?: string;
+  payload: T;
+  message?: string;
+  timestamp: string;
 }
 
 interface PageBase {

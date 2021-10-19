@@ -10,7 +10,7 @@ import { getDictAllMapReq } from "/@/api/Admin/Dict";
 
 interface UserState {
   userLogin: boolean;
-  userToken: Nullable<UserTokenVO>;
+  userToken: Nullable<AuthTokenVO>;
   userInfoLogin: Nullable<UserInfoLoginVO>;
   // menu
   menus: Nullable<MenuTree[]>;
@@ -42,7 +42,7 @@ export const useUserStore = defineStore({
     }
   },
   actions: {
-    setUserToken(userToken: Nullable<UserTokenVO>) {
+    setUserToken(userToken: Nullable<AuthTokenVO>) {
       this.userToken = userToken;
       setUserToken(this.userToken);
     },
@@ -88,12 +88,13 @@ export const useUserStore = defineStore({
       //   param: ["password"]
       // });
       const body = await loginReq(data);
-      this.setUserToken(body);
+      this.setUserToken(body.payload.token);
+      console.log(body);
       await router.push("/");
     },
     async smsLogin(data: SmsLoginVO) {
       const body = await smsLoginReq(data);
-      this.setUserToken(body);
+      this.setUserToken(body.payload.token);
       await router.push("/");
     },
     async logout(redirect?: string) {

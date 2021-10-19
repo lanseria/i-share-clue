@@ -17,8 +17,9 @@ const commonConfig = {
 const requestInterceptors = (config: AxiosRequestConfig) => {
   // 请求之前处理config
   const userToken = getUserToken();
-  if (userToken?.access_token) {
-    config.headers["Authorization"] = "Bearer " + userToken.access_token; // token
+  if (userToken?.accessToken) {
+    config.headers["Authorization"] =
+      userToken.tokenType + " " + userToken.accessToken; // token
   }
   if (config.method === "get") {
     config.paramsSerializer = function (params) {

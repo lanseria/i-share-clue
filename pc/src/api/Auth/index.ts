@@ -3,7 +3,7 @@ import { SmsLoginDTO } from "/@/types/Admin/User/dto";
 import { api, initalAppendForm, initalHeader } from "./config";
 
 export const loginReq = (data: LoginVO) => {
-  return r.request<UserTokenVO>({
+  return r.request<R<AuthLoginVO>>({
     url: api.login,
     method: "POST",
     headers: initalHeader,
@@ -17,7 +17,7 @@ export const loginReq = (data: LoginVO) => {
 
 export const smsLoginReq = (data: SmsLoginVO) => {
   const smsLoginDto = new SmsLoginDTO(data);
-  return r.request<UserTokenVO>({
+  return r.request<R<AuthLoginVO>>({
     url: api.smsLogin,
     headers: initalHeader,
     method: "POST",

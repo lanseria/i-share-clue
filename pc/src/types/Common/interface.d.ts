@@ -50,9 +50,6 @@ interface CommonTree extends IObj {
   children: CommonTree[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type EmitType = (event: string, ...args: any[]) => void;
-
 interface DateCell {
   type: string;
   date: Date;
