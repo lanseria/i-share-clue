@@ -16,6 +16,7 @@ import { UsersRepository } from '@modules/admin/access/users/users.repository';
 import { UserMapper } from '@admin/access/users/users.mapper';
 import { TokenService } from './token.service';
 import { HashHelper } from '@helpers';
+import { BadPasswordException } from '@common/exeptions/bad-password.exception';
 
 @Injectable()
 export class AuthService {
@@ -45,7 +46,7 @@ export class AuthService {
     const passwordMatch = await HashHelper.compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new InvalidCredentialsException();
+      throw new BadPasswordException();
     }
     if (user.status == UserStatus.Blocked) {
       throw new DisabledUserException(ErrorType.BlockedUser);

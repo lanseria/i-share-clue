@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": ["esnext", "dom"],
+    "baseUrl": ".",
+    "types": ["vite/client", "vite-plugin-pwa/client", "node"],
+    "typeRoots": ["./node_modules/@types/", "./src/types"],
+    "paths": {
+      "/@/*": ["src/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+
+    "src/types/**/*.d.ts",
+    "src/types/**/*.ts",
+
+    "build/**/*.ts",
+    "build/**/*.d.ts",
+
+    "mock/**/*.ts",
+
+    "vite.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.js"]
+}

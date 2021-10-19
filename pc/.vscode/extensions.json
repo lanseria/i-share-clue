@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "mikestead.dotenv",
+    "wayou.vscode-todo-highlight",
+    "eamodio.gitlens",
+    "eg2.vscode-npm-script",
+    "christian-kohler.npm-intellisense",
+    "xabikos.javascriptsnippets",
+    "johnsoncodehk.volar"
+  ]
+}
