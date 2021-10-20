@@ -27,10 +27,10 @@ export class AuthController {
     private tokenService: TokenService,
   ) {}
 
-  @ApiOperation({ description: 'User authentication' })
-  @ApiOkResponse({ description: 'Successfully authenticated user' })
-  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
-  @ApiInternalServerErrorResponse({ description: 'Server error' })
+  @ApiOperation({ description: '用户鉴权登录' })
+  @ApiOkResponse({ description: '成功鉴权用户' })
+  @ApiUnauthorizedResponse({ description: '非法登录' })
+  @ApiInternalServerErrorResponse({ description: '服务器错误' })
   @Post('/login')
   login(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsRequestDto,
@@ -38,10 +38,10 @@ export class AuthController {
     return this.authService.login(authCredentialsDto);
   }
 
-  @ApiOperation({ description: 'Renew access in the application' })
-  @ApiOkResponse({ description: 'token successfully renewed' })
-  @ApiUnauthorizedResponse({ description: 'Refresh token invalid or expired' })
-  @ApiInternalServerErrorResponse({ description: 'Server error' })
+  @ApiOperation({ description: '在应用程序中更新访问' })
+  @ApiOkResponse({ description: '令牌成功续期' })
+  @ApiUnauthorizedResponse({ description: '刷新令牌无效或过期' })
+  @ApiInternalServerErrorResponse({ description: '服务器错误' })
   @Post('/token/refresh')
   async getNewToken(
     @Body(ValidationPipe) refreshTokenDto: RefreshTokenRequestDto,
@@ -50,9 +50,9 @@ export class AuthController {
     return this.tokenService.generateRefreshToken(refreshToken);
   }
 
-  @ApiOperation({ description: 'Validate token' })
-  @ApiOkResponse({ description: 'Validation was successful' })
-  @ApiInternalServerErrorResponse({ description: 'Server error' })
+  @ApiOperation({ description: '验证令牌' })
+  @ApiOkResponse({ description: '验证成功' })
+  @ApiInternalServerErrorResponse({ description: '服务器错误' })
   @Post('/token/validate')
   async validateToken(
     @Body(ValidationPipe) validateToken: ValidateTokenRequestDto,

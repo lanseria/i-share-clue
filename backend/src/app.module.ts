@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AdminModule } from '@admin/admin.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { DatabaseModule } from '@database/database.module';
+import { MinioClientModule } from './modules/minio-client/minio-client.module';
+import { FileUploadModule } from './modules/file-upload/file-upload.module';
 
 @Module({
   imports: [
@@ -12,6 +14,8 @@ import { DatabaseModule } from '@database/database.module';
     DatabaseModule,
     AdminModule,
     AuthModule,
+    MinioClientModule,
+    FileUploadModule,
   ],
 })
 export class AppModule {
