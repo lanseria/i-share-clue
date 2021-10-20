@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "name": "PC前端",
+      "path": "./pc"
+    },
+    {
+      "name": "后端服务",
+      "path": "./backend"
+    }
+  ],
+  "settings": {}
+}

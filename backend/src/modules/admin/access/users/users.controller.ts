@@ -49,7 +49,7 @@ import { UserEntity } from './user.entity';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @ApiOperation({ description: 'Get a paginated user list' })
+  @ApiOperation({ description: '获得一个分页的用户列表' })
   @ApiPaginatedResponse(UserResponseDto)
   @ApiQuery({
     name: 'search',
@@ -69,7 +69,7 @@ export class UsersController {
     return this.usersService.getUsers(pagination);
   }
 
-  @ApiOperation({ description: 'Get user by id' })
+  @ApiOperation({ description: '通过ID获取用户' })
   @ApiGlobalResponse(UserResponseDto)
   @Permissions(
     'admin.access.users.read',
@@ -83,9 +83,9 @@ export class UsersController {
     return this.usersService.getUserById(id);
   }
 
-  @ApiOperation({ description: 'Create new user' })
+  @ApiOperation({ description: '创建新用户' })
   @ApiGlobalResponse(UserResponseDto)
-  @ApiConflictResponse({ description: 'User already exists' })
+  @ApiConflictResponse({ description: '用户已经存在' })
   @ApiGlobalResponse(UserResponseDto)
   @Permissions('admin.access.users.create')
   @Post()
@@ -95,9 +95,9 @@ export class UsersController {
     return this.usersService.createUser(UserDto);
   }
 
-  @ApiOperation({ description: 'Update user by id' })
+  @ApiOperation({ description: '按ID更新用户' })
   @ApiGlobalResponse(UserResponseDto)
-  @ApiConflictResponse({ description: 'User already exists' })
+  @ApiConflictResponse({ description: '用户已经存在' })
   @Permissions('admin.access.users.update')
   @Put('/:id')
   public updateUser(
@@ -107,7 +107,7 @@ export class UsersController {
     return this.usersService.updateUser(id, UserDto);
   }
 
-  @ApiOperation({ description: 'Change user password' })
+  @ApiOperation({ description: '更改用户密码' })
   @ApiGlobalResponse(UserResponseDto)
   @Post('/change/password')
   changePassword(

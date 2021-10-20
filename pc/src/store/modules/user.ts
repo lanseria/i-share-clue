@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { encryption } from "/@/utils/encrypt";
-import { loginReq, logoutReq, smsLoginReq } from "/@/api/Auth";
+// import { encryption } from "/@/utils/encrypt";
+import { loginReq, smsLoginReq } from "/@/api/Auth";
 import { setUserToken } from "/@/utils/auth";
 import { userInfoReq } from "/@/api/Admin/User";
 import { getMenuListReq } from "/@/api/Admin/Menu";
@@ -98,26 +98,19 @@ export const useUserStore = defineStore({
       await router.push("/");
     },
     async logout(redirect?: string) {
-      const { data, msg, code } = await logoutReq();
-      if (data) {
-        console.log("用户登出成功");
-        // 不管有没有请求成功都是清空用户数据
-        this.removeAll();
-        await router.push({
-          name: "Login",
-          ...(redirect
-            ? {
-                query: {
-                  redirect
-                }
+      // 不管有没有请求成功都是清空用户数据
+      this.removeAll();
+      await router.push({
+        name: "Login",
+        ...(redirect
+          ? {
+              query: {
+                redirect
               }
-            : {})
-        });
-        return true;
-      } else {
-        console.error(msg, code, data);
-        return false;
-      }
+            }
+          : {})
+      });
+      return true;
     },
     async gSetUserInfo() {
       const body = await userInfoReq();
