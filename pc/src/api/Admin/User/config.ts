@@ -1,5 +1,5 @@
 import { modulePrefix } from "../config";
-const prefix = `${modulePrefix}/user`;
+const prefix = `${modulePrefix}/users`;
 
 const api = {
   info: `${prefix}/info`, // GET

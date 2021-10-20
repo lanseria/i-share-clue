@@ -34,11 +34,11 @@ export const useUserStore = defineStore({
     dataDict: new Map()
   }),
   getters: {
-    getRoles(): number[] {
+    getRoles(): RoleResponseVo[] {
       return this.userInfoLogin?.roles ?? [];
     },
-    getUserInfo(): Nullable<UserInfoVO> {
-      return this.userInfoLogin?.sysUser ?? null;
+    getUserInfo(): Nullable<UserInfoLoginVO> {
+      return this.userInfoLogin ?? null;
     }
   },
   actions: {
@@ -114,7 +114,7 @@ export const useUserStore = defineStore({
     },
     async gSetUserInfo() {
       const body = await userInfoReq();
-      this.setUserInfo(body.data);
+      this.setUserInfo(body.payload);
       this.userLogin = true;
     },
     async gSetMenusModules() {
@@ -127,14 +127,14 @@ export const useUserStore = defineStore({
     },
     async getAll() {
       await this.gSetUserInfo();
-      await this.gSetMenusModules();
-      await this.gSetDataDict();
+      // await this.gSetMenusModules();
+      // await this.gSetDataDict();
     },
     removeAll() {
       this.setUserToken(null);
       this.setUserInfo(null);
-      this.setMenusModules(null);
-      this.setDataDict(null);
+      // this.setMenusModules(null);
+      // this.setDataDict(null);
     }
   }
 });

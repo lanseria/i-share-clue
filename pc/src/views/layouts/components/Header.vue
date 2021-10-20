@@ -15,7 +15,7 @@
       >
         <n-space align="center" style="height: 42px">
           <n-avatar :src="userInfo?.avatar" />
-          <n-button text :keyboard="false">{{ userInfo?.realName }}</n-button>
+          <n-button text :keyboard="false">{{ userInfo?.firstName }}</n-button>
         </n-space>
       </n-dropdown>
     </div>

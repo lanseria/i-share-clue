@@ -16,6 +16,9 @@ export class UserResponseDto {
   @ApiProperty()
   lastName: string;
 
+  @ApiProperty()
+  avatar: string;
+
   @ApiProperty({ type: [RoleResponseDto] })
   roles?: RoleResponseDto[];
 

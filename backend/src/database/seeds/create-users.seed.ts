@@ -12,11 +12,14 @@ const users = [
     firstName: 'Admin',
     lastName: 'Admin',
     password: 'Hello123',
+    avatar:
+      'https://wx3.sinaimg.cn/mw2000/bcbbf95bly8gvgek5ma9bj20n00n0769.jpg',
     username: 'Admin',
     isSuperUser: true,
     status: UserStatus.Active,
   },
 ];
+
 const rolePermissions = {
   Developer: [
     { slug: 'admin.access.users.read', description: 'Read users' },

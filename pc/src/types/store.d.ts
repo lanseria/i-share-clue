@@ -49,13 +49,42 @@ interface UserInfoVO {
   handle: string;
 }
 
+interface RoleResponseVo {
+  id: number;
+
+  name: string;
+
+  permissions: PermissionResponseVo[];
+
+  active: boolean;
+}
+
+interface PermissionResponseVo {
+  id: number;
+
+  slug: string;
+
+  description: string;
+
+  active: boolean;
+}
+
 interface UserInfoLoginVO {
-  authentication: boolean;
-  identity: string;
-  // TODO: 需要优化{id,name}
-  orgs: OrgDictItemVO[];
-  permissions: string[];
-  roles: number[];
-  // TODO: 改成 userInfo 字段更好
-  sysUser: UserInfoVO;
+  id: string;
+
+  username: string;
+
+  firstName: string;
+
+  lastName: string;
+
+  avatar: string;
+
+  roles?: RoleResponseVo[];
+
+  permissions?: PermissionResponseVo[];
+
+  isSuperUser: boolean;
+
+  status: string;
 }

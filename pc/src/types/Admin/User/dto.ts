@@ -1,5 +1,11 @@
 import { CommonDTO } from "../../Common/dto";
 
+export enum UserStatus {
+  Active = "active",
+  Blocked = "blocked",
+  Inactive = "inactive"
+}
+
 export class LoginDTO implements LoginVO {
   username = "";
   password = "";

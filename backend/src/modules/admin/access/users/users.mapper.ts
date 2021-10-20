@@ -32,6 +32,7 @@ export class UserMapper {
     dto.username = entity.username;
     dto.firstName = entity.firstName;
     dto.lastName = entity.lastName;
+    dto.avatar = entity.avatar;
     dto.permissions = await Promise.all(
       (await entity.permissions).map(PermissionMapper.toDto),
     );

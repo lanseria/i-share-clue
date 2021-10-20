@@ -82,7 +82,7 @@ import {
   NDynamicTags
 } from "naive-ui";
 import { useImpPageLoad } from "/@/hooks/useLoad";
-import { editDetailReq, informationReq } from "/@/api/Admin/User";
+import { editDetailReq, userInfoReq } from "/@/api/Admin/User";
 import { UserDTO } from "/@/types/Admin/User/dto";
 import { useImpSubmit } from "/@/hooks/useForm";
 import ImageUpload from "/@/components/common/ImageUpload.vue";
@@ -109,7 +109,7 @@ export default defineComponent({
     // method
     const pageAction = async () => {
       try {
-        const { data } = await informationReq();
+        const { data } = await userInfoReq();
         modelRef.value.mergeProperties(data);
       } catch (error) {
         throw new Error(error);

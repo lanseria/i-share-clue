@@ -8,6 +8,7 @@ import {
   Body,
   Get,
   Put,
+  Logger,
 } from '@nestjs/common';
 import {
   ApiConflictResponse,
@@ -49,6 +50,14 @@ import { UserEntity } from './user.entity';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @ApiOperation({ description: '获取本人信息' })
+  @ApiGlobalResponse(UserResponseDto)
+  @Get('/info')
+  public getInfo(@CurrentUser() user: UserEntity): Promise<UserResponseDto> {
+    Logger.log(user);
+    return this.usersService.getUserById(user.id);
+  }
+
   @ApiOperation({ description: '获得一个分页的用户列表' })
   @ApiPaginatedResponse(UserResponseDto)
   @ApiQuery({
@@ -80,6 +89,7 @@ export class UsersController {
   public getUserById(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<UserResponseDto> {
+    Logger.log(id);
     return this.usersService.getUserById(id);
   }
 
@@ -110,10 +120,11 @@ export class UsersController {
   @ApiOperation({ description: '更改用户密码' })
   @ApiGlobalResponse(UserResponseDto)
   @Post('/change/password')
-  changePassword(
+  public changePassword(
     @Body(ValidationPipe) changePassword: ChangePasswordRequestDto,
     @CurrentUser() user: UserEntity,
   ): Promise<UserResponseDto> {
+    Logger.log(user);
     return this.usersService.changePassword(changePassword, user.id);
   }
 }

@@ -1,3 +1,3 @@
-const modulePrefix = "/admin";
+const modulePrefix = "/access";
 
 export { modulePrefix };
