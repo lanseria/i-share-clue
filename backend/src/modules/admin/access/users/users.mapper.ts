@@ -63,17 +63,19 @@ export class UserMapper {
 
   public static toUpdateEntity(
     entity: UserEntity,
-    dto: UpdateUserRequestDto,
+    dto: Partial<UpdateUserRequestDto>,
   ): UserEntity {
     entity.username = dto.username;
     entity.firstName = dto.firstName;
     entity.lastName = dto.lastName;
-    entity.permissions = Promise.resolve(
-      dto.permissions.map((id) => new PermissionEntity({ id })),
-    );
-    entity.roles = Promise.resolve(
-      dto.roles.map((id) => new RoleEntity({ id })),
-    );
+    dto.permissions &&
+      (entity.permissions = Promise.resolve(
+        dto.permissions.map((id) => new PermissionEntity({ id })),
+      ));
+    dto.roles &&
+      (entity.roles = Promise.resolve(
+        dto.roles.map((id) => new RoleEntity({ id })),
+      ));
     entity.status = dto.status;
     return entity;
   }

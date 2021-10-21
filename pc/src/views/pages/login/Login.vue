@@ -16,7 +16,7 @@
     <n-form-item label="密码" path="password">
       <n-input
         type="password"
-        show-password-toggle
+        showPasswordOn="click"
         placeholder="请输入密码"
         :maxlength="16"
         v-model:value="modelRef.password"

@@ -23,6 +23,7 @@ import { HashHelper, Pagination } from '@helpers';
 import { DBErrorCode } from '@common/enums';
 import { UserMapper } from './users.mapper';
 import { TimeoutError } from 'rxjs';
+import { UpdateUserInfoDto } from './dtos/update-user-info.dto';
 
 @Injectable()
 export class UsersService {
@@ -112,12 +113,12 @@ export class UsersService {
   /**
    * Update User by id
    * @param id {string}
-   * @param userDto {UpdateUserRequestDto}
+   * @param userDto {Partial<UpdateUserRequestDto>}
    * @returns {Promise<UserResponseDto>}
    */
   public async updateUser(
     id: string,
-    userDto: UpdateUserRequestDto,
+    userDto: Partial<UpdateUserRequestDto>,
   ): Promise<UserResponseDto> {
     let userEntity = await this.usersRepository.findOne(id);
     if (!userEntity) {

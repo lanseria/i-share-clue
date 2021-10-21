@@ -15,7 +15,7 @@
       >
         <n-space align="center" style="height: 42px">
           <n-avatar :src="userInfo?.avatar" />
-          <n-button text :keyboard="false">{{ userInfo?.firstName }}</n-button>
+          <n-button text :keyboard="false">{{ realName }}</n-button>
         </n-space>
       </n-dropdown>
     </div>
@@ -53,6 +53,11 @@ export default {
     // computed
     const userInfo = computed(() => {
       return userStore.getUserInfo;
+    });
+    const realName = computed(() => {
+      return `${userInfo.value?.firstName || ""}${
+        userInfo.value?.lastName || ""
+      }`;
     });
     // method
     const handleLogoClick = () => {
@@ -106,6 +111,7 @@ export default {
       ],
       // computed
       userInfo,
+      realName,
       // method
       handleLogoClick,
       handleSelect

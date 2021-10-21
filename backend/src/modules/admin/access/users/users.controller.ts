@@ -39,6 +39,7 @@ import { PaginationRequest } from '@common/interfaces';
 import { PaginationResponseDto } from '@common/dtos';
 import { UsersService } from './users.service';
 import { UserEntity } from './user.entity';
+import { UpdateUserInfoDto } from './dtos/update-user-info.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth(TOKEN_NAME)
@@ -50,12 +51,21 @@ import { UserEntity } from './user.entity';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @ApiOperation({ description: '获取本人信息' })
+  @ApiOperation({ description: '获取本人用户信息' })
   @ApiGlobalResponse(UserResponseDto)
   @Get('/info')
   public getInfo(@CurrentUser() user: UserEntity): Promise<UserResponseDto> {
-    Logger.log(user);
     return this.usersService.getUserById(user.id);
+  }
+
+  @ApiOperation({ description: '更新本人用户信息' })
+  @ApiGlobalResponse(UserResponseDto)
+  @Put('/info')
+  public updateInfo(
+    @CurrentUser() user: UserEntity,
+    @Body(ValidationPipe) UserDto: UpdateUserInfoDto,
+  ): Promise<UserResponseDto> {
+    return this.usersService.updateUser(user.id, UserDto);
   }
 
   @ApiOperation({ description: '获得一个分页的用户列表' })

@@ -11,23 +11,13 @@ export const userInfoReq = () => {
 };
 
 /**
- * 复杂用户信息获取
- */
-export const informationReq = () => {
-  return r.request<R<UserVO>>({
-    url: api.information,
-    method: "GET"
-  });
-};
-
-/**
  * 更新用户信息
  * @param data
  */
-export const editDetailReq = (data: UserVO) => {
-  return r.request<R<boolean>>({
-    url: api.editDetail,
-    method: "POST",
+export const editDetailReq = (data: UserInfoVO) => {
+  return r.request<R<UserInfoLoginVO>>({
+    url: api.info,
+    method: "PUT",
     data
   });
 };

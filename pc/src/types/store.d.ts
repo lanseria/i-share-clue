@@ -24,31 +24,6 @@ interface OrgDictItemVO {
   userId?: number;
 }
 
-interface UserInfoVO {
-  assetOrg: number;
-  avatar: string;
-  createTime: string;
-  deptId: number;
-  isAdmin: number;
-  lockFlag: string;
-  orgId: number;
-  orgLogo: string;
-  orgName: string;
-  password: string;
-  phone: string;
-  qqOpenid: string;
-  realName: string;
-  safePassword: string;
-  tenantId: number;
-  updateTime: string;
-  userId: number;
-  username: string;
-  weCanSecret: string;
-  wxUnionid: string;
-  // 0已办理人力入职 1未办理入职
-  handle: string;
-}
-
 interface RoleResponseVo {
   id: number;
 
@@ -69,7 +44,7 @@ interface PermissionResponseVo {
   active: boolean;
 }
 
-interface UserInfoLoginVO {
+interface UserInfoVO {
   id: string;
 
   username: string;
@@ -80,11 +55,13 @@ interface UserInfoLoginVO {
 
   avatar: string;
 
+  status: string;
+}
+
+interface UserInfoLoginVO extends UserInfoVO {
   roles?: RoleResponseVo[];
 
   permissions?: PermissionResponseVo[];
 
   isSuperUser: boolean;
-
-  status: string;
 }
