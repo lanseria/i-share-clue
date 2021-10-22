@@ -36,7 +36,7 @@ import { defineComponent, ref } from "vue";
 import { NUpload, NButton, NSpace } from "naive-ui";
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
-import { postFileUploadAvatarReq } from "/@/api/Admin/File";
+import { postFileUploadAvatarReq } from "/@/api/File";
 export default defineComponent({
   props: {
     aspectRatio: {
@@ -85,15 +85,15 @@ export default defineComponent({
       canvas.toBlob(async blob => {
         const formData = new FormData();
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        formData.append("file", blob!, fileName);
+        formData.append("image", blob!, fileName);
         // const img = window.URL.createObjectURL(blob);
         // console.log(img);
-        const { code, msg, data } = await postFileUploadAvatarReq(formData);
-        if (code) {
-          window.$message.success(msg);
+        const { payload, message } = await postFileUploadAvatarReq(formData);
+        if (!payload) {
+          window.$message.success(message!);
         } else {
           window.$message.success("上传成功");
-          emit("img-url", data.url);
+          emit("img-url", `//${payload.image_url}`);
           close();
         }
       });

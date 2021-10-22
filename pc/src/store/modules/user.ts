@@ -117,14 +117,14 @@ export const useUserStore = defineStore({
       this.setUserInfo(body.payload);
       this.userLogin = true;
     },
-    async gSetMenusModules() {
-      const { data } = await getMenuListReq();
-      this.setMenusModules(data);
-    },
-    async gSetDataDict() {
-      const body = await getDictAllMapReq();
-      this.setDataDict(body.data);
-    },
+    // async gSetMenusModules() {
+    //   const { data } = await getMenuListReq();
+    //   this.setMenusModules(data);
+    // },
+    // async gSetDataDict() {
+    //   const body = await getDictAllMapReq();
+    //   this.setDataDict(body.data);
+    // },
     async getAll() {
       await this.gSetUserInfo();
       // await this.gSetMenusModules();

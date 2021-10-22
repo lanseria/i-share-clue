@@ -18,6 +18,7 @@ export class UserMapper {
     dto.username = entity.username;
     dto.firstName = entity.firstName;
     dto.lastName = entity.lastName;
+    dto.avatar = entity.avatar;
     dto.status = entity.status;
     dto.isSuperUser = entity.isSuperUser;
     return dto;
@@ -68,6 +69,7 @@ export class UserMapper {
     entity.username = dto.username;
     entity.firstName = dto.firstName;
     entity.lastName = dto.lastName;
+    entity.avatar = dto.avatar;
     dto.permissions &&
       (entity.permissions = Promise.resolve(
         dto.permissions.map((id) => new PermissionEntity({ id })),

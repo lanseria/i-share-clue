@@ -2,9 +2,8 @@ import r from "/@/router/axios";
 import { api } from "./config";
 
 interface FileUploadResponse {
-  bucketName: string;
-  fileName: string;
-  url: string;
+  message: string;
+  image_url: string;
 }
 
 export const postFileUploadAvatarReq = (data: FormData) => {
