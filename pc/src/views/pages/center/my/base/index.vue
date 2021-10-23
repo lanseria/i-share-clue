@@ -17,7 +17,7 @@
       style="margin-top: 40px"
     >
       <n-grid :cols="24" :x-gap="24">
-        <n-form-item-gi :span="12" label="用户名" path="username">
+        <n-form-item-gi :span="24" label="用户名" path="username">
           <n-input
             placeholder="请输入用户名"
             disabled

@@ -27,6 +27,7 @@
     "upi": "yarn upgrade-interactive"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@vicons/ionicons5": "^0.10.0",
     "@vueuse/core": "^4.1.0",
     "axios": "^0.21.1",

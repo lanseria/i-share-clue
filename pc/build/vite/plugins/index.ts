@@ -18,7 +18,10 @@ export function createVitePlugins(
   const isMock = mode.endsWith("mock");
   const fontIconUUID = env.VITE_FONTICONUUID;
   const commonCss: string[] = [];
-  const commonJs = [`https://at.alicdn.com/t/${fontIconUUID}.js`];
+  const commonJs = [
+    `https://at.alicdn.com/t/${fontIconUUID}.js`
+    // "https://webapi.amap.com/loader.js"
+  ];
   let prodMock = true;
   const vitePlugins: (Plugin | Plugin[])[] = [
     // have to

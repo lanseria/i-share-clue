@@ -6,11 +6,12 @@ import { PageEnum } from "/@/enums/pageEnum";
 import { CenterRoute } from "/@/views/pages/center/route";
 import { LOGIN_NAME, REGISTER_NAME, ROOT_NAME } from "../constant";
 import { noAuthMetaFunc } from "/@/utils/route";
+import { DashboardRoute } from "/@/views/pages/dashboard/route";
 
 export const RootRoute: AppRouteRecordRaw = {
   path: "/",
   name: ROOT_NAME,
-  redirect: PageEnum.BASE_HOME,
+  redirect: PageEnum.DASHBOARD_PAGE,
   meta: noAuthMetaFunc(ROOT_NAME)
 };
 
@@ -40,6 +41,7 @@ export const LoginRoute: AppRouteRecordRaw = {
 export const basicRoutes = [
   LoginRoute,
   CenterRoute,
+  DashboardRoute,
   RootRoute,
   PAGE_NOT_FOUND_ROUTE
 ];

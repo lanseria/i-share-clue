@@ -97,7 +97,7 @@ export default {
       // const
       options: [
         {
-          label: "赋能台",
+          label: "寻找地图",
           key: "dashboard"
         },
         {

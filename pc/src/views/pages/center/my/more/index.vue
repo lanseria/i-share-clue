@@ -37,8 +37,8 @@
 import { defineComponent, onMounted, ref } from "vue";
 import { NGrid, NButton, NFormItemGi, NForm, NInput } from "naive-ui";
 import { useImpPageLoad } from "/@/hooks/useLoad";
-import { editDetailReq, informationReq } from "/@/api/Admin/User";
-import { UserDTO } from "/@/types/Admin/User/dto";
+import { editDetailReq, userInfoReq } from "/@/api/Admin/User";
+import { UserInfoDTO } from "/@/types/Admin/User/dto";
 import { useImpSubmit } from "/@/hooks/useForm";
 export default defineComponent({
   components: {
@@ -55,11 +55,11 @@ export default defineComponent({
     // refs
     const FormRef = ref();
     // ref
-    const modelRef = ref(new UserDTO());
+    const modelRef = ref(new UserInfoDTO());
     // method
     const pageAction = async () => {
       try {
-        const { data } = await informationReq();
+        const { data } = await userInfoReq();
         modelRef.value.mergeProperties(data);
       } catch (error) {
         throw new Error(error);

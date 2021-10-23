@@ -17,5 +17,6 @@ interface ImportMetaEnv {
   VITE_BASEURL: string;
   VITE_HOST: string;
   VITE_FONTICONUUID: string;
+  VITE_AMAP_KEY: string;
   // 更多环境变量...
 }
