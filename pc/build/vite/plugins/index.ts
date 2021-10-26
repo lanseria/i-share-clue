@@ -32,7 +32,7 @@ export function createVitePlugins(
     html({
       inject: {
         injectData: {
-          title: "企业智慧赋能平台",
+          title: "爱舟山",
           css: [...commonCss],
           js: [...commonJs]
         }

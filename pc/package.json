@@ -1,19 +1,19 @@
 {
-  "name": "imp-core-ui",
+  "name": "i-zhoushan-ui",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lanseria/imp-core-ui.git"
+    "url": "git+https://github.com/Lanseria/i-zhoushan.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Lanseria/imp-core-ui/issues"
+    "url": "https://github.com/Lanseria/i-zhoushan/issues"
   },
-  "homepage": "https://github.com/Lanseria/imp-core-ui#readme",
+  "homepage": "https://github.com/Lanseria/i-zhoushan#readme",
   "scripts": {
     "dev": "vite",
     "dev:mock": "vite --mode devmock",

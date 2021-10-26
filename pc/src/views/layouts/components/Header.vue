@@ -2,7 +2,7 @@
   <n-layout-header bordered class="nav">
     <n-text tag="div" class="ui-logo" :depth="1" @click="handleLogoClick">
       <img src="/assets/images/naivelogo.svg" />
-      <span>Imp-core-ui</span>
+      <span>i-zhoushan</span>
     </n-text>
     <div></div>
     <div class="nav-end">

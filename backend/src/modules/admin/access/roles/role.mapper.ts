@@ -1,4 +1,3 @@
-
 import { PermissionEntity } from '../permissions/permission.entity';
 import { PermissionMapper } from '../permissions/permission.mapper';
 import {
@@ -17,11 +16,15 @@ export class RoleMapper {
     return dto;
   }
 
-  public static async toDtoWithRelations(entity: RoleEntity): Promise<RoleResponseDto> {
+  public static async toDtoWithRelations(
+    entity: RoleEntity,
+  ): Promise<RoleResponseDto> {
     const dto = new RoleResponseDto();
     dto.id = entity.id;
     dto.name = entity.name;
-    dto.permissions = await Promise.all((await entity.permissions).map(PermissionMapper.toDto));
+    dto.permissions = await Promise.all(
+      (await entity.permissions).map(PermissionMapper.toDto),
+    );
     dto.active = entity.active;
     return dto;
   }
@@ -29,17 +32,21 @@ export class RoleMapper {
   public static toCreateEntity(dto: CreateRoleRequestDto): RoleEntity {
     const entity = new RoleEntity();
     entity.name = dto.name;
-    entity.permissions = Promise.resolve(dto.permissions.map(id => new PermissionEntity({ id })));
+    entity.permissions = Promise.resolve(
+      dto.permissions.map((id) => new PermissionEntity({ id })),
+    );
     entity.active = true;
     return entity;
   }
 
   public static toUpdateEntity(
     entity: RoleEntity,
-    dto: UpdateRoleRequestDto
+    dto: UpdateRoleRequestDto,
   ): RoleEntity {
     entity.name = dto.name;
-    entity.permissions = Promise.resolve(dto.permissions.map(id => new PermissionEntity({ id })));
+    entity.permissions = Promise.resolve(
+      dto.permissions.map((id) => new PermissionEntity({ id })),
+    );
     entity.active = dto.active;
     return entity;
   }
