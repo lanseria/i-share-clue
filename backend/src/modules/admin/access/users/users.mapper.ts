@@ -11,7 +11,7 @@ import { UserStatus } from './user-status.enum';
 import { UserEntity } from './user.entity';
 
 export class UserMapper {
-  public static async toDto(entity: UserEntity): Promise<UserResponseDto> {
+  public static toDto(entity: UserEntity): UserResponseDto {
     const dto = new UserResponseDto();
 
     dto.id = entity.id;

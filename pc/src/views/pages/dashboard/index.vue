@@ -1,6 +1,6 @@
 <template>
   <div class="map-wrap">
-    <div id="container" tabindex="0" @contextmenu="handleContextMenu"></div>
+    <div id="container" tabindex="0"></div>
 
     <div id="myPageTop">
       <table>
@@ -34,15 +34,33 @@
       :on-clickoutside="onClickoutside"
     />
   </div>
+  <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, watchEffect, nextTick } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
 import { NAutoComplete, NDropdown, useMessage } from "naive-ui";
+import FormModal from "./FormModal.vue";
+class LngLat {
+  KL = 122.10714947486878;
+  kT = 30.029054686576302;
+  lat = 30.029055;
+  lng = 122.107149;
+  pos = [13592905.701760534, 3507285.0995366885];
+
+  constructor(that: LngLat) {
+    this.KL = that.KL;
+    this.kT = that.kT;
+    this.lat = that.lat;
+    this.lng = that.lng;
+    this.pos = that.pos;
+  }
+}
 export default defineComponent({
   components: {
     NAutoComplete,
-    NDropdown
+    NDropdown,
+    FormModal
   },
   setup() {
     const message = useMessage();
@@ -55,33 +73,41 @@ export default defineComponent({
     ];
     let AMap: any = undefined;
     let map: any = undefined;
+    let lnglat: LngLat | undefined = undefined;
     // ref
     const searchText = ref("");
 
+    // refs
+    const FormModalRef = ref();
     const showDropdownRef = ref(false);
+    // ref
     const xRef = ref(0);
     const yRef = ref(0);
 
     const options = ref<any[]>([]);
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
+    const clickHandler = (e: any) => {
       showDropdownRef.value = false;
       nextTick().then(() => {
         showDropdownRef.value = true;
-        xRef.value = e.clientX;
-        yRef.value = e.clientY;
+        xRef.value = e.originEvent.clientX;
+        yRef.value = e.originEvent.clientY;
+        lnglat = new LngLat(e.lnglat);
       });
     };
-
     const handleSelect = (key: string) => {
       showDropdownRef.value = false;
       message.info(key);
+      if (key === "add-msg") {
+        FormModalRef.value.open();
+      }
     };
 
     const onClickoutside = (e: MouseEvent) => {
       showDropdownRef.value = false;
     };
-
+    const loadPage = () => {
+      //
+    };
     onMounted(async () => {
       AMap = await AMapLoader.load({
         //首次调用 load
@@ -97,7 +123,7 @@ export default defineComponent({
         mapStyle: "amap://styles/dark", //设置地图的显示样式
         features: ["bg", "road", "building", "point"]
       });
-
+      map.on("rightclick", clickHandler);
       watchEffect(() => {
         AMap.plugin(["AMap.PlaceSearch"], function () {
           //构造地点查询类
@@ -181,14 +207,18 @@ export default defineComponent({
     });
 
     return {
+      // refs
+      FormModalRef,
+      showDropdown: showDropdownRef,
+
       searchText,
       options,
       ddOptions,
-      showDropdown: showDropdownRef,
       x: xRef,
       y: yRef,
+      // method
+      loadPage,
       handleSelect,
-      handleContextMenu,
       onClickoutside
     };
   }

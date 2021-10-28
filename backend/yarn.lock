@@ -597,9 +597,9 @@
     webpack-node-externals "3.0.0"
 
 "@nestjs/common@^8.0.0":
-  version "8.1.1"
-  resolved "https://registry.npmmirror.com/@nestjs/common/download/@nestjs/common-8.1.1.tgz#24bb7f032cad229de182317ef69b9d481b18c12d"
-  integrity sha1-JLt/AyytIp3hgjF+9pudSBsYwS0=
+  version "8.1.2"
+  resolved "https://registry.npmmirror.com/@nestjs/common/download/@nestjs/common-8.1.2.tgz#8f27440454260174786c1a561fdb32ede4455d94"
+  integrity sha1-jydEBFQmAXR4bBpWH9sy7eRFXZQ=
   dependencies:
     axios "0.23.0"
     iterare "1.2.1"
@@ -619,9 +619,9 @@
     uuid "8.3.2"
 
 "@nestjs/core@^8.0.0":
-  version "8.1.1"
-  resolved "https://registry.npmmirror.com/@nestjs/core/download/@nestjs/core-8.1.1.tgz#d3c2452e8a4c83a4c511962c4a5bd0dd6d594b92"
-  integrity sha1-08JFLopMg6TFEZYsSlvQ3W1ZS5I=
+  version "8.1.2"
+  resolved "https://registry.npmmirror.com/@nestjs/core/download/@nestjs/core-8.1.2.tgz#e60787054c18f7a37c32f395f687176d071100c4"
+  integrity sha1-5geHBUwY96N8MvOV9ocXbQcRAMQ=
   dependencies:
     "@nuxtjs/opencollective" "0.3.2"
     fast-safe-stringify "2.1.1"
@@ -650,9 +650,9 @@
   integrity sha1-YIuyZd/YVgKqdLvOrMAS/7Lp0l0=
 
 "@nestjs/platform-express@^8.0.0":
-  version "8.1.1"
-  resolved "https://registry.npmmirror.com/@nestjs/platform-express/download/@nestjs/platform-express-8.1.1.tgz#33545402def3dd45219dcb9165db456bf8f239b2"
-  integrity sha1-M1RUAt7z3UUhncuRZdtFa/jyObI=
+  version "8.1.2"
+  resolved "https://registry.npmmirror.com/@nestjs/platform-express/download/@nestjs/platform-express-8.1.2.tgz?cache=0&sync_timestamp=1635245903084&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40nestjs%2Fplatform-express%2Fdownload%2F%40nestjs%2Fplatform-express-8.1.2.tgz#232c4d7fab65e3b1464ad56ff786e61c936c2304"
+  integrity sha1-IyxNf6tl47FGStVv94bmHJNsIwQ=
   dependencies:
     body-parser "1.19.0"
     cors "2.8.5"
@@ -672,18 +672,18 @@
     pluralize "8.0.0"
 
 "@nestjs/swagger@^5.1.0":
-  version "5.1.1"
-  resolved "https://registry.npmmirror.com/@nestjs/swagger/download/@nestjs/swagger-5.1.1.tgz#c5ab24f01758fbfa50e686cd7f2912659402cdb6"
-  integrity sha1-xask8BdY+/pQ5obNfykSZZQCzbY=
+  version "5.1.4"
+  resolved "https://registry.npmmirror.com/@nestjs/swagger/download/@nestjs/swagger-5.1.4.tgz#38ad97563429f1a592c4f65b8152a8aa859cf57f"
+  integrity sha1-OK2XVjQp8aWSxPZbgVKoqoWc9X8=
   dependencies:
     "@nestjs/mapped-types" "1.0.0"
     lodash "4.17.21"
     path-to-regexp "3.2.0"
 
 "@nestjs/testing@^8.0.0":
-  version "8.1.1"
-  resolved "https://registry.npmmirror.com/@nestjs/testing/download/@nestjs/testing-8.1.1.tgz#bb4b2908c1ae0a2809193052e11a4b3a22e4942a"
-  integrity sha1-u0spCMGuCigJGTBS4RpLOiLklCo=
+  version "8.1.2"
+  resolved "https://registry.npmmirror.com/@nestjs/testing/download/@nestjs/testing-8.1.2.tgz?cache=0&sync_timestamp=1635245903276&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40nestjs%2Ftesting%2Fdownload%2F%40nestjs%2Ftesting-8.1.2.tgz#fc8c3371f45891e935a1b45ae31fd35bd2a045d6"
+  integrity sha1-/IwzcfRYkek1obRa4x/TW9KgRdY=
   dependencies:
     optional "0.1.4"
     tslib "2.3.1"
@@ -925,10 +925,15 @@
   resolved "https://registry.nlark.com/@types/mime/download/@types/mime-1.3.2.tgz?cache=0&sync_timestamp=1629708374856&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fmime%2Fdownload%2F%40types%2Fmime-1.3.2.tgz#93e25bf9ee75fe0fd80b594bc4feb0e862111b5a"
   integrity sha1-k+Jb+e51/g/YC1lLxP6w6GIRG1o=
 
-"@types/node@*", "@types/node@^16.0.0":
+"@types/node@*":
   version "16.11.1"
   resolved "https://registry.npmmirror.com/@types/node/download/@types/node-16.11.1.tgz#2e50a649a50fc403433a14f829eface1a3443e97"
   integrity sha1-LlCmSaUPxANDOhT4Ke+s4aNEPpc=
+
+"@types/node@^16.0.0":
+  version "16.11.6"
+  resolved "https://registry.npmmirror.com/@types/node/download/@types/node-16.11.6.tgz?cache=0&sync_timestamp=1635213425908&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-16.11.6.tgz#6bef7a2a0ad684cf6e90fcfe31cecabd9ce0a3ae"
+  integrity sha1-a+96KgrWhM9ukPz+Mc7KvZzgo64=
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -1462,7 +1467,7 @@ available-typed-arrays@^1.0.5:
 
 axios@0.23.0:
   version "0.23.0"
-  resolved "https://registry.npmmirror.com/axios/download/axios-0.23.0.tgz?cache=0&sync_timestamp=1634053173003&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Faxios%2Fdownload%2Faxios-0.23.0.tgz#b0fa5d0948a8d1d75e3d5635238b6c4625b05149"
+  resolved "https://registry.npmmirror.com/axios/download/axios-0.23.0.tgz#b0fa5d0948a8d1d75e3d5635238b6c4625b05149"
   integrity sha1-sPpdCUio0ddePVY1I4tsRiWwUUk=
   dependencies:
     follow-redirects "^1.14.4"
@@ -5627,9 +5632,9 @@ ts-loader@^9.2.3:
     semver "^7.3.4"
 
 ts-node@^10.0.0:
-  version "10.3.0"
-  resolved "https://registry.npmmirror.com/ts-node/download/ts-node-10.3.0.tgz#a797f2ed3ff50c9a5d814ce400437cb0c1c048b4"
-  integrity sha1-p5fy7T/1DJpdgUzkAEN8sMHASLQ=
+  version "10.4.0"
+  resolved "https://registry.npmmirror.com/ts-node/download/ts-node-10.4.0.tgz?cache=0&sync_timestamp=1634967008919&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fts-node%2Fdownload%2Fts-node-10.4.0.tgz#680f88945885f4e6cf450e7f0d6223dd404895f7"
+  integrity sha1-aA+IlFiF9ObPRQ5/DWIj3UBIlfc=
   dependencies:
     "@cspotcode/source-map-support" "0.7.0"
     "@tsconfig/node10" "^1.0.7"
@@ -5976,7 +5981,7 @@ whatwg-mimetype@^2.3.0:
 
 whatwg-url@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.npmmirror.com/whatwg-url/download/whatwg-url-5.0.0.tgz?cache=0&sync_timestamp=1633539062585&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fwhatwg-url%2Fdownload%2Fwhatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  resolved "https://registry.npmmirror.com/whatwg-url/download/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
   integrity sha1-lmRU6HZUYuN2RNNib2dCzotwll0=
   dependencies:
     tr46 "~0.0.3"

@@ -61,7 +61,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         }
       },
       hmr: {
-        overlay: true
+        overlay: false
       }
     },
     plugins: createVitePlugins(env, command, mode),
