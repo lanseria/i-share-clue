@@ -134,7 +134,6 @@ export class UsersController {
     @Body(ValidationPipe) changePassword: ChangePasswordRequestDto,
     @CurrentUser() user: UserEntity,
   ): Promise<UserResponseDto> {
-    Logger.log(user);
     return this.usersService.changePassword(changePassword, user.id);
   }
 }

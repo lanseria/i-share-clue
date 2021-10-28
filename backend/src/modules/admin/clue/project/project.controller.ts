@@ -1,4 +1,10 @@
-import { JwtAuthGuard, PermissionsGuard, TOKEN_NAME } from '@modules/auth';
+import { UserEntity } from '@modules/admin/access/users/user.entity';
+import {
+  CurrentUser,
+  JwtAuthGuard,
+  PermissionsGuard,
+  TOKEN_NAME,
+} from '@modules/auth';
 import {
   Body,
   Controller,
@@ -22,7 +28,8 @@ export class ProjectController {
   @Post()
   public createProject(
     @Body(ValidationPipe) projectDto: CreateProjectRequestDto,
+    @CurrentUser() user: UserEntity,
   ) {
-    return this.projectService.createProject(projectDto);
+    return this.projectService.createProject(projectDto, user);
   }
 }

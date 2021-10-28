@@ -1,10 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsAlphanumeric, IsNotEmpty, MaxLength } from 'class-validator';
+import { IsNotEmpty, MaxLength } from 'class-validator';
 
 export class CreateProjectRequestDto {
   @IsNotEmpty()
   @MaxLength(100)
-  @IsAlphanumeric()
   @ApiProperty({
     example: '如何打到车',
   })
@@ -25,8 +24,4 @@ export class CreateProjectRequestDto {
 
   @ApiProperty()
   region: string;
-
-  @IsNotEmpty()
-  @ApiProperty()
-  creatorId: string;
 }

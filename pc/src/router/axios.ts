@@ -90,7 +90,7 @@ const responseInterceptors = (res: AxiosResponse<any>) => {
   if (/4\d\d/.test(status)) {
     const msg = getErrorCode(status);
     // 除了验证400以外的全部报错
-    if (msg) {
+    if (status === "401") {
       clearInfoToLogin();
       showNotification(msg);
       throw Error(msg);

@@ -2,11 +2,11 @@ import { defineStore } from "pinia";
 // import { encryption } from "/@/utils/encrypt";
 import { loginReq, smsLoginReq } from "/@/api/Auth";
 import { setUserToken } from "/@/utils/auth";
-import { userInfoReq } from "/@/api/Admin/User";
-import { getMenuListReq } from "/@/api/Admin/Menu";
+import { userInfoReq } from "/@/api/Admin/Access/User";
+import { getMenuListReq } from "/@/api/Admin/Access/Menu";
 import { addRouteByMenu, resetRouter, router } from "/@/router";
 import { RouteRecordRaw } from "vue-router";
-import { getDictAllMapReq } from "/@/api/Admin/Dict";
+import { getDictAllMapReq } from "/@/api/Admin/Access/Dict";
 
 interface UserState {
   userLogin: boolean;

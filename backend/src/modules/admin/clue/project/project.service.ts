@@ -1,3 +1,4 @@
+import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { UsersRepository } from '@modules/admin/access/users/users.repository';
 import {
   Injectable,
@@ -18,12 +19,13 @@ export class ProjectService {
     @InjectRepository(ProjectRepository)
     private projectRepository: ProjectRepository,
   ) {}
-  public async createProject(projectDto: CreateProjectRequestDto) {
+  public async createProject(
+    projectDto: CreateProjectRequestDto,
+    user: UserEntity,
+  ) {
     try {
       let projectEntity = ProjectMapper.toCreateEntity(projectDto);
-      const userEntity = await this.usersRepository.findOne(
-        projectDto.creatorId,
-      );
+      const userEntity = await this.usersRepository.findOne(user.id);
       projectEntity.createor = userEntity;
       projectEntity = await this.projectRepository.save(projectEntity);
       return ProjectMapper.toDto(projectEntity);
