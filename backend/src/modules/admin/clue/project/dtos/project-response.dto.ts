@@ -1,5 +1,6 @@
 import { UserResponseDto } from '@modules/admin/access/users/dtos';
 import { ApiProperty } from '@nestjs/swagger';
+import { ProjectLocation } from './location';
 
 export class ProjectResponseDto {
   @ApiProperty()
@@ -22,4 +23,7 @@ export class ProjectResponseDto {
 
   @ApiProperty()
   creator: UserResponseDto;
+
+  @ApiProperty()
+  location: ProjectLocation;
 }

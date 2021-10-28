@@ -6,7 +6,7 @@ import { userInfoReq } from "/@/api/Admin/Access/User";
 import { getMenuListReq } from "/@/api/Admin/Access/Menu";
 import { addRouteByMenu, resetRouter, router } from "/@/router";
 import { RouteRecordRaw } from "vue-router";
-import { getDictAllMapReq } from "/@/api/Admin/Access/Dict";
+import { getDictAllMapReq } from "../../api/Admin/Access/Dict";
 
 interface UserState {
   userLogin: boolean;

@@ -1,5 +1,7 @@
 import { UserMapper } from '@modules/admin/access/users/users.mapper';
+import { Point } from 'geojson';
 import { CreateProjectRequestDto } from './dtos';
+import { ProjectLocation } from './dtos/location';
 import { ProjectResponseDto } from './dtos/project-response.dto';
 import { ProjectEntity } from './project.entity';
 
@@ -11,6 +13,11 @@ export class ProjectMapper {
     entity.desc = dto.desc;
     entity.category = dto.category;
     entity.region = dto.region;
+    const pointObject: Point = {
+      type: 'Point',
+      coordinates: [dto.location.lng, dto.location.lat],
+    };
+    entity.location = pointObject;
     return entity;
   }
 
@@ -23,6 +30,10 @@ export class ProjectMapper {
     dto.category = entity.category;
     dto.region = entity.region;
     dto.creator = UserMapper.toDto(entity.createor);
+    dto.location = new ProjectLocation({
+      lng: entity.location.coordinates[0],
+      lat: entity.location.coordinates[1],
+    });
     return dto;
   }
 }

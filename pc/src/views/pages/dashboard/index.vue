@@ -98,7 +98,12 @@ export default defineComponent({
       showDropdownRef.value = false;
       message.info(key);
       if (key === "add-msg") {
-        FormModalRef.value.open();
+        FormModalRef.value.open({
+          location: {
+            lng: lnglat?.lng,
+            lat: lnglat?.lat
+          }
+        });
       }
     };
 

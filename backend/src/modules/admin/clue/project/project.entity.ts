@@ -1,6 +1,14 @@
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  OneToOne,
+  JoinColumn,
+  Index,
+} from 'typeorm';
 import { BaseEntity } from '@database/entities';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
+import { Point } from 'geojson';
 
 @Entity({ schema: 'admin', name: 'project' })
 export class ProjectEntity extends BaseEntity {
@@ -49,8 +57,17 @@ export class ProjectEntity extends BaseEntity {
   @JoinColumn()
   createor: UserEntity;
 
-  constructor(user?: Partial<UserEntity>) {
+  @Index({ spatial: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+    nullable: true,
+  })
+  location: Point;
+
+  constructor(project?: Partial<ProjectEntity>) {
     super();
-    Object.assign(this, user);
+    Object.assign(this, project);
   }
 }

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, MaxLength } from 'class-validator';
+import { ProjectLocation } from './location';
 
 export class CreateProjectRequestDto {
   @IsNotEmpty()
@@ -24,4 +25,7 @@ export class CreateProjectRequestDto {
 
   @ApiProperty()
   region: string;
+
+  @ApiProperty()
+  location: ProjectLocation;
 }

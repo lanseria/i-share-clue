@@ -16,6 +16,14 @@
       <n-form-item path="region" label="地域类型">
         <n-input v-model:value="modelRef.region" />
       </n-form-item>
+      <template v-if="modelRef.location">
+        <n-form-item path="lng" label="经度">
+          <n-input-number v-model:value="modelRef.location.lng" />
+        </n-form-item>
+        <n-form-item path="lat" label="纬度">
+          <n-input-number v-model:value="modelRef.location.lat" />
+        </n-form-item>
+      </template>
     </n-form>
     <template #footer>
       <n-space>
@@ -26,7 +34,14 @@
   </imp-modal>
 </template>
 <script lang="ts">
-import { NForm, NFormItem, NInput, NSpace, NButton } from "naive-ui";
+import {
+  NForm,
+  NFormItem,
+  NInput,
+  NSpace,
+  NButton,
+  NInputNumber
+} from "naive-ui";
 import { defineComponent, ref } from "vue";
 import { createProjectReq } from "/@/api/Admin/Clue/Project";
 import { CreateProjectFormDTO } from "/@/types/Admin/Clue/Project/dto";
@@ -38,7 +53,8 @@ export default defineComponent({
     NFormItem,
     NInput,
     NSpace,
-    NButton
+    NButton,
+    NInputNumber
   },
   setup(props, { emit }) {
     // refs
