@@ -3,6 +3,7 @@ import { UsersRepository } from '@modules/admin/access/users/users.repository';
 import {
   Injectable,
   InternalServerErrorException,
+  Logger,
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,6 +34,7 @@ export class ProjectService {
       if (error instanceof TimeoutError) {
         throw new RequestTimeoutException();
       } else {
+        Logger.warn(error);
         throw new InternalServerErrorException();
       }
     }

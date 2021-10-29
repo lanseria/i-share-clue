@@ -26,6 +26,8 @@ export class CreateProjectRequestDto {
   @ApiProperty()
   region: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'gcj02',
+  })
   location: ProjectLocation;
 }

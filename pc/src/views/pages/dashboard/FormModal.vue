@@ -74,8 +74,10 @@ export default defineComponent({
       emit("load-page");
     };
     const handleSubmit = async () => {
-      const data = await createProjectReq(modelRef.value);
-      console.log(data);
+      const { payload } = await createProjectReq(modelRef.value);
+      if (payload) {
+        close();
+      }
     };
     return {
       // refs

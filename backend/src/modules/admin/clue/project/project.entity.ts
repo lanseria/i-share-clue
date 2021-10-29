@@ -5,6 +5,7 @@ import {
   OneToOne,
   JoinColumn,
   Index,
+  ManyToOne,
 } from 'typeorm';
 import { BaseEntity } from '@database/entities';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
@@ -53,7 +54,7 @@ export class ProjectEntity extends BaseEntity {
   })
   region: string;
 
-  @OneToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity)
   @JoinColumn()
   createor: UserEntity;
 
