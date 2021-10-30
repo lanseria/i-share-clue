@@ -41,6 +41,8 @@ import { defineComponent, onMounted, ref, watchEffect, nextTick } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
 import { NAutoComplete, NDropdown, useMessage } from "naive-ui";
 import FormModal from "./FormModal.vue";
+import { searchAreaProjectsReq } from "/@/api/Admin/Clue/Project";
+import { debounce } from "lodash";
 class LngLat {
   KL = 122.10714947486878;
   kT = 30.029054686576302;
@@ -110,8 +112,13 @@ export default defineComponent({
     const onClickoutside = (e: MouseEvent) => {
       showDropdownRef.value = false;
     };
-    const loadPage = () => {
-      //
+    const debounceLoadPage = debounce(function (event) {
+      loadPage();
+    }, 1500);
+    const loadPage = async () => {
+      var bounds = map.getBounds();
+      const data = await searchAreaProjectsReq(bounds);
+      console.log(data);
     };
     onMounted(async () => {
       AMap = await AMapLoader.load({
@@ -129,6 +136,10 @@ export default defineComponent({
         features: ["bg", "road", "building", "point"]
       });
       map.on("rightclick", clickHandler);
+      map.on("complete", debounceLoadPage);
+      map.on("zoomend", debounceLoadPage);
+      map.on("moveend", debounceLoadPage);
+      map.on("resize", debounceLoadPage);
       watchEffect(() => {
         AMap.plugin(["AMap.PlaceSearch"], function () {
           //构造地点查询类

@@ -20,6 +20,7 @@ export class ProjectService {
     @InjectRepository(ProjectRepository)
     private projectRepository: ProjectRepository,
   ) {}
+
   public async createProject(
     projectDto: CreateProjectRequestDto,
     user: UserEntity,
@@ -37,6 +38,16 @@ export class ProjectService {
         Logger.warn(error);
         throw new InternalServerErrorException();
       }
+    }
+  }
+
+  public async searchAreaProjects(bounds: [number, number, number, number]) {
+    try {
+      const [projectEntities, totalProjects] =
+        await this.projectRepository.searchArea(bounds);
+      console.log(projectEntities, totalProjects);
+    } catch (error) {
+      throw new InternalServerErrorException();
     }
   }
 }

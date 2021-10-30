@@ -8,6 +8,9 @@ import {
 import {
   Body,
   Controller,
+  Get,
+  Param,
+  ParseFloatPipe,
   Post,
   UseGuards,
   ValidationPipe,
@@ -31,5 +34,16 @@ export class ProjectController {
     @CurrentUser() user: UserEntity,
   ) {
     return this.projectService.createProject(projectDto, user);
+  }
+
+  @Get('/area/:nelat/:nelng/:swlat/:swlng')
+  public searchAreaProjects(
+    @Param('nelat', ParseFloatPipe) nelat: number,
+    @Param('nelng', ParseFloatPipe) nelng: number,
+    @Param('swlat', ParseFloatPipe) swlat: number,
+    @Param('swlng', ParseFloatPipe) swlng: number,
+  ) {
+    this.projectService.searchAreaProjects([nelat, nelng, swlat, swlng]);
+    return;
   }
 }

@@ -9,3 +9,10 @@ export const createProjectReq = (dto: CreateProjectFormDTO) => {
     data: dto
   });
 };
+
+export const searchAreaProjectsReq = (bounds: AMapBounds) => {
+  return r.request<R<unknown>>({
+    url: `${api.area}/${bounds.northEast.lat}/${bounds.northEast.lng}/${bounds.southWest.lat}/${bounds.southWest.lng}`,
+    method: "GET"
+  });
+};
