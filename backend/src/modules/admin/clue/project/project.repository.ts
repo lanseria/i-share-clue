@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { Polygon } from 'geojson';
 import { gcj02towgs84 } from 'src/helpers/convert';
 import { EntityRepository, Repository } from 'typeorm';
@@ -25,9 +26,10 @@ export class ProjectRepository extends Repository<ProjectEntity> {
         ],
       ],
     };
+    Logger.warn(JSON.stringify(area));
     const query = this.createQueryBuilder('p')
       .leftJoinAndSelect('p.creator', 'u')
-      .where(`ST_DWithin(location, ST_GeomFromGeoJSON(:area), 4326)`)
+      .where(`ST_DWithin(location, ST_GeomFromGeoJSON(:area), 0)`)
       .setParameters({
         // 字符串化 GeoJSON
         area: JSON.stringify(area),
