@@ -30,7 +30,7 @@ export class ProjectMapper {
     dto.desc = entity.desc;
     dto.category = entity.category;
     dto.region = entity.region;
-    dto.creator = UserMapper.toDto(entity.createor);
+    dto.creator = UserMapper.toDto(entity.creator);
     const location = wgs84togcj02(
       entity.location.coordinates[0],
       entity.location.coordinates[1],

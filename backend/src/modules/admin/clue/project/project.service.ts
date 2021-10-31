@@ -28,7 +28,7 @@ export class ProjectService {
     try {
       let projectEntity = ProjectMapper.toCreateEntity(projectDto);
       const userEntity = await this.usersRepository.findOne(user.id);
-      projectEntity.createor = userEntity;
+      projectEntity.creator = userEntity;
       projectEntity = await this.projectRepository.save(projectEntity);
       return ProjectMapper.toDto(projectEntity);
     } catch (error) {
@@ -45,8 +45,12 @@ export class ProjectService {
     try {
       const [projectEntities, totalProjects] =
         await this.projectRepository.searchArea(bounds);
-      console.log(projectEntities, totalProjects);
+      // console.log(projectEntities, totalProjects);
+      return projectEntities.map((m) => {
+        return ProjectMapper.toDto(m);
+      });
     } catch (error) {
+      console.warn(error);
       throw new InternalServerErrorException();
     }
   }

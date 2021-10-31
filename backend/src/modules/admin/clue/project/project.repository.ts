@@ -1,4 +1,5 @@
 import { Polygon } from 'geojson';
+import { gcj02towgs84 } from 'src/helpers/convert';
 import { EntityRepository, Repository } from 'typeorm';
 import { ProjectEntity } from './project.entity';
 
@@ -16,19 +17,17 @@ export class ProjectRepository extends Repository<ProjectEntity> {
       type: 'Polygon',
       coordinates: [
         [
-          [bounds[1], bounds[0]],
-          [bounds[3], bounds[0]],
-          [bounds[3], bounds[2]],
-          [bounds[1], bounds[2]],
-          [bounds[1], bounds[0]],
+          gcj02towgs84(bounds[1], bounds[0]),
+          gcj02towgs84(bounds[3], bounds[0]),
+          gcj02towgs84(bounds[3], bounds[2]),
+          gcj02towgs84(bounds[1], bounds[2]),
+          gcj02towgs84(bounds[1], bounds[0]),
         ],
       ],
     };
     const query = this.createQueryBuilder('p')
-      .where(
-        `
-    ST_DWithin(location, ST_GeomFromGeoJSON(:area), 4326)`,
-      )
+      .leftJoinAndSelect('p.creator', 'u')
+      .where(`ST_DWithin(location, ST_GeomFromGeoJSON(:area), 4326)`)
       .setParameters({
         // 字符串化 GeoJSON
         area: JSON.stringify(area),

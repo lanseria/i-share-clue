@@ -11,8 +11,8 @@ export const createProjectReq = (dto: CreateProjectFormDTO) => {
 };
 
 export const searchAreaProjectsReq = (bounds: AMapBounds) => {
-  return r.request<R<unknown>>({
-    url: `${api.area}/${bounds.northEast.lat}/${bounds.northEast.lng}/${bounds.southWest.lat}/${bounds.southWest.lng}`,
+  return r.request<R<ClueMark[]>>({
+    url: `${api.area}/${bounds.northEast.kT}/${bounds.northEast.KL}/${bounds.southWest.kT}/${bounds.southWest.KL}`,
     method: "GET"
   });
 };

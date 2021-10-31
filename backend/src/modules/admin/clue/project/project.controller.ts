@@ -43,7 +43,6 @@ export class ProjectController {
     @Param('swlat', ParseFloatPipe) swlat: number,
     @Param('swlng', ParseFloatPipe) swlng: number,
   ) {
-    this.projectService.searchAreaProjects([nelat, nelng, swlat, swlng]);
-    return;
+    return this.projectService.searchAreaProjects([nelat, nelng, swlat, swlng]);
   }
 }

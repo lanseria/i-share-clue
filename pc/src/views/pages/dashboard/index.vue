@@ -76,6 +76,7 @@ export default defineComponent({
     let AMap: any = undefined;
     let map: any = undefined;
     let lnglat: LngLat | undefined = undefined;
+    let markerList: any[] = [];
     // ref
     const searchText = ref("");
 
@@ -116,9 +117,21 @@ export default defineComponent({
       loadPage();
     }, 1500);
     const loadPage = async () => {
+      markerList.map(marker => {
+        map.remove(marker);
+      });
       var bounds = map.getBounds();
-      const data = await searchAreaProjectsReq(bounds);
-      console.log(data);
+      console.log(bounds);
+      const { payload } = await searchAreaProjectsReq(bounds);
+      markerList = payload.map(m => {
+        return new AMap.Marker({
+          position: new AMap.LngLat(m.location.lng, m.location.lat), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+          title: m.name
+        });
+      });
+      markerList.map(marker => {
+        map.add(marker);
+      });
     };
     onMounted(async () => {
       AMap = await AMapLoader.load({

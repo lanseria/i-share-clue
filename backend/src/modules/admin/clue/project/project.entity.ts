@@ -56,7 +56,7 @@ export class ProjectEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity)
   @JoinColumn()
-  createor: UserEntity;
+  creator: UserEntity;
 
   @Index({ spatial: true })
   @Column({
