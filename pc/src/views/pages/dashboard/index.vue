@@ -75,6 +75,7 @@ export default defineComponent({
     ];
     let AMap: any = undefined;
     let map: any = undefined;
+    let infoWindow: any = undefined;
     let lnglat: LngLat | undefined = undefined;
     let markerList: any[] = [];
     // ref
@@ -117,17 +118,33 @@ export default defineComponent({
       loadPage();
     }, 1500);
     const loadPage = async () => {
-      markerList.map(marker => {
-        map.remove(marker);
-      });
       var bounds = map.getBounds();
       console.log(bounds);
       const { payload } = await searchAreaProjectsReq(bounds);
+      markerList.map(marker => {
+        map.remove(marker);
+      });
       markerList = payload.map(m => {
-        return new AMap.Marker({
-          position: new AMap.LngLat(m.location.lng, m.location.lat), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-          title: m.name
+        const marker = new AMap.CircleMarker({
+          center: new AMap.LngLat(m.location.lng, m.location.lat),
+          radius: 10, //3D视图下，CircleMarker半径不要超过64px
+          strokeColor: "white",
+          strokeWeight: 2,
+          strokeOpacity: 0.5,
+          fillColor: "rgba(0,0,255,1)",
+          fillOpacity: 0.5,
+          zIndex: 10,
+          bubble: true,
+          cursor: "pointer",
+          clickable: true,
+          extData: m
         });
+        marker.on("click", function (e: any) {
+          const extData = e.target.getExtData();
+          console.log(extData);
+          infoWindow.open(map, [extData.location.lng, extData.location.lat]);
+        });
+        return marker;
       });
       markerList.map(marker => {
         map.add(marker);
@@ -139,6 +156,22 @@ export default defineComponent({
         key: import.meta.env.VITE_AMAP_KEY, //首次load key为必填
         version: "2.0",
         plugins: ["AMap.Scale", "AMap.ToolBar"]
+      });
+      //构建信息窗体中显示的内容
+      let info = [];
+      info.push(
+        '<div class=\'input-card content-window-card\'><div><img style="float:left;width:67px;height:16px;" src=" https://webapi.amap.com/images/autonavi.png "/></div> '
+      );
+      info.push('<div style="padding:7px 0px 0px 0px;"><h4>高德软件</h4>');
+      info.push(
+        "<p class='input-item'>电话 : 010-84107000   邮编 : 100102</p>"
+      );
+      info.push(
+        "<p class='input-item'>地址 :北京市朝阳区望京阜荣街10号首开广场4层</p></div></div>"
+      );
+
+      infoWindow = new AMap.InfoWindow({
+        content: info.join("") //使用默认信息窗体框样式，显示信息内容
       });
       map = new AMap.Map("container", {
         resizeEnable: true, //是否监控地图容器尺寸变化
@@ -285,19 +318,15 @@ export default defineComponent({
 #myPageTop input {
   width: 270px;
 }
-.map-wrap :deep(.amap-content-body) {
-  background-color: var(--color);
-}
-.map-wrap :deep(.amap-lib-infowindow-title) {
-  background-color: var(--color);
-}
-.map-wrap :deep(.amap-lib-infowindow-content) {
-  background-color: var(--color);
-}
-.map-wrap :deep(.amap-menu-outer) {
-  background-color: var(--color);
-}
+.map-wrap :deep(.amap-content-body),
+.map-wrap :deep(.amap-lib-infowindow-title),
+.map-wrap :deep(.amap-lib-infowindow-content),
+.map-wrap :deep(.amap-menu-outer),
+.map-wrap :deep(.amap-info-content),
 .map-wrap :deep(.amap-menu-outer li:hover) {
   background-color: var(--color);
+}
+.map-wrap :deep(.amap-info-sharp) {
+  border-top: 8px solid var(--color);
 }
 </style>
