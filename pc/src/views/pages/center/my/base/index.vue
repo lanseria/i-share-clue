@@ -52,7 +52,7 @@ import {
   // NDynamicTags
 } from "naive-ui";
 import { useImpPageLoad } from "/@/hooks/useLoad";
-import { editDetailReq, userInfoReq } from "/@/api/Admin/User";
+import { editDetailReq, userInfoReq } from "/@/api/Admin/Access/User";
 import { UserInfoDTO } from "/@/types/Admin/User/dto";
 import { useImpSubmit } from "/@/hooks/useForm";
 import ImageUpload from "/@/components/common/ImageUpload.vue";
