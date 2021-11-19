@@ -1,16 +1,24 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MinioModule } from 'nestjs-minio-client';
-import { config } from './config';
 import { MinioClientService } from './minio-client.service';
 
 @Module({
   imports: [
-    MinioModule.register({
-      endPoint: config.MINIO_ENDPOINT,
-      port: config.MINIO_PORT,
-      useSSL: false,
-      accessKey: config.MINIO_ACCESSKEY,
-      secretKey: config.MINIO_SECRETKEY,
+    MinioModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => {
+        const cfg = {
+          endPoint: config.get('MINIO_ENDPOINT'),
+          port: +config.get('MINIO_PORT'),
+          useSSL: false,
+          accessKey: config.get('MINIO_ACCESSKEY'),
+          secretKey: config.get('MINIO_SECRETKEY'),
+        };
+        console.log(cfg);
+        return cfg;
+      },
+      inject: [ConfigService],
     }),
   ],
 
