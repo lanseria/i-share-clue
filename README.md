@@ -124,5 +124,7 @@ yarn dev
 ### 3. 车辆接送信息
 
 ```
+具有简单的权限系统与文件上传, 并主要用GIS开发地图上的线索分享系统
 
+Simple permission system and file uploading, and lead sharing system on maps developed mainly with GIS
 ```
