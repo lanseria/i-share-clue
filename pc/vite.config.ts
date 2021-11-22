@@ -1,9 +1,9 @@
-import { ConfigEnv, loadEnv, UserConfig } from "vite";
-import { resolve } from "path";
-import { createVitePlugins } from "./build/vite/plugins";
+import { ConfigEnv, loadEnv, UserConfig } from 'vite';
+import { resolve } from 'path';
+import { createVitePlugins } from './build/vite/plugins';
 
 function pathResolve(dir: string) {
-  return resolve(__dirname, ".", dir);
+  return resolve(__dirname, '.', dir);
 }
 
 export default ({ command, mode }: ConfigEnv): UserConfig => {
@@ -19,12 +19,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         // /@/xxxx => src/xxxx
         {
           find: /\/@\//,
-          replacement: pathResolve("src") + "/"
-        }
-      ]
+          replacement: pathResolve('src') + '/',
+        },
+      ],
     },
     build: {
-      target: "esnext"
+      target: 'esnext',
       // terserOptions: {
       //   compress: {
       //     keep_infinity: true,
@@ -53,21 +53,21 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       // Load proxy configuration from .env
       // 从.env中加载代理配置
       proxy: {
-        "/api": {
+        '/api': {
           target: env.VITE_BASEURL,
           changeOrigin: true,
           ws: true,
-          rewrite: path => path.replace(/^\/api/, "")
-        }
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
       },
       hmr: {
-        overlay: false
-      }
+        overlay: false,
+      },
     },
     plugins: createVitePlugins(env, command, mode),
     optimizeDeps: {
-      include: ["dayjs/plugin/advancedFormat"],
-      exclude: ["vue-demi"]
-    }
+      include: ['dayjs/plugin/advancedFormat'],
+      exclude: ['vue-demi'],
+    },
   };
 };

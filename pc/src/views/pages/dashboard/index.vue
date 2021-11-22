@@ -2,47 +2,18 @@
   <div class="map-wrap">
     <div id="container" tabindex="0"></div>
 
-    <div id="myPageTop">
-      <table>
-        <tr>
-          <td>
-            <label>请输入关键字：</label>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <n-auto-complete
-              id="tipinput"
-              :options="options"
-              v-model:value="searchText"
-              type="text"
-              placeholder="请输入关键词"
-              clearable
-            />
-          </td>
-        </tr>
-      </table>
-    </div>
-    <n-dropdown
-      placement="bottom-start"
-      @select="handleSelect"
-      trigger="manual"
-      :x="x"
-      :y="y"
-      :options="ddOptions"
-      :show="showDropdown"
-      :on-clickoutside="onClickoutside"
-    />
+    <PlaceSearch></PlaceSearch>
+    <RightDropdown ref="RightDropdownRef" @add-msg="handleAddMsg"></RightDropdown>
   </div>
   <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, watchEffect, nextTick } from "vue";
-import AMapLoader from "@amap/amap-jsapi-loader";
-import { NAutoComplete, NDropdown, useMessage } from "naive-ui";
-import FormModal from "./FormModal.vue";
-import { searchAreaProjectsReq } from "/@/api/Admin/Clue/Project";
-import { debounce } from "lodash";
+import { defineComponent, onMounted, ref, getCurrentInstance, nextTick, provide } from 'vue';
+import FormModal from './FormModal.vue';
+import PlaceSearch from './PlaceSearch.vue';
+import RightDropdown from './RightDropdown.vue';
+import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
+import { debounce } from 'lodash';
 class LngLat {
   KL = 122.10714947486878;
   kT = 30.029054686576302;
@@ -60,175 +31,119 @@ class LngLat {
 }
 export default defineComponent({
   components: {
-    NAutoComplete,
-    NDropdown,
-    FormModal
+    FormModal,
+    PlaceSearch,
+    RightDropdown,
   },
   setup() {
-    const message = useMessage();
-    // global
-    const ddOptions = [
-      {
-        label: "添加信息",
-        key: "add-msg"
-      }
-    ];
-    let AMap: any = undefined;
-    let map: any = undefined;
+    const { $Amap } = getCurrentInstance()!.appContext.config.globalProperties;
+    //
     let infoWindow: any = undefined;
     let lnglat: LngLat | undefined = undefined;
     let markerList: any[] = [];
-    // ref
-    const searchText = ref("");
+    let map: any = undefined;
+    provide('map', map);
 
     // refs
+    const RightDropdownRef = ref();
     const FormModalRef = ref();
-    const showDropdownRef = ref(false);
-    // ref
-    const xRef = ref(0);
-    const yRef = ref(0);
 
-    const options = ref<any[]>([]);
     const clickHandler = (e: any) => {
-      showDropdownRef.value = false;
+      RightDropdownRef.value.close();
       nextTick().then(() => {
-        showDropdownRef.value = true;
-        xRef.value = e.originEvent.clientX;
-        yRef.value = e.originEvent.clientY;
+        RightDropdownRef.value.open(e);
         lnglat = new LngLat(e.lnglat);
       });
     };
-    const handleSelect = (key: string) => {
-      showDropdownRef.value = false;
-      message.info(key);
-      if (key === "add-msg") {
-        FormModalRef.value.open({
-          location: {
-            lng: lnglat?.lng,
-            lat: lnglat?.lat
-          }
-        });
-      }
+    const handleAddMsg = (key: string) => {
+      RightDropdownRef.value.close();
+      FormModalRef.value.open({
+        location: {
+          lng: lnglat?.lng,
+          lat: lnglat?.lat,
+        },
+      });
     };
 
-    const onClickoutside = (e: MouseEvent) => {
-      showDropdownRef.value = false;
-    };
     const debounceLoadPage = debounce(function (event) {
       loadPage();
     }, 1500);
+
     const loadPage = async () => {
       var bounds = map.getBounds();
-      console.log(bounds);
       const { payload } = await searchAreaProjectsReq(bounds);
-      markerList.map(marker => {
+      markerList.map((marker) => {
         map.remove(marker);
       });
-      markerList = payload.map(m => {
-        const marker = new AMap.CircleMarker({
-          center: new AMap.LngLat(m.location.lng, m.location.lat),
+      markerList = payload.map((m) => {
+        const marker = new $Amap.CircleMarker({
+          center: new $Amap.LngLat(m.location.lng, m.location.lat),
           radius: 10, //3D视图下，CircleMarker半径不要超过64px
-          strokeColor: "white",
+          strokeColor: 'white',
           strokeWeight: 2,
           strokeOpacity: 0.5,
-          fillColor: "rgba(0,0,255,1)",
+          fillColor: 'rgba(0,0,255,1)',
           fillOpacity: 0.5,
           zIndex: 10,
           bubble: true,
-          cursor: "pointer",
+          cursor: 'pointer',
           clickable: true,
-          extData: m
+          extData: m,
         });
-        marker.on("click", function (e: any) {
+        marker.on('click', function (e: any) {
           const extData = e.target.getExtData();
           console.log(extData);
           infoWindow.open(map, [extData.location.lng, extData.location.lat]);
         });
         return marker;
       });
-      markerList.map(marker => {
+      markerList.map((marker) => {
         map.add(marker);
       });
     };
     onMounted(async () => {
-      AMap = await AMapLoader.load({
-        //首次调用 load
-        key: import.meta.env.VITE_AMAP_KEY, //首次load key为必填
-        version: "2.0",
-        plugins: ["AMap.Scale", "AMap.ToolBar"]
-      });
       //构建信息窗体中显示的内容
       let info = [];
       info.push(
         '<div class=\'input-card content-window-card\'><div><img style="float:left;width:67px;height:16px;" src=" https://webapi.amap.com/images/autonavi.png "/></div> '
       );
       info.push('<div style="padding:7px 0px 0px 0px;"><h4>高德软件</h4>');
-      info.push(
-        "<p class='input-item'>电话 : 010-84107000   邮编 : 100102</p>"
-      );
-      info.push(
-        "<p class='input-item'>地址 :北京市朝阳区望京阜荣街10号首开广场4层</p></div></div>"
-      );
+      info.push("<p class='input-item'>电话 : 010-84107000   邮编 : 100102</p>");
+      info.push("<p class='input-item'>地址 :北京市朝阳区望京阜荣街10号首开广场4层</p></div></div>");
 
-      infoWindow = new AMap.InfoWindow({
-        content: info.join("") //使用默认信息窗体框样式，显示信息内容
+      infoWindow = new $Amap.InfoWindow({
+        content: info.join(''), //使用默认信息窗体框样式，显示信息内容
       });
-      map = new AMap.Map("container", {
+      map = new $Amap.Map('container', {
         resizeEnable: true, //是否监控地图容器尺寸变化
         zoom: 17, //初始地图级别
         pitch: 75, // 地图俯仰角度，有效范围 0 度- 83 度
-        viewMode: "2D", // 地图模式
-        mapStyle: "amap://styles/dark", //设置地图的显示样式
-        features: ["bg", "road", "building", "point"]
+        viewMode: '2D', // 地图模式
+        mapStyle: 'amap://styles/dark', //设置地图的显示样式
+        features: ['bg', 'road', 'building', 'point'],
       });
-      map.on("rightclick", clickHandler);
-      map.on("complete", debounceLoadPage);
-      map.on("zoomend", debounceLoadPage);
-      map.on("moveend", debounceLoadPage);
-      map.on("resize", debounceLoadPage);
-      watchEffect(() => {
-        AMap.plugin(["AMap.PlaceSearch"], function () {
-          //构造地点查询类
-          var placeSearch = new AMap.PlaceSearch({
-            pageSize: 5, // 单页显示结果条数
-            pageIndex: 1, // 页码
-            city: "舟山", // 兴趣点城市
-            citylimit: true, //是否强制限制在设置的城市内搜索
-            map: map, // 展现结果的地图实例
-            autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
-          });
-          //关键字查询
-          placeSearch.search(
-            searchText.value,
-            (status: string, result: any) => {
-              console.log(result);
-              options.value =
-                result.poiList?.pois.map((m: any) => {
-                  return {
-                    label: m.name,
-                    value: m.id
-                  };
-                }) ?? [];
-            }
-          );
-        });
-      });
-      AMap.plugin("AMap.Geolocation", function () {
-        var geolocation = new AMap.Geolocation({
+      map.on('rightclick', clickHandler);
+      map.on('complete', debounceLoadPage);
+      map.on('zoomend', debounceLoadPage);
+      map.on('moveend', debounceLoadPage);
+      map.on('resize', debounceLoadPage);
+
+      $Amap.plugin('AMap.Geolocation', function () {
+        var geolocation = new $Amap.Geolocation({
           // 是否使用高精度定位，默认：true
           enableHighAccuracy: true,
           // 设置定位超时时间，默认：无穷大
           timeout: 10000,
           //  定位按钮的排放位置,  RB表示右下
-          buttonPosition: "RB",
+          buttonPosition: 'RB',
           // 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
           // buttonOffset: new AMap.Pixel(-100, -100),
           //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-          zoomToAccuracy: true
+          zoomToAccuracy: true,
         });
         map.addControl(geolocation);
         geolocation.getCurrentPosition(function (status: any, result: any) {
-          if (status == "complete") {
+          if (status == 'complete') {
             onComplete(result);
           } else {
             onError(result);
@@ -270,20 +185,14 @@ export default defineComponent({
 
     return {
       // refs
+      RightDropdownRef,
       FormModalRef,
-      showDropdown: showDropdownRef,
 
-      searchText,
-      options,
-      ddOptions,
-      x: xRef,
-      y: yRef,
       // method
       loadPage,
-      handleSelect,
-      onClickoutside
+      handleAddMsg,
     };
-  }
+  },
 });
 </script>
 <style lang="css" scoped>
@@ -295,28 +204,6 @@ export default defineComponent({
   position: absolute;
   width: 100%;
   height: 100%;
-}
-#myPageTop {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  font-family: "Microsoft Yahei", ΢���ź�, Pinghei;
-  font-size: 14px;
-  background-color: var(--color);
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(204, 204, 204);
-  border-image: initial;
-  margin: 10px auto;
-  padding: 6px;
-}
-#myPageTop label {
-  margin: 0 20px 0 0;
-  color: #666666;
-  font-weight: normal;
-}
-#myPageTop input {
-  width: 270px;
 }
 .map-wrap :deep(.amap-content-body),
 .map-wrap :deep(.amap-lib-infowindow-title),

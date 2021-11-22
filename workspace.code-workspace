@@ -10,5 +10,24 @@
       "path": "."
     }
   ],
-  "settings": {}
+  "settings": {
+    "editor.autoIndent": "advanced",
+    "editor.fontSize": 16,
+    "editor.insertSpaces": true,
+    "editor.mouseWheelZoom": false,
+    "editor.snippetSuggestions": "top",
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "editor.minimap.scale": 2,
+    "editor.fontFamily": "Fira Code, Consolas, Microsoft YaHei",
+    "editor.fontLigatures": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode", // 设置默认格式化工具为prettier
+    "files.autoSaveDelay": 1000,
+    "files.eol": "\n",
+    "git.autofetch": true,
+    "workbench.editor.tabSizing": "shrink",
+    "volar.codeLens.pugTools": false,
+    "volar.icon.splitEditors": false,
+    "volar.autoCompleteRefs": false
+  }
 }

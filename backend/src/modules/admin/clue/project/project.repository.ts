@@ -26,7 +26,6 @@ export class ProjectRepository extends Repository<ProjectEntity> {
         ],
       ],
     };
-    Logger.warn(JSON.stringify(area));
     const query = this.createQueryBuilder('p')
       .leftJoinAndSelect('p.creator', 'u')
       .where(`ST_DWithin(location, ST_GeomFromGeoJSON(:area), 0)`)
