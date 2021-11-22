@@ -20,6 +20,8 @@ import { MinioClientService } from './minio-client.service';
       },
       inject: [ConfigService],
     }),
+
+    ConfigModule,
   ],
 
   providers: [MinioClientService],
