@@ -2,17 +2,12 @@
   <n-layout-header bordered class="nav">
     <n-text tag="div" class="ui-logo" :depth="1" @click="handleLogoClick">
       <img src="/assets/images/naivelogo.svg" />
-      <span>i-zhoushan</span>
+      <span>i-share-clue</span>
     </n-text>
     <div></div>
     <div class="nav-end">
       <dark-mode-toggle class="nav-picker"></dark-mode-toggle>
-      <n-dropdown
-        @select="handleSelect"
-        trigger="click"
-        placement="bottom-end"
-        :options="options"
-      >
+      <n-dropdown @select="handleSelect" trigger="click" placement="bottom-end" :options="options">
         <n-space align="center" style="height: 42px">
           <n-avatar :src="userInfo?.avatar" />
           <n-button text :keyboard="false">{{ realName }}</n-button>
@@ -23,20 +18,13 @@
 </template>
 
 <script lang="ts">
-import { computed } from "@vue/runtime-core";
-import {
-  NLayoutHeader,
-  NText,
-  NButton,
-  NDropdown,
-  NAvatar,
-  NSpace
-} from "naive-ui";
-import DarkModeToggle from "/@/components/common/DarkModeToggle.vue";
-import { useUserStore } from "/@/store/modules/user";
-import { useImpRoute } from "/@/hooks/useRoute";
+import { computed } from '@vue/runtime-core';
+import { NLayoutHeader, NText, NButton, NDropdown, NAvatar, NSpace } from 'naive-ui';
+import DarkModeToggle from '/@/components/common/DarkModeToggle.vue';
+import { useUserStore } from '/@/store/modules/user';
+import { useImpRoute } from '/@/hooks/useRoute';
 export default {
-  name: "DashboardHeader",
+  name: 'DashboardHeader',
   components: {
     NLayoutHeader,
     NText,
@@ -44,7 +32,7 @@ export default {
     NSpace,
     NButton,
     NDropdown,
-    DarkModeToggle
+    DarkModeToggle,
   },
   setup() {
     // use
@@ -55,39 +43,37 @@ export default {
       return userStore.getUserInfo;
     });
     const realName = computed(() => {
-      return `${userInfo.value?.firstName || ""}${
-        userInfo.value?.lastName || ""
-      }`;
+      return `${userInfo.value?.firstName || ''}${userInfo.value?.lastName || ''}`;
     });
     // method
     const handleLogoClick = () => {
-      pushPath("/");
+      pushPath('/');
     };
     const handleLogout = () => {
       const d = window.$dialog.warning({
-        title: "退出",
-        content: "真的要注销登录吗 ?",
-        positiveText: "确定",
+        title: '退出',
+        content: '真的要注销登录吗 ?',
+        positiveText: '确定',
         onPositiveClick: () => {
           d.loading = true;
           return userStore.logout();
         },
         onNegativeClick: () => {
-          window.$message.error("不确定");
-        }
+          window.$message.error('不确定');
+        },
       });
     };
     const handleSelect = (key: Event) => {
       // TODO: fix
       switch (key as unknown as unknown as string) {
-        case "logout":
+        case 'logout':
           handleLogout();
           break;
-        case "dashboard":
-          pushPath("/");
+        case 'dashboard':
+          pushPath('/');
           break;
-        case "center":
-          pushPath("/center/my");
+        case 'center':
+          pushPath('/center/my');
           break;
         default:
           break;
@@ -97,26 +83,26 @@ export default {
       // const
       options: [
         {
-          label: "寻找地图",
-          key: "dashboard"
+          label: '寻找地图',
+          key: 'dashboard',
         },
         {
-          label: "个人信息",
-          key: "center"
+          label: '个人信息',
+          key: 'center',
         },
         {
-          label: "登出",
-          key: "logout"
-        }
+          label: '登出',
+          key: 'logout',
+        },
       ],
       // computed
       userInfo,
       realName,
       // method
       handleLogoClick,
-      handleSelect
+      handleSelect,
     };
-  }
+  },
 };
 </script>
 

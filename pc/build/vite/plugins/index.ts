@@ -26,7 +26,7 @@ export function createVitePlugins(env: Record<string, string>, command: string, 
     html({
       inject: {
         injectData: {
-          title: '爱舟山',
+          title: '爱线索分享',
           css: [...commonCss],
           js: [...commonJs],
         },

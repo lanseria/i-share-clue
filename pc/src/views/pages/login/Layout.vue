@@ -4,11 +4,8 @@
       <dark-mode-toggle class="dark-mode-toggle"></dark-mode-toggle>
       <right-image class="right-image" />
       <div class="login-main">
-        <n-h1
-          style="margin-top: 0; font-size: 40px !important"
-          class="imp-title"
-        >
-          <span>IMP CORE UI</span>
+        <n-h1 style="margin-top: 0; font-size: 40px !important" class="imp-title">
+          <span>Share Clue</span>
         </n-h1>
         <router-view />
       </div>
@@ -21,11 +18,11 @@
 </template>
 
 <script lang="ts">
-import LandingFooter from "./Footer.vue";
-import leftImage from "./Left.vue";
-import rightImage from "./Right.vue";
-import { NLayout, NLayoutFooter, NH1 } from "naive-ui";
-import DarkModeToggle from "/@/components/common/DarkModeToggle.vue";
+import LandingFooter from './Footer.vue';
+import leftImage from './Left.vue';
+import rightImage from './Right.vue';
+import { NLayout, NLayoutFooter, NH1 } from 'naive-ui';
+import DarkModeToggle from '/@/components/common/DarkModeToggle.vue';
 export default {
   components: {
     LandingFooter,
@@ -34,11 +31,11 @@ export default {
     NLayout,
     NLayoutFooter,
     NH1,
-    DarkModeToggle
+    DarkModeToggle,
   },
   setup() {
     return {};
-  }
+  },
 };
 </script>
 
@@ -58,7 +55,7 @@ export default {
 }
 
 .imp::after {
-  content: "";
+  content: '';
   width: 100%;
   height: 64px;
 }

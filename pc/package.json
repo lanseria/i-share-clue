@@ -1,19 +1,19 @@
 {
-  "name": "i-zhoushan-ui",
+  "name": "i-share-clue-ui",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lanseria/i-zhoushan.git"
+    "url": "git+https://github.com/Lanseria/i-share-clue.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Lanseria/i-zhoushan/issues"
+    "url": "https://github.com/Lanseria/i-share-clue/issues"
   },
-  "homepage": "https://github.com/Lanseria/i-zhoushan#readme",
+  "homepage": "https://github.com/Lanseria/i-share-clue#readme",
   "scripts": {
     "dev": "vite",
     "dev:mock": "vite --mode devmock",
