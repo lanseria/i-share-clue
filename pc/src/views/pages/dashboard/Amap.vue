@@ -6,9 +6,13 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, getCurrentInstance, onMounted, provide, reactive, Ref, ref } from 'vue';
+import { computed, defineComponent, getCurrentInstance, onMounted, provide, reactive, Ref, ref, watchEffect } from 'vue';
 import { addEvents, events } from './events';
-
+import { useAppStore } from '/@/store/modules/app';
+const styleThemeMap = {
+  light: 'normal',
+  dark: 'dark',
+};
 export default defineComponent({
   name: 'FastAMap',
   props: {
@@ -33,6 +37,8 @@ export default defineComponent({
     ...events,
   ],
   setup(props, { emit }) {
+    // use
+    const appStore = useAppStore();
     // comp
     let map: Ref<any> = ref<any>({});
     provide('map', map);
@@ -42,6 +48,11 @@ export default defineComponent({
     const ContainerRef = ref();
     // ref
     const mapLoaded = ref(false);
+    // computed
+    const mapStyle = computed(() => {
+      const theme = appStore.getTheme;
+      return styleThemeMap[theme];
+    });
     // method
     const handleCompleteEvent = (event: any) => {
       mapLoaded.value = true;
@@ -94,26 +105,32 @@ export default defineComponent({
         zoom: 17, //初始地图级别
         pitch: 75, // 地图俯仰角度，有效范围 0 度- 83 度
         viewMode: '2D', // 地图模式
-        mapStyle: 'amap://styles/dark', //设置地图的显示样式
+        mapStyle: `amap://styles/${mapStyle.value}`, //设置地图的显示样式
         features: ['bg', 'road', 'building', 'point'],
       };
+
       try {
-        map.value = new $Amap.Map(ContainerRef.value, options);
-        map.value.on('mapmove', handleMapmoveEvent);
-        map.value.on('complete', handleCompleteEvent);
-        map.value.on('movestart', handleMovestartEvent);
-        map.value.on('moveend', handleMoveendEvent);
-        map.value.on('zoomchange', handleZoomchangeEvent);
-        map.value.on('zoomstart', handleZoomstartEvent);
-        map.value.on('zoomend', handleZoomendEvent);
-        map.value.on('dragstart', handleDragstartEvent);
-        map.value.on('dragging', handleDraggingEvent);
-        map.value.on('dragend', handleDragendEvent);
-        map.value.on('resize', handleResizeEvent);
-        addEvents(map.value, events, (event: any) => {
+        const newMap = new $Amap.Map(ContainerRef.value, options);
+        newMap.on('mapmove', handleMapmoveEvent);
+        newMap.on('complete', handleCompleteEvent);
+        newMap.on('movestart', handleMovestartEvent);
+        newMap.on('moveend', handleMoveendEvent);
+        newMap.on('zoomchange', handleZoomchangeEvent);
+        newMap.on('zoomstart', handleZoomstartEvent);
+        newMap.on('zoomend', handleZoomendEvent);
+        newMap.on('dragstart', handleDragstartEvent);
+        newMap.on('dragging', handleDraggingEvent);
+        newMap.on('dragend', handleDragendEvent);
+        newMap.on('resize', handleResizeEvent);
+        addEvents(newMap, events, (event: any) => {
           emit(event.type, event);
         });
 
+        // watch
+        watchEffect(() => {
+          const styleName = 'amap://styles/' + mapStyle.value;
+          newMap.setMapStyle(styleName);
+        });
         //
         const geolocation = new $Amap.Geolocation({
           // 是否使用高精度定位，默认：true
@@ -127,13 +144,12 @@ export default defineComponent({
           //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
           zoomToAccuracy: true,
         });
-        map.value.addControl(geolocation);
+        newMap.addControl(geolocation);
 
         function onComplete(data: any) {
-          console.log(data);
           emit('location-complete', {
             data,
-            map,
+            map: newMap,
           });
           // data是具体的定位信息
         }
@@ -150,7 +166,7 @@ export default defineComponent({
           }
         });
         //
-
+        map.value = newMap;
         // //创建右键菜单
         // const contextMenu = new AMap.ContextMenu();
         // let contextMenuPositon = "";

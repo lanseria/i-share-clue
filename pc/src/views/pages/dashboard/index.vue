@@ -78,7 +78,7 @@ export default defineComponent({
     }, 1500);
 
     const onAmapComplete = (e: any) => {
-      map = e.map.value;
+      map = e.map;
       loadPage();
     };
 
