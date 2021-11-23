@@ -8,6 +8,7 @@ import { setupStore } from '/@/store';
 import '/@/styles/index.css';
 import { initAppConfigStore } from './logic/initAppConfig';
 import { registerGlobComp } from './components/registerGlobComp';
+import MapRegistry from './views/pages/dashboard/MapRegistry';
 
 async function bootstrap() {
   const app = createApp(App);
@@ -16,8 +17,9 @@ async function bootstrap() {
     //首次调用 load
     key: import.meta.env.VITE_AMAP_KEY, //首次load key为必填
     version: '2.0',
-    plugins: ['AMap.Scale', 'AMap.ToolBar'],
+    plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.PlaceSearch', 'AMap.Geolocation'],
   });
+  app.config.globalProperties.$MapRegistry = new MapRegistry();
   // Configure store
   setupStore(app);
 
