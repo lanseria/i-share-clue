@@ -1,10 +1,10 @@
 <template>
   <div class="map-wrap">
-    <Amap></Amap>
-    <!-- <div id="container" tabindex="0"></div> -->
-
-    <PlaceSearch></PlaceSearch>
-    <RightDropdown ref="RightDropdownRef" @add-msg="handleAddMsg"></RightDropdown>
+    <Amap @rightclick="clickHandler" @location-complete="onAmapComplete" @resize="debounceLoadPage" @zoomend="debounceLoadPage" @moveend="debounceLoadPage">
+      <PlaceSearch></PlaceSearch>
+      <RightDropdown ref="RightDropdownRef" @add-msg="handleAddMsg"></RightDropdown>
+      <CircleMarker v-for="marker in markerList" :key="marker.id" :location="marker.location" :ext-data="marker" @click="handleMarkerClick"></CircleMarker>
+    </Amap>
   </div>
   <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
 </template>
@@ -14,6 +14,7 @@ import FormModal from './FormModal.vue';
 import PlaceSearch from './PlaceSearch.vue';
 import RightDropdown from './RightDropdown.vue';
 import Amap from './Amap.vue';
+import CircleMarker from './CircleMarker.vue';
 import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
 import { debounce } from 'lodash';
 class LngLat {
@@ -37,16 +38,15 @@ export default defineComponent({
     PlaceSearch,
     RightDropdown,
     Amap,
+    CircleMarker,
   },
   setup() {
     const { $Amap } = getCurrentInstance()!.appContext.config.globalProperties;
     //
     let infoWindow: any = undefined;
     let lnglat: LngLat | undefined = undefined;
-    let markerList: any[] = [];
-    let map: any = undefined;
-    provide('map', map);
-
+    let markerList = ref<any[]>([]);
+    let map: any = null;
     // refs
     const RightDropdownRef = ref();
     const FormModalRef = ref();
@@ -58,6 +58,7 @@ export default defineComponent({
         lnglat = new LngLat(e.lnglat);
       });
     };
+
     const handleAddMsg = (key: string) => {
       RightDropdownRef.value.close();
       FormModalRef.value.open({
@@ -68,41 +69,23 @@ export default defineComponent({
       });
     };
 
+    const handleMarkerClick = (e: any) => {
+      infoWindow.open(map, [e.extData.location.lng, e.extData.location.lat]);
+    };
+
     const debounceLoadPage = debounce(function (event) {
       loadPage();
     }, 1500);
 
+    const onAmapComplete = (e: any) => {
+      map = e.map.value;
+      loadPage();
+    };
+
     const loadPage = async () => {
-      var bounds = map.getBounds();
+      const bounds = map.getBounds();
       const { payload } = await searchAreaProjectsReq(bounds);
-      markerList.map((marker) => {
-        map.remove(marker);
-      });
-      markerList = payload.map((m) => {
-        const marker = new $Amap.CircleMarker({
-          center: new $Amap.LngLat(m.location.lng, m.location.lat),
-          radius: 10, //3D视图下，CircleMarker半径不要超过64px
-          strokeColor: 'white',
-          strokeWeight: 2,
-          strokeOpacity: 0.5,
-          fillColor: 'rgba(0,0,255,1)',
-          fillOpacity: 0.5,
-          zIndex: 10,
-          bubble: true,
-          cursor: 'pointer',
-          clickable: true,
-          extData: m,
-        });
-        marker.on('click', function (e: any) {
-          const extData = e.target.getExtData();
-          console.log(extData);
-          infoWindow.open(map, [extData.location.lng, extData.location.lat]);
-        });
-        return marker;
-      });
-      markerList.map((marker) => {
-        map.add(marker);
-      });
+      markerList.value = payload;
     };
     const showMap = () => {
       //构建信息窗体中显示的内容
@@ -118,9 +101,13 @@ export default defineComponent({
         content: info.join(''), //使用默认信息窗体框样式，显示信息内容
       });
     };
-    onMounted(async () => {});
+    onMounted(async () => {
+      showMap();
+    });
 
     return {
+      // ref
+      markerList,
       // refs
       RightDropdownRef,
       FormModalRef,
@@ -128,6 +115,10 @@ export default defineComponent({
       // method
       loadPage,
       handleAddMsg,
+      clickHandler,
+      onAmapComplete,
+      debounceLoadPage,
+      handleMarkerClick,
     };
   },
 });
@@ -136,21 +127,5 @@ export default defineComponent({
 .map-wrap {
   position: relative;
   height: calc(100vh - 64px);
-}
-#container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-.map-wrap :deep(.amap-content-body),
-.map-wrap :deep(.amap-lib-infowindow-title),
-.map-wrap :deep(.amap-lib-infowindow-content),
-.map-wrap :deep(.amap-menu-outer),
-.map-wrap :deep(.amap-info-content),
-.map-wrap :deep(.amap-menu-outer li:hover) {
-  background-color: var(--color);
-}
-.map-wrap :deep(.amap-info-sharp) {
-  border-top: 8px solid var(--color);
 }
 </style>

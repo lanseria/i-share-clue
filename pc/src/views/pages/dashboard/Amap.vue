@@ -6,24 +6,8 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, getCurrentInstance, onMounted, provide, ref } from 'vue';
-const events = [
-  'click',
-  'dblclick',
-  'hotspotclick',
-  'hotspotover',
-  'hotspotout',
-  'mousemove',
-  'mousewheel',
-  'mouseover',
-  'mouseout',
-  'mouseup',
-  'mousedown',
-  'rightclick',
-  'touchstart',
-  'touchmove',
-  'touchend',
-];
+import { defineComponent, getCurrentInstance, onMounted, provide, reactive, Ref, ref } from 'vue';
+import { addEvents, events } from './events';
 
 export default defineComponent({
   name: 'FastAMap',
@@ -33,10 +17,24 @@ export default defineComponent({
       default: '100%',
     },
   },
-  emits: ['mapmove', 'complete', 'movestart', 'moveend', 'zoomchange', 'zoomstart', 'zoomend', 'dragstart', 'dragging', 'dragend', 'resize', ...events],
+  emits: [
+    'location-complete',
+    'mapmove',
+    'complete',
+    'movestart',
+    'moveend',
+    'zoomchange',
+    'zoomstart',
+    'zoomend',
+    'dragstart',
+    'dragging',
+    'dragend',
+    'resize',
+    ...events,
+  ],
   setup(props, { emit }) {
     // comp
-    let map: any = null;
+    let map: Ref<any> = ref<any>({});
     provide('map', map);
     // global
     const $Amap = getCurrentInstance()!.appContext.config.globalProperties.$Amap;
@@ -45,10 +43,9 @@ export default defineComponent({
     // ref
     const mapLoaded = ref(false);
     // method
-
     const handleCompleteEvent = (event: any) => {
       mapLoaded.value = true;
-      emit(event.type, event, map);
+      emit(event.type, { event, map });
     };
 
     const handleMapmoveEvent = () => {
@@ -90,12 +87,6 @@ export default defineComponent({
     const handleResizeEvent = () => {
       emit('resize');
     };
-    const addEvents = (map: any, events: string[], hanleEvents: Function) => {
-      events.forEach((event) => {
-        // 注册事件，并传入通用函数处理方法
-        map.on(event, hanleEvents);
-      });
-    };
     // hook
     onMounted(() => {
       const options = {
@@ -107,19 +98,19 @@ export default defineComponent({
         features: ['bg', 'road', 'building', 'point'],
       };
       try {
-        map = new $Amap.Map(ContainerRef.value, options);
-        map.on('mapmove', handleMapmoveEvent);
-        map.on('complete', handleCompleteEvent);
-        map.on('movestart', handleMovestartEvent);
-        map.on('moveend', handleMoveendEvent);
-        map.on('zoomchange', handleZoomchangeEvent);
-        map.on('zoomstart', handleZoomstartEvent);
-        map.on('zoomend', handleZoomendEvent);
-        map.on('dragstart', handleDragstartEvent);
-        map.on('dragging', handleDraggingEvent);
-        map.on('dragend', handleDragendEvent);
-        map.on('resize', handleResizeEvent);
-        addEvents(map, events, (event: any) => {
+        map.value = new $Amap.Map(ContainerRef.value, options);
+        map.value.on('mapmove', handleMapmoveEvent);
+        map.value.on('complete', handleCompleteEvent);
+        map.value.on('movestart', handleMovestartEvent);
+        map.value.on('moveend', handleMoveendEvent);
+        map.value.on('zoomchange', handleZoomchangeEvent);
+        map.value.on('zoomstart', handleZoomstartEvent);
+        map.value.on('zoomend', handleZoomendEvent);
+        map.value.on('dragstart', handleDragstartEvent);
+        map.value.on('dragging', handleDraggingEvent);
+        map.value.on('dragend', handleDragendEvent);
+        map.value.on('resize', handleResizeEvent);
+        addEvents(map.value, events, (event: any) => {
           emit(event.type, event);
         });
 
@@ -136,15 +127,19 @@ export default defineComponent({
           //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
           zoomToAccuracy: true,
         });
-        map.addControl(geolocation);
+        map.value.addControl(geolocation);
 
         function onComplete(data: any) {
           console.log(data);
+          emit('location-complete', {
+            data,
+            map,
+          });
           // data是具体的定位信息
         }
 
         function onError(data: any) {
-          console.log(data);
+          // console.log(data);
           // 定位出错
         }
         geolocation.getCurrentPosition(function (status: any, result: any) {
@@ -182,6 +177,7 @@ export default defineComponent({
     });
     return {
       ContainerRef,
+      // ref
       mapLoaded,
     };
   },
@@ -199,5 +195,16 @@ export default defineComponent({
 .cpt-fast-map {
   position: relative;
   overflow: hidden;
+}
+.cpt-fast-map :deep(.amap-content-body),
+.cpt-fast-map :deep(.amap-lib-infowindow-title),
+.cpt-fast-map :deep(.amap-lib-infowindow-content),
+.cpt-fast-map :deep(.amap-menu-outer),
+.cpt-fast-map :deep(.amap-info-content),
+.cpt-fast-map :deep(.amap-menu-outer li:hover) {
+  background-color: var(--color);
+}
+.cpt-fast-map :deep(.amap-info-sharp) {
+  border-top: 8px solid var(--color);
 }
 </style>

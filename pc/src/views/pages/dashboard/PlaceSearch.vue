@@ -15,7 +15,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, watchEffect, onMounted, getCurrentInstance, inject } from 'vue';
+import { defineComponent, ref, watchEffect, onMounted, getCurrentInstance, inject, Ref } from 'vue';
 import { NAutoComplete } from 'naive-ui';
 export default defineComponent({
   components: {
@@ -23,7 +23,7 @@ export default defineComponent({
   },
   setup() {
     const { $Amap } = getCurrentInstance()!.appContext.config.globalProperties;
-    const map = inject<any>('map');
+    const map = inject<Ref<any>>('map');
     let placeSearch: any = null;
     // ref
     const searchText = ref('');
@@ -35,7 +35,7 @@ export default defineComponent({
         pageIndex: 1, // 页码
         // city: '', // 兴趣点城市
         citylimit: true, //是否强制限制在设置的城市内搜索
-        map: map, // 展现结果的地图实例
+        map: map!.value, // 展现结果的地图实例
         autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
       });
 
