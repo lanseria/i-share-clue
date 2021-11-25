@@ -16,23 +16,23 @@ export class UsersRepository extends Repository<UserEntity> {
       skip,
       limit: take,
       order,
-      params: { search },
+      params: { username },
     } = pagination;
     const query = this.createQueryBuilder('u')
-      .innerJoinAndSelect('u.roles', 'r')
-      .leftJoinAndSelect('u.permissions', 'p')
+      // .innerJoinAndSelect('u.roles', 'r')
+      // .leftJoinAndSelect('u.permissions', 'p')
       .skip(skip)
       .take(take)
       .orderBy(order);
 
-    if (search) {
+    if (username) {
       query.where(
         `
             u.username ILIKE :search
             OR u.first_name ILIKE :search
             OR u.last_name ILIKE :search
             `,
-        { search: `%${search}%` },
+        { search: `%${username}%` },
       );
     }
 

@@ -5,19 +5,19 @@ import { DefaultPagination } from '../interfaces/default-pagination.interface';
  * Decorator intended for building a PaginationRequest object based on the query string parameters
  */
 export const PaginationParams = createParamDecorator(
-  (data: DefaultPagination
-    = {
+  (
+    data: DefaultPagination = {
       defaultSkip: 0,
       defaultPage: 0,
       defaultLimit: 10,
       defaultOrder: {},
       defaultOrderDirection: 'ASC',
-      maxAllowedSize: 20
+      maxAllowedSize: 20,
     },
-    ctx: ExecutionContext) => {
-
+    ctx: ExecutionContext,
+  ) => {
     let {
-      query: { skip, page, limit, orderBy, orderDirection, ...params },
+      query: { skip, page, pageSize, orderBy, orderDirection, ...params },
     } = ctx.switchToHttp().getRequest();
 
     const {
@@ -26,32 +26,32 @@ export const PaginationParams = createParamDecorator(
       defaultLimit,
       defaultOrder,
       defaultOrderDirection,
-      maxAllowedSize
+      maxAllowedSize,
     } = data;
 
     const order = orderBy
       ? { [orderBy]: orderDirection ? orderDirection : defaultOrderDirection }
       : defaultOrder;
 
-    limit = (limit && limit > 0) ? +limit : defaultLimit;
+    pageSize = pageSize && pageSize > 0 ? +pageSize : defaultLimit;
 
     if (!skip) {
       if (page) {
-        skip = (+page - 1) * +limit;
+        skip = (+page - 1) * +pageSize;
         skip = skip >= 0 ? skip : 0;
       } else {
         page = defaultPage;
         skip = defaultSkip;
       }
     } else {
-      page = Math.floor(+skip / limit);
+      page = Math.floor(+skip / pageSize);
     }
 
-    limit = (+limit < +maxAllowedSize) ? limit : maxAllowedSize;
+    pageSize = +pageSize < +maxAllowedSize ? pageSize : maxAllowedSize;
     return Object.assign(data ? data : {}, {
       skip,
       page,
-      limit,
+      limit: pageSize,
       order,
       params,
     });

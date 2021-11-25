@@ -39,7 +39,11 @@ import { PaginationRequest } from '@common/interfaces';
 import { PaginationResponseDto } from '@common/dtos';
 import { UsersService } from './users.service';
 import { UserEntity } from './user.entity';
-import { UpdateUserInfoDto } from './dtos/update-user-info.dto';
+import {
+  UpdateUserBaseDto,
+  UpdateUserInfoDto,
+} from './dtos/update-user-info.dto';
+import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth(TOKEN_NAME)
@@ -81,7 +85,7 @@ export class UsersController {
     'admin.access.users.create',
     'admin.access.users.update',
   )
-  @Get()
+  @Get('/page')
   public getUsers(
     @PaginationParams() pagination: PaginationRequest,
   ): Promise<PaginationResponseDto<UserResponseDto>> {
@@ -115,6 +119,18 @@ export class UsersController {
     return this.usersService.createUser(UserDto);
   }
 
+  @ApiOperation({ description: '创建新用户(简单)' })
+  @ApiGlobalResponse(UserResponseDto)
+  @ApiConflictResponse({ description: '用户已经存在' })
+  @ApiGlobalResponse(UserResponseDto)
+  @Permissions('admin.access.users.create')
+  @Post('/base')
+  public createUserBase(
+    @Body(ValidationPipe) UserDto: CreateUserBaseRequestDto,
+  ): Promise<UserResponseDto> {
+    return this.usersService.createUserBase(UserDto);
+  }
+
   @ApiOperation({ description: '按ID更新用户' })
   @ApiGlobalResponse(UserResponseDto)
   @ApiConflictResponse({ description: '用户已经存在' })
@@ -123,6 +139,18 @@ export class UsersController {
   public updateUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(ValidationPipe) UserDto: UpdateUserRequestDto,
+  ): Promise<UserResponseDto> {
+    return this.usersService.updateUser(id, UserDto);
+  }
+  //TODO:
+  @ApiOperation({ description: '按ID更新用户基本信息' })
+  @ApiGlobalResponse(UserResponseDto)
+  @ApiConflictResponse({ description: '用户已经存在' })
+  @Permissions('admin.access.users.update')
+  @Put('/base/:id')
+  public updateUserBaseInfo(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(ValidationPipe) UserDto: UpdateUserBaseDto,
   ): Promise<UserResponseDto> {
     return this.usersService.updateUser(id, UserDto);
   }

@@ -1,21 +1,21 @@
-import { CommonDTO } from "../../Common/dto";
+import { CommonDTO } from '../../Common/dto';
 
 export enum UserStatus {
-  Active = "active",
-  Blocked = "blocked",
-  Inactive = "inactive"
+  Active = 'active',
+  Blocked = 'blocked',
+  Inactive = 'inactive',
 }
 
 export class LoginDTO implements LoginVO {
-  username = "";
-  password = "";
-  randomStr = "";
-  code = "";
+  username = '';
+  password = '';
+  randomStr = '';
+  code = '';
 }
 
 export class SmsLoginDTO implements SmsLoginVO {
   constructor(data: SmsLoginDTO) {
-    this.mobile = "SMS@" + data.mobile;
+    this.mobile = 'SMS@' + data.mobile;
     this.code = data.code;
   }
   mobile: string;
@@ -23,10 +23,18 @@ export class SmsLoginDTO implements SmsLoginVO {
 }
 
 export class UserInfoDTO extends CommonDTO implements UserInfoVO {
-  id: string = "";
-  username: string = "";
-  firstName: string = "";
-  lastName: string = "";
-  avatar: string = "";
+  id: string = '';
+  username: string = '';
+  firstName: string = '';
+  lastName: string = '';
+  avatar: string = '';
   status: UserStatus = UserStatus.Active;
+}
+
+export class CreateUserFormDTO extends CommonDTO implements CreateUserFormVO {
+  id = '';
+  username = '';
+  lastName = '';
+  firstName = '';
+  password = '';
 }

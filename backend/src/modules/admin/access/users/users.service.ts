@@ -3,6 +3,7 @@ import {
   RequestTimeoutException,
   NotFoundException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import {
   ChangePasswordRequestDto,
@@ -24,6 +25,7 @@ import { DBErrorCode } from '@common/enums';
 import { UserMapper } from './users.mapper';
 import { TimeoutError } from 'rxjs';
 import { UpdateUserInfoDto } from './dtos/update-user-info.dto';
+import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
 
 @Injectable()
 export class UsersService {
@@ -41,9 +43,11 @@ export class UsersService {
     pagination: PaginationRequest,
   ): Promise<PaginationResponseDto<UserResponseDto>> {
     try {
+      // Logger.log(JSON.stringify(pagination));
       const [userEntities, totalUsers] =
         await this.usersRepository.getUsersAndCount(pagination);
 
+      // Logger.log(totalUsers, userEntities, pagination);
       if (!userEntities?.length || totalUsers === 0) {
         throw new NotFoundException();
       }
@@ -100,6 +104,40 @@ export class UsersService {
         error.code == DBErrorCode.PgForeignKeyConstraintViolation ||
         error.code == DBErrorCode.PgNotNullConstraintViolation
       ) {
+        throw new ForeignKeyConflictException();
+      }
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  /**
+   * Create new user
+   * @param userDto {CreateUserRequestDto}
+   * @returns {Promise<UserResponseDto>}
+   */
+  public async createUserBase(
+    userDto: CreateUserBaseRequestDto,
+  ): Promise<UserResponseDto> {
+    try {
+      Logger.log('userEntity');
+      let userEntity = UserMapper.toCreateSimpleEntity(userDto);
+      userEntity.password = await HashHelper.encrypt(userEntity.password);
+      Logger.log(JSON.stringify(userEntity));
+      userEntity = await this.usersRepository.save(userEntity);
+      return UserMapper.toDto(userEntity);
+    } catch (error) {
+      if (error.code == DBErrorCode.PgUniqueConstraintViolation) {
+        throw new UserExistsException(userDto.username);
+      }
+      if (
+        error.code == DBErrorCode.PgForeignKeyConstraintViolation ||
+        error.code == DBErrorCode.PgNotNullConstraintViolation
+      ) {
+        Logger.error(error);
         throw new ForeignKeyConflictException();
       }
       if (error instanceof TimeoutError) {

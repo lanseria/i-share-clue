@@ -36,7 +36,7 @@ export class UserEntity extends BaseEntity {
     name: 'avatar',
     type: 'varchar',
     length: 100,
-    nullable: false,
+    nullable: true,
   })
   avatar: string;
 

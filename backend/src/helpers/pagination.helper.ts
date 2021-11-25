@@ -2,33 +2,30 @@ import { PaginationResponseDto } from '../common/dtos/pagination-response.dto';
 import { PaginationRequest } from '../common/interfaces/pagination-request.interface';
 
 export class Pagination {
-
   /**
    * Return pagination response
-   * @param PaginationRequest {PaginationRequest} 
-   * @param totalRecords {number}
+   * @param PaginationRequest {PaginationRequest}
+   * @param total {number}
    * @param dtos {t[]}
    * @returns {PaginationResponseDto}
    */
   static of<T>(
     { limit, page, skip }: PaginationRequest,
-    totalRecords: number,
+    total: number,
     dtos: T[],
   ): PaginationResponseDto<T> {
-    const totalPages =
-      Math.floor(totalRecords / limit) +
-      (totalRecords % limit > 0 ? 1 : 0);
-    const currentPage = (+page > 0 ? +page : 1);
-    const hasNext = (currentPage <= (totalPages - 1));
+    const pages = Math.floor(total / limit) + (total % limit > 0 ? 1 : 0);
+    const current = +page > 0 ? +page : 1;
+    const hasNext = current <= pages - 1;
 
     return {
-      totalPages: totalPages,
+      pages: pages,
       payloadSize: dtos.length,
       hasNext: hasNext,
-      content: dtos,
-      currentPage: currentPage,
+      records: dtos,
+      current: current,
       skippedRecords: skip,
-      totalRecords: totalRecords
+      total: total,
     };
   }
 }

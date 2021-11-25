@@ -1,15 +1,23 @@
-import { AppRouteRecordRaw } from "/@/router/types";
-import { authMetaFunc } from "/@/utils/route";
+import { AppRouteRecordRaw } from '/@/router/types';
+import { authMetaFunc } from '/@/utils/route';
 
 export const myRoute: AppRouteRecordRaw[] = [
   {
-    path: "base",
-    name: "Base",
-    meta: authMetaFunc("基本信息", {
-      icon: "icon-Shape"
+    path: 'base',
+    name: 'Base',
+    meta: authMetaFunc('基本信息', {
+      icon: 'icon-Shape',
     }),
-    component: () => import("./base/index.vue")
-  }
+    component: () => import('./base/index.vue'),
+  },
+  {
+    path: 'user-list',
+    name: 'UserList',
+    meta: authMetaFunc('用户管理', {
+      icon: 'icon-Shape',
+    }),
+    component: () => import('./user-list/index.vue'),
+  },
   // {
   //   path: "more",
   //   name: "More",

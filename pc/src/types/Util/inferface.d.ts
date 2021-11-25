@@ -6,8 +6,8 @@ interface R<T> {
 }
 
 interface PageBase {
-  current: number | string;
-  size: number | string;
+  page: number | string;
+  pageSize: number | string;
 }
 
 interface ParamsBase {
@@ -24,6 +24,7 @@ interface PageOption extends PageBase {
 
 interface PageResult<T> extends PageOption {
   pages: number;
+  current: number;
   records: Array<T>;
   searchCount: boolean;
 }

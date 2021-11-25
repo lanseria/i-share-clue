@@ -2,7 +2,7 @@ import { IsAlphanumeric, IsEnum, IsNotEmpty, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserStatus } from '../user-status.enum';
 
-export class UpdateUserInfoDto {
+export class UpdateUserBaseDto {
   @IsNotEmpty()
   @IsAlphanumeric()
   @ApiProperty({
@@ -23,7 +23,9 @@ export class UpdateUserInfoDto {
     example: 'Doe',
   })
   lastName: string;
+}
 
+export class UpdateUserInfoDto extends UpdateUserBaseDto {
   @IsNotEmpty()
   @MaxLength(100)
   @ApiProperty({

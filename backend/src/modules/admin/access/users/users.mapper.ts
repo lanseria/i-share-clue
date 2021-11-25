@@ -7,6 +7,7 @@ import {
   UserResponseDto,
   UpdateUserRequestDto,
 } from './dtos';
+import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
 import { UserStatus } from './user-status.enum';
 import { UserEntity } from './user.entity';
 
@@ -61,6 +62,18 @@ export class UserMapper {
     entity.isSuperUser = false;
     return entity;
   }
+  public static toCreateSimpleEntity(
+    dto: CreateUserBaseRequestDto,
+  ): UserEntity {
+    const entity = new UserEntity();
+    entity.username = dto.username;
+    entity.firstName = dto.firstName;
+    entity.lastName = dto.lastName;
+    entity.password = dto.password;
+    entity.status = UserStatus.Active;
+    entity.isSuperUser = false;
+    return entity;
+  }
 
   public static toUpdateEntity(
     entity: UserEntity,
@@ -69,7 +82,7 @@ export class UserMapper {
     entity.username = dto.username;
     entity.firstName = dto.firstName;
     entity.lastName = dto.lastName;
-    entity.avatar = dto.avatar;
+    dto.avatar && (entity.avatar = dto.avatar);
     dto.permissions &&
       (entity.permissions = Promise.resolve(
         dto.permissions.map((id) => new PermissionEntity({ id })),
@@ -78,7 +91,7 @@ export class UserMapper {
       (entity.roles = Promise.resolve(
         dto.roles.map((id) => new RoleEntity({ id })),
       ));
-    entity.status = dto.status;
+    dto.status && (entity.status = dto.status);
     return entity;
   }
 }

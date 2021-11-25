@@ -70,3 +70,11 @@ interface AdminUserPageItemVO extends UserPageItemVO {
   avatar: string;
   orgId: number;
 }
+
+interface CreateUserFormVO {
+  id: string;
+  username: string;
+  lastName: string;
+  firstName: string;
+  password: string;
+}

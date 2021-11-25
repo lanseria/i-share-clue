@@ -11,7 +11,8 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
-export class CreateUserRequestDto {
+
+export class CreateUserBaseRequestDto {
   @IsNotEmpty()
   @IsAlphanumeric()
   @ApiProperty({
@@ -33,12 +34,22 @@ export class CreateUserRequestDto {
   })
   lastName: string;
 
+  @IsNotEmpty()
+  @IsAlphanumeric()
+  @Length(6, 20)
+  @ApiProperty({
+    example: '123456',
+  })
+  password: string;
+}
+
+export class CreateUserRequestDto extends CreateUserBaseRequestDto {
   @Matches(passwordRegex, { message: 'Password too weak' })
   @IsNotEmpty()
   @IsAlphanumeric()
   @Length(6, 20)
   @ApiProperty({
-    example: 'Hello123',
+    example: '123456',
   })
   password: string;
 
