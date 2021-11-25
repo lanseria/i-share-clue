@@ -36,7 +36,9 @@ export class UserEntity extends BaseEntity {
     name: 'avatar',
     type: 'varchar',
     length: 100,
-    nullable: true,
+    nullable: false,
+    default:
+      'https://wx3.sinaimg.cn/mw2000/bcbbf95bly8gvgek5ma9bj20n00n0769.jpg',
   })
   avatar: string;
 
