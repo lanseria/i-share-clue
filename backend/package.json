@@ -29,7 +29,8 @@
     "schema:sync": "npm run typeorm schema:sync",
     "typeorm-seeding": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js",
     "seed:config": "npm run typeorm-seeding config",
-    "seed": "npm run typeorm-seeding seed"
+    "seed": "npm run typeorm-seeding seed",
+    "upi": "yarn upgrade-interactive"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

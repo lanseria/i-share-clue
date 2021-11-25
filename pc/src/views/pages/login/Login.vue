@@ -1,11 +1,7 @@
 <template>
   <n-form ref="FormRef" :label-width="80" :rules="rules" :model="modelRef">
     <n-form-item label="账号" path="username">
-      <n-input
-        placeholder="请输入账号"
-        :maxlength="16"
-        v-model:value="modelRef.username"
-      >
+      <n-input placeholder="请输入账号" :input-props="{ autocomplete: 'username' }" :maxlength="16" v-model:value="modelRef.username">
         <template #prefix>
           <n-icon>
             <person-outline-icon />
@@ -18,6 +14,7 @@
         type="password"
         showPasswordOn="click"
         placeholder="请输入密码"
+        :input-props="{ autocomplete: 'current-password' }"
         :maxlength="16"
         v-model:value="modelRef.password"
       >
@@ -48,23 +45,10 @@
     <n-form-item>
       <n-grid x-gap="12" :cols="2">
         <n-grid-item>
-          <n-button
-            type="primary"
-            block
-            :loading="operating"
-            :disabled="operating"
-            @click="handleSubmit()"
-            >登录</n-button
-          >
+          <n-button type="primary" block :loading="operating" :disabled="operating" @click="handleSubmit()">登录</n-button>
         </n-grid-item>
         <n-grid-item>
-          <n-button
-            block
-            :loading="operating"
-            :disabled="operating"
-            @click="handleRegister()"
-            >注册</n-button
-          >
+          <n-button block :loading="operating" :disabled="operating" @click="handleRegister()">注册</n-button>
         </n-grid-item>
       </n-grid>
     </n-form-item>
@@ -73,25 +57,17 @@
 
 <script lang="ts">
 // import CodeImg, { CodeImgRefs } from "./CodeImg.vue";
-import {
-  NForm,
-  NFormItem,
-  NInput,
-  NButton,
-  NIcon,
-  NGrid,
-  NGridItem
-} from "naive-ui";
+import { NForm, NFormItem, NInput, NButton, NIcon, NGrid, NGridItem } from 'naive-ui';
 import {
   PersonOutline as PersonOutlineIcon,
-  KeyOutline as KeyOutlineIcon
+  KeyOutline as KeyOutlineIcon,
   // KeypadOutline as KeypadOutlineIcon
-} from "@vicons/ionicons5";
-import { computed, ref } from "vue";
-import { loginRules } from "./options";
-import { useUserStore } from "/@/store/modules/user";
-import { useImpSubmit } from "/@/hooks/useForm";
-import { useImpRoute } from "/@/hooks/useRoute";
+} from '@vicons/ionicons5';
+import { computed, ref } from 'vue';
+import { loginRules } from './options';
+import { useUserStore } from '/@/store/modules/user';
+import { useImpSubmit } from '/@/hooks/useForm';
+import { useImpRoute } from '/@/hooks/useRoute';
 export default {
   components: {
     // CodeImg,
@@ -103,7 +79,7 @@ export default {
     NGrid,
     NGridItem,
     PersonOutlineIcon,
-    KeyOutlineIcon
+    KeyOutlineIcon,
     // KeypadOutlineIcon
   },
   setup() {
@@ -115,11 +91,11 @@ export default {
     const FormRef = ref();
     // const CodeImgRef = ref<CodeImgRefs>();
     const modelRef = ref({
-      username: "",
-      mobile: "",
-      password: "",
-      code: "",
-      randomStr: ""
+      username: '',
+      mobile: '',
+      password: '',
+      code: '',
+      randomStr: '',
     });
     // computed
     const operating = computed(() => {
@@ -127,7 +103,7 @@ export default {
     });
     // method
     const refreshRandomStr = (randomStr: string) => {
-      modelRef.value.code = "";
+      modelRef.value.code = '';
       modelRef.value.randomStr = randomStr;
     };
     const submitAction = async () => {
@@ -144,7 +120,7 @@ export default {
       impSubmit(FormRef.value, submitAction);
     };
     const handleRegister = async () => {
-      pushName("Register");
+      pushName('Register');
     };
     return {
       // const
@@ -159,8 +135,8 @@ export default {
       // method
       refreshRandomStr,
       handleSubmit,
-      handleRegister
+      handleRegister,
     };
-  }
+  },
 };
 </script>
