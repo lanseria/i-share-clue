@@ -1,5 +1,5 @@
 <template>
-  <imp-modal ref="ImpModalRef" :title="`${actionProp.actionName}用户`">
+  <imp-modal ref="ImpModalRef" :title="`${actionProp.actionName}用户`" @leave="close()">
     <n-form :model="modelRef" ref="formRef">
       <n-form-item path="username" label="用户名">
         <n-input v-model:value="modelRef.username" />

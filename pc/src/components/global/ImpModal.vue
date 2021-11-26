@@ -1,10 +1,5 @@
 <template>
-  <n-modal
-    preset="card"
-    :style="bodyStyle"
-    :title="title"
-    v-model:show="showModal"
-  >
+  <n-modal preset="card" :style="bodyStyle" :title="title" v-model:show="showModal" :on-after-leave="handleLeave">
     <template #header-extra>
       <slot name="header-extra"></slot>
     </template>
@@ -15,28 +10,32 @@
   </n-modal>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { NModal } from "naive-ui";
+import { defineComponent, ref } from 'vue';
+import { NModal } from 'naive-ui';
 export default defineComponent({
-  name: "ImpModal",
+  name: 'ImpModal',
   props: {
     title: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
+  emits: ['leave'],
   components: {
-    NModal
+    NModal,
   },
-  setup() {
+  setup(props, { emit }) {
     const showModal = ref(false);
-
+    const handleLeave = () => {
+      emit('leave');
+    };
     return {
       bodyStyle: {
-        width: "600px"
+        width: '600px',
       },
-      showModal
+      showModal,
+      handleLeave,
     };
-  }
+  },
 });
 </script>
