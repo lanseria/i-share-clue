@@ -6,52 +6,61 @@
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
 # Nestjs Permission Boilerplate
+
 ## Description
 
 This is a basic [Nest](https://github.com/nestjs/nest) boilerplate project built on the more powerful node.js framework. The main purpose of this project is to dynamically handle roles and permissions assigned to the user
 
 ## Installation
+
 - make sure you have [node.js](https://nodejs.org/) installed version 11+
 - copy `.env examaple` to `.env` and set environments for use
+
 ```bash
 # install nodejs packages
-$ npm install
+$ npm i -g yarn
+$ yarn install
 ```
 
 ## Running the app
 
 ```bash
 # development
-$ npm run start
+$ yarn start
 
 # watch mode
-$ npm run start:dev
+$ yarn start:dev
 
 # production mode
-$ npm run start:prod
+$ yarn start:prod
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
+$ yarn test
 
 # e2e tests
-$ npm run test:e2e
+$ yarn test:e2e
 
 # test coverage
-$ npm run test:cov
+$ yarn test:cov
 ```
+
 ## Database
+
 Postgres is the database we use in the project, on the other hand you can install the package for your database and start enjoying.
 
 ```bash
 # generate database structure
-$ npm run migrate
+$ yarn migrate
 
 # insert roles, permissions and users
-$ npm run seed
+$ yarn seed
+
+# generate migrate files
+$ yarn migration:gen <update-user-table> -d src/database/migrations/admin
 ```
 
 ## Swagger
@@ -60,20 +69,20 @@ $ npm run seed
 - token: [`JWT <token_generated_on_login>`](http://localhost:8080/api/v1/swagger/#/Auth/AuthController_login)
 
 ## Users
+
 - username: `Admin` - password: `Hello123`
 
 ## Features
 
-- [x]  [NestJS](https://github.com/nestjs/nest) - A progressive Node.js framework for building efficient, reliable and scalable server-side applications
-- [x]  [TypeORM](http://typeorm.io/) - ORM for TypeScript and JavaScript (ES7, ES6, ES5). Supports MySQL, PostgreSQL, MariaDB, SQLite, MS SQL Server, Oracle, WebSQL databases
-- [x]  [TypeScript](https://github.com/Microsoft/TypeScript) - superset of JS which compiles to JS, providing compile-time type checking
-- [x]  [Swagger ui](https://swagger.io/tools/swagger-ui) - allows you to visualize and interact with the API’s resources without having any of the implementation logic in placechecking
-- [x]  [Passport](http://www.passportjs.org/packages/passport-jwt/) - a popular library used to implement JavaScript authentication (Facebook, Google+)
-- [x]  [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - a JavaScript json web tokens implementation by auth0
-- [x]  [pg](https://github.com/brianc/node-postgres) - Non-blocking PostgreSQL client for Node.js. Pure JavaScript and optional native libpq bindings
+- [x] [NestJS](https://github.com/nestjs/nest) - A progressive Node.js framework for building efficient, reliable and scalable server-side applications
+- [x] [TypeORM](http://typeorm.io/) - ORM for TypeScript and JavaScript (ES7, ES6, ES5). Supports MySQL, PostgreSQL, MariaDB, SQLite, MS SQL Server, Oracle, WebSQL databases
+- [x] [TypeScript](https://github.com/Microsoft/TypeScript) - superset of JS which compiles to JS, providing compile-time type checking
+- [x] [Swagger ui](https://swagger.io/tools/swagger-ui) - allows you to visualize and interact with the API’s resources without having any of the implementation logic in placechecking
+- [x] [Passport](http://www.passportjs.org/packages/passport-jwt/) - a popular library used to implement JavaScript authentication (Facebook, Google+)
+- [x] [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - a JavaScript json web tokens implementation by auth0
+- [x] [pg](https://github.com/brianc/node-postgres) - Non-blocking PostgreSQL client for Node.js. Pure JavaScript and optional native libpq bindings
 
-
-## Project Structure 
+## Project Structure
 
 ```
 src
@@ -103,7 +112,7 @@ src
 │   │   │   ├── roles
 │   │   │   ├── users
 │   │   │   └── access.module.ts
-│   │   └── admin.module.ts    
+│   │   └── admin.module.ts
 │   └── auth
 │      ├── decorators
 │      ├── dtos

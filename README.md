@@ -2,13 +2,14 @@
 
 ## 技术栈
 
-- POSTGis gis
-- vue.js@3 framework
+- POSTGIS gis
+- vue.js@3 typescript framework
 - naive-ui@2 ui
 - postgres database
-- nestjs backend
+- @nestjs backend
 - AMap@2 gis-show
 - minio file-save-server
+- docker build
 
 ## 开发工作
 
@@ -46,7 +47,7 @@ docker run --name pgadmin -d -p 5433:80 -e PGADMIN_DEFAULT_EMAIL=root@root.com -
 
 7. 登录 `pgadmin` 连接 `pgsql` 记得 ip 是 `host.docker.internal`
 
-8. 检查与建立数据库
+8. 检查与建立数据库 `zhoushan` 默认
 
 9. 执行迁移
 
@@ -80,18 +81,17 @@ yarn start
 yarn
 ```
 
-2. 注册高德地图 key 填入 `.env.local`
+2. 注册高德地图 key
 
-```
+```sh
+# 高德地图 key 填入 `.env.local`
 cp .env .env.local
 ```
 
 3. 运行开发模式
 
 ```
-
 yarn dev
-
 ```
 
 ## 目的
@@ -105,11 +105,12 @@ yarn dev
 2. 简单用户信息设定
 3. 线索位置添加
 4. 线索位置搜索
+5. 用户管理 CRUD
 
 ## 待完成
 
-1. 分类功能
-2. 字典功能
+1. 用户自定义"大标题"颜色
+2. 字典功能(分类功能)
 3. 线索与项目生成关联与讨论
 4. 打赏与线索更新机制讨论
 
