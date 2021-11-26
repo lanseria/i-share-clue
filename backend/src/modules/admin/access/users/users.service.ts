@@ -35,6 +35,25 @@ export class UsersService {
     private usersRepository: UsersRepository,
   ) {}
   /**
+   * 删除用户
+   * @param id 用户ID
+   */
+  public async deleteUser(id: string) {
+    const userEntity = await this.usersRepository.findOne(id);
+    userEntity.isDelete = true;
+    userEntity.status = UserStatus.Blocked;
+    try {
+      await this.usersRepository.save(userEntity);
+      return UserMapper.toDto(userEntity);
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+  /**
    * 拉白
    * @param id 用户ID
    * @returns

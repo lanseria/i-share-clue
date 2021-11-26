@@ -65,6 +65,14 @@ export class UserEntity extends BaseEntity {
   })
   status: UserStatus;
 
+  @Column({
+    name: 'is_delete',
+    type: 'boolean',
+    nullable: false,
+    default: false,
+  })
+  isDelete: boolean;
+
   @ManyToMany(() => RoleEntity, (role) => role.id, {
     lazy: true,
     cascade: true,

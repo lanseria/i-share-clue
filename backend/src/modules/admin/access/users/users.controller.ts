@@ -9,6 +9,7 @@ import {
   Get,
   Put,
   Logger,
+  Delete,
 } from '@nestjs/common';
 import {
   ApiConflictResponse,
@@ -54,6 +55,34 @@ import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
 })
 export class UsersController {
   constructor(private usersService: UsersService) {}
+  @Delete('/:id')
+  public deleteUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.deleteUser(id);
+  }
+  /**
+   * 拉黑用户
+   * @param id 用户ID
+   * @returns 用户信息
+   */
+  @ApiOperation({ description: '拉黑用户' })
+  @ApiGlobalResponse(UserResponseDto)
+  @Permissions('admin.access.users.update')
+  @Post('/block/:id')
+  public blockUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.blockUser(id);
+  }
+  /**
+   * 拉白用户
+   * @param id 用户ID
+   * @returns 用户信息
+   */
+  @ApiOperation({ description: '拉白用户' })
+  @ApiGlobalResponse(UserResponseDto)
+  @Permissions('admin.access.users.update')
+  @Post('/white/:id')
+  public whiteUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.whiteUser(id);
+  }
   /**
    * 获取本人用户信息
    * @param user 当前用户
@@ -203,29 +232,5 @@ export class UsersController {
     @CurrentUser() user: UserEntity,
   ): Promise<UserResponseDto> {
     return this.usersService.changePassword(changePassword, user.id);
-  }
-  /**
-   * 拉黑用户
-   * @param id 用户ID
-   * @returns 用户信息
-   */
-  @ApiOperation({ description: '拉黑用户' })
-  @ApiGlobalResponse(UserResponseDto)
-  @Permissions('admin.access.users.update')
-  @Post('/block/:id')
-  public blockUser(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.blockUser(id);
-  }
-  /**
-   * 拉白用户
-   * @param id 用户ID
-   * @returns 用户信息
-   */
-  @ApiOperation({ description: '拉白用户' })
-  @ApiGlobalResponse(UserResponseDto)
-  @Permissions('admin.access.users.update')
-  @Post('/white/:id')
-  public whiteUser(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.whiteUser(id);
   }
 }

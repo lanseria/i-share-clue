@@ -15,7 +15,7 @@ interface ParamsBase {
 }
 
 interface PageParam extends PageBase {
-  [key: string]: number | string | null;
+  [key: string]: number | string | boolean | null;
 }
 
 interface PageOption extends PageBase {

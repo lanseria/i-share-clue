@@ -1,6 +1,17 @@
 import r from '/@/router/axios';
 import { api } from './config';
 /**
+ * 删除用户
+ * @param id 用户ID
+ * @returns
+ */
+export const deleteUserReq = (id: string) => {
+  return r.request({
+    url: `${api.self}/${id}`,
+    method: 'DELETE',
+  });
+};
+/**
  * 拉白用户
  * @param id 用户ID
  * @returns

@@ -16,14 +16,17 @@ export class UsersRepository extends Repository<UserEntity> {
       skip,
       limit: take,
       order,
-      params: { username },
+      params: { username, isDelete },
     } = pagination;
     const query = this.createQueryBuilder('u')
       // .innerJoinAndSelect('u.roles', 'r')
       // .leftJoinAndSelect('u.permissions', 'p')
       .skip(skip)
       .take(take)
-      .orderBy(order);
+      .orderBy(order)
+      .where({
+        isDelete: isDelete ?? false,
+      });
 
     if (username) {
       query.where(

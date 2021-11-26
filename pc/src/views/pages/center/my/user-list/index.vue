@@ -1,10 +1,14 @@
 <template>
   <imp-page-container>
     <div class="data-table-header">
-      <n-space>
+      <n-space align="center">
         <n-button type="primary" @click="handleAdd()">新增</n-button>
         <n-button>批量导出</n-button>
         <n-button>批量删除</n-button>
+        <n-switch v-model:value="isDelete" size="large" @update:value="handleSearch()">
+          <template #checked>关闭回收站</template>
+          <template #unchecked>打开回收站</template>
+        </n-switch>
       </n-space>
       <n-space>
         <n-input-group>
@@ -33,13 +37,13 @@
   <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
 </template>
 <script lang="ts">
-import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag } from 'naive-ui';
+import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
-import { defineComponent, h, onMounted, ref } from 'vue';
+import { computed, defineComponent, h, onMounted, ref } from 'vue';
 import { operateColums, OptList } from './Actions';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import FormModal from './FormModal.vue';
-import { adminUserPageReq, blockUserReq, whiteUserReq } from '/@/api/Admin/Access/User';
+import { adminUserPageReq, blockUserReq, deleteUserReq, whiteUserReq } from '/@/api/Admin/Access/User';
 import { UserInfoDTO, UserStatus } from '/@/types/Admin/User/dto';
 class PaginationDTO {
   page = 1;
@@ -55,6 +59,7 @@ export default defineComponent({
     NInputGroup,
     NInput,
     NIcon,
+    NSwitch,
     SearchOutlineIcon,
     FormModal,
   },
@@ -64,15 +69,46 @@ export default defineComponent({
     // ref
     const loading = ref(false);
     const searchName = ref('');
+    const isDelete = ref(false);
     const pagedTable = ref<UserPageItemVO[]>([]);
     const pagination = ref(new PaginationDTO());
+    // computed
+    const currentQuery = computed(() => {
+      return {
+        username: searchName.value,
+        isDelete: isDelete.value,
+      };
+    });
     // method
+    const initPage = async () => {
+      pagination.value = new PaginationDTO();
+      const params = {
+        ...pagination.value,
+        ...currentQuery.value,
+      };
+      if (!loading.value) {
+        loading.value = true;
+        const { payload, errorType, message } = await adminUserPageReq(params);
+        if (errorType) {
+          window.$message.warning(message!);
+        } else {
+          pagedTable.value = payload.records;
+          pagination.value.page = +payload.current;
+          pagination.value.pageCount = +payload.pages;
+        }
+        loading.value = false;
+      }
+    };
     const loadPage = async (
-      params: IObj = {
+      pageObj: IObj = {
         page: pagination.value.page,
         pageSize: pagination.value.pageSize,
       }
     ) => {
+      const params = {
+        ...pageObj,
+        ...currentQuery.value,
+      };
       if (!loading.value) {
         loading.value = true;
         const { payload, errorType, message } = await adminUserPageReq(params);
@@ -87,23 +123,25 @@ export default defineComponent({
       }
     };
     const handleSearch = () => {
-      loadPage({
-        page: 1,
-        pageSize: pagination.value.pageSize,
-        username: searchName.value,
-      });
+      initPage();
     };
-    const handlePageChange = async (currentPage: number) => {
-      loadPage({
-        page: currentPage,
+    const handlePageChange = async (page: number) => {
+      await loadPage({
+        page,
         pageSize: pagination.value.pageSize,
       });
+      if (pagedTable.value.length === 0) {
+        initPage();
+      }
     };
-    const handlePageSizeChange = async (currentPageSize: number) => {
-      loadPage({
+    const handlePageSizeChange = async (pageSize: number) => {
+      await loadPage({
         page: 1,
-        pageSize: currentPageSize,
+        pageSize,
       });
+      if (pagedTable.value.length === 0) {
+        initPage();
+      }
     };
     const handleAdd = () => {
       FormModalRef.value.open();
@@ -129,7 +167,19 @@ export default defineComponent({
       });
     };
     const handleDel = (row: IObj) => {
-      console.log(row);
+      window.$dialog.error({
+        title: '注意',
+        content: `你确定删除此用户？(可还原)`,
+        positiveText: '确定',
+        negativeText: '不确定',
+        onPositiveClick: async () => {
+          await deleteUserReq(row.id);
+          loadPage();
+        },
+        onNegativeClick: () => {
+          loadPage();
+        },
+      });
     };
 
     onMounted(() => {
@@ -207,6 +257,7 @@ export default defineComponent({
       FormModalRef,
       // ref
       searchName,
+      isDelete,
       loading,
       columns,
       pagedTable,
