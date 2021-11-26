@@ -9,8 +9,8 @@ import { HashHelper } from '../../helpers';
 
 const users = [
   {
-    firstName: 'Admin',
-    lastName: 'Admin',
+    firstName: '超',
+    lastName: '管',
     password: 'Hello123',
     avatar:
       'https://wx3.sinaimg.cn/mw2000/bcbbf95bly8gvgek5ma9bj20n00n0769.jpg',

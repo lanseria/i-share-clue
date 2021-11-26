@@ -27,7 +27,7 @@ export const editDetailReq = (data: UserInfoVO) => {
  * @returns
  */
 export const adminUserPageReq = (params: Partial<PageParam>) => {
-  return r.request<R<PageResult<AdminUserPageItemVO>>>({
+  return r.request<R<PageResult<UserPageItemVO>>>({
     url: api.page,
     method: 'GET',
     params,

@@ -26,6 +26,7 @@ import { UserMapper } from './users.mapper';
 import { TimeoutError } from 'rxjs';
 import { UpdateUserInfoDto } from './dtos/update-user-info.dto';
 import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
+import { UserStatus } from './user-status.enum';
 
 @Injectable()
 export class UsersService {
@@ -123,10 +124,8 @@ export class UsersService {
     userDto: CreateUserBaseRequestDto,
   ): Promise<UserResponseDto> {
     try {
-      Logger.log('userEntity');
       let userEntity = UserMapper.toCreateSimpleEntity(userDto);
       userEntity.password = await HashHelper.encrypt(userEntity.password);
-      Logger.log(JSON.stringify(userEntity));
       userEntity = await this.usersRepository.save(userEntity);
       return UserMapper.toDto(userEntity);
     } catch (error) {
@@ -214,6 +213,21 @@ export class UsersService {
 
     try {
       userEntity.password = await HashHelper.encrypt(newPassword);
+      await this.usersRepository.save(userEntity);
+      return UserMapper.toDto(userEntity);
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  public async blockUser(id: string) {
+    const userEntity = await this.usersRepository.findOne(id);
+    userEntity.status = UserStatus.Blocked;
+    try {
       await this.usersRepository.save(userEntity);
       return UserMapper.toDto(userEntity);
     } catch (error) {

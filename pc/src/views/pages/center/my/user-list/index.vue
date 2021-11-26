@@ -33,13 +33,14 @@
   <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
 </template>
 <script lang="ts">
-import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon } from 'naive-ui';
+import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, h, onMounted, ref } from 'vue';
 import { operateColums, OptList } from './Actions';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import FormModal from './FormModal.vue';
 import { adminUserPageReq } from '/@/api/Admin/Access/User';
+import { UserInfoDTO } from '/@/types/Admin/User/dto';
 class PaginationDTO {
   page = 1;
   pageSize = 10;
@@ -63,7 +64,7 @@ export default defineComponent({
     // ref
     const loading = ref(false);
     const searchName = ref('');
-    const pagedTable = ref<AdminUserPageItemVO[]>([]);
+    const pagedTable = ref<UserPageItemVO[]>([]);
     const pagination = ref(new PaginationDTO());
     // method
     const loadPage = async (
@@ -110,6 +111,9 @@ export default defineComponent({
     const handleEdit = (row: IObj) => {
       FormModalRef.value.open(row);
     };
+    const handleBlock = (row: IObj) => {
+      console.log(row);
+    };
     const handleDel = (row: IObj) => {
       console.log(row);
     };
@@ -124,8 +128,15 @@ export default defineComponent({
         func: handleEdit,
       },
       {
+        name: '拉黑',
+        func: handleBlock,
+      },
+      {
         name: '删除',
         func: handleDel,
+        hidden: (row) => {
+          return !row.isSuperUser;
+        },
       },
     ];
     const columns: TableColumn[] = [
@@ -135,14 +146,20 @@ export default defineComponent({
       {
         title: '用户名',
         key: 'username',
+        render(row) {
+          const line = new UserInfoDTO();
+          line.mergeProperties(row);
+          return h(NSpace, { align: 'center' }, [line.username, ...(line.isSuperUser ? [h(NTag, { type: 'success' }, '超级管理员')] : [])]);
+        },
       },
       {
         title: '名字',
-        key: 'lastName',
-      },
-      {
-        title: '姓',
-        key: 'firstName',
+        key: 'realName',
+        render(row) {
+          const line = new UserInfoDTO();
+          line.mergeProperties(row);
+          return h('span', null, line.firstName + line.lastName);
+        },
       },
       {
         title: '状态',

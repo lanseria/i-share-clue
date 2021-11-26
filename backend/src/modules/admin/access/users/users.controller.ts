@@ -54,14 +54,23 @@ import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
 })
 export class UsersController {
   constructor(private usersService: UsersService) {}
-
+  /**
+   * 获取本人用户信息
+   * @param user 当前用户
+   * @returns 用户信息
+   */
   @ApiOperation({ description: '获取本人用户信息' })
   @ApiGlobalResponse(UserResponseDto)
   @Get('/info')
   public getInfo(@CurrentUser() user: UserEntity): Promise<UserResponseDto> {
     return this.usersService.getUserById(user.id);
   }
-
+  /**
+   * 更新本人用户信息
+   * @param user 当前用户
+   * @param UserDto 用户数据
+   * @returns 用户信息
+   */
   @ApiOperation({ description: '更新本人用户信息' })
   @ApiGlobalResponse(UserResponseDto)
   @Put('/info')
@@ -71,7 +80,11 @@ export class UsersController {
   ): Promise<UserResponseDto> {
     return this.usersService.updateUser(user.id, UserDto);
   }
-
+  /**
+   * 用户管理分页
+   * @param pagination 分页信息
+   * @returns 用户管理分页
+   */
   @ApiOperation({ description: '获得一个分页的用户列表' })
   @ApiPaginatedResponse(UserResponseDto)
   @ApiQuery({
@@ -91,7 +104,11 @@ export class UsersController {
   ): Promise<PaginationResponseDto<UserResponseDto>> {
     return this.usersService.getUsers(pagination);
   }
-
+  /**
+   * 通过ID获取用户信息
+   * @param id 用户ID
+   * @returns 用户信息
+   */
   @ApiOperation({ description: '通过ID获取用户' })
   @ApiGlobalResponse(UserResponseDto)
   @Permissions(
@@ -106,10 +123,14 @@ export class UsersController {
     Logger.log(id);
     return this.usersService.getUserById(id);
   }
-
+  /**
+   * 创建新用户
+   * @param UserDto 新用户信息
+   * @returns 新用户信息
+   */
   @ApiOperation({ description: '创建新用户' })
   @ApiGlobalResponse(UserResponseDto)
-  @ApiConflictResponse({ description: '用户已经存在' })
+  @ApiConflictResponse({ description: '用户名已经存在' })
   @ApiGlobalResponse(UserResponseDto)
   @Permissions('admin.access.users.create')
   @Post()
@@ -118,10 +139,14 @@ export class UsersController {
   ): Promise<UserResponseDto> {
     return this.usersService.createUser(UserDto);
   }
-
+  /**
+   * 用户管理员创建用户
+   * @param UserDto 简单用户信息
+   * @returns 用户信息
+   */
   @ApiOperation({ description: '创建新用户(简单)' })
   @ApiGlobalResponse(UserResponseDto)
-  @ApiConflictResponse({ description: '用户已经存在' })
+  @ApiConflictResponse({ description: '用户名已经存在' })
   @ApiGlobalResponse(UserResponseDto)
   @Permissions('admin.access.users.create')
   @Post('/base')
@@ -130,10 +155,15 @@ export class UsersController {
   ): Promise<UserResponseDto> {
     return this.usersService.createUserBase(UserDto);
   }
-
+  /**
+   * 更新用户信息
+   * @param id 用户ID
+   * @param UserDto 用户更新信息
+   * @returns 用户信息
+   */
   @ApiOperation({ description: '按ID更新用户' })
   @ApiGlobalResponse(UserResponseDto)
-  @ApiConflictResponse({ description: '用户已经存在' })
+  @ApiConflictResponse({ description: '用户名已经存在' })
   @Permissions('admin.access.users.update')
   @Put('/:id')
   public updateUser(
@@ -142,10 +172,15 @@ export class UsersController {
   ): Promise<UserResponseDto> {
     return this.usersService.updateUser(id, UserDto);
   }
-  //TODO:
+  /**
+   * 管理员更新用户信息
+   * @param id 用户ID
+   * @param UserDto 用户更新基本信息
+   * @returns 用户信息
+   */
   @ApiOperation({ description: '按ID更新用户基本信息' })
   @ApiGlobalResponse(UserResponseDto)
-  @ApiConflictResponse({ description: '用户已经存在' })
+  @ApiConflictResponse({ description: '用户名已经存在' })
   @Permissions('admin.access.users.update')
   @Put('/base/:id')
   public updateUserBaseInfo(
@@ -154,7 +189,12 @@ export class UsersController {
   ): Promise<UserResponseDto> {
     return this.usersService.updateUser(id, UserDto);
   }
-
+  /**
+   * 更新用户密码
+   * @param changePassword 更改的密码
+   * @param user 当前用户
+   * @returns 用户信息
+   */
   @ApiOperation({ description: '更改用户密码' })
   @ApiGlobalResponse(UserResponseDto)
   @Post('/change/password')
@@ -163,5 +203,17 @@ export class UsersController {
     @CurrentUser() user: UserEntity,
   ): Promise<UserResponseDto> {
     return this.usersService.changePassword(changePassword, user.id);
+  }
+  /**
+   * 拉黑用户
+   * @param id 用户ID
+   * @returns 用户信息
+   */
+  @ApiOperation({ description: '拉黑用户' })
+  @ApiGlobalResponse(UserResponseDto)
+  @Permissions('admin.access.users.update')
+  @Post('/block/:id')
+  public blockUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.blockUser(id);
   }
 }

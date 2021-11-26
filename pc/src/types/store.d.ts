@@ -56,6 +56,8 @@ interface UserInfoVO {
   avatar: string;
 
   status: string;
+
+  isSuperUser: boolean;
 }
 
 interface UserInfoLoginVO extends UserInfoVO {

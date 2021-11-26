@@ -29,6 +29,7 @@ export class UserInfoDTO extends CommonDTO implements UserInfoVO {
   lastName: string = '';
   avatar: string = '';
   status: UserStatus = UserStatus.Active;
+  isSuperUser = false;
 }
 
 export class CreateUserFormDTO extends CommonDTO implements CreateUserFormVO {
