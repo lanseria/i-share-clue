@@ -9,6 +9,8 @@ const api = {
   base: `${prefix}/base`, // POST
   // admin page
   page: `${prefix}/page`, // get
+  block: `${prefix}/block`, // POST
+  white: `${prefix}/white`, // POST
 };
 
 export { api };

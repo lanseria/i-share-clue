@@ -39,8 +39,8 @@ import { defineComponent, h, onMounted, ref } from 'vue';
 import { operateColums, OptList } from './Actions';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import FormModal from './FormModal.vue';
-import { adminUserPageReq } from '/@/api/Admin/Access/User';
-import { UserInfoDTO } from '/@/types/Admin/User/dto';
+import { adminUserPageReq, blockUserReq, whiteUserReq } from '/@/api/Admin/Access/User';
+import { UserInfoDTO, UserStatus } from '/@/types/Admin/User/dto';
 class PaginationDTO {
   page = 1;
   pageSize = 10;
@@ -111,8 +111,22 @@ export default defineComponent({
     const handleEdit = (row: IObj) => {
       FormModalRef.value.open(row);
     };
-    const handleBlock = (row: IObj) => {
-      console.log(row);
+    const handleChangeStatus = (row: IObj) => {
+      const actionName = row.status === UserStatus.Active ? '拉黑' : '激活';
+      const actionMethod = row.status === UserStatus.Active ? blockUserReq : whiteUserReq;
+      window.$dialog.warning({
+        title: '警告',
+        content: `你确定${actionName}此用户？`,
+        positiveText: '确定',
+        negativeText: '不确定',
+        onPositiveClick: async () => {
+          await actionMethod(row.id);
+          loadPage();
+        },
+        onNegativeClick: () => {
+          loadPage();
+        },
+      });
     };
     const handleDel = (row: IObj) => {
       console.log(row);
@@ -128,8 +142,10 @@ export default defineComponent({
         func: handleEdit,
       },
       {
-        name: '拉黑',
-        func: handleBlock,
+        name: (row: IObj) => {
+          return row.status === UserStatus.Active ? '拉黑' : '激活';
+        },
+        func: handleChangeStatus,
       },
       {
         name: '删除',
@@ -149,7 +165,26 @@ export default defineComponent({
         render(row) {
           const line = new UserInfoDTO();
           line.mergeProperties(row);
-          return h(NSpace, { align: 'center' }, [line.username, ...(line.isSuperUser ? [h(NTag, { type: 'success' }, '超级管理员')] : [])]);
+          return h(
+            NSpace,
+            { align: 'center' },
+            {
+              default: () => [
+                line.username,
+                ...(line.isSuperUser
+                  ? [
+                      h(
+                        NTag,
+                        { type: 'success' },
+                        {
+                          default: () => '超级管理员',
+                        }
+                      ),
+                    ]
+                  : []),
+              ],
+            }
+          );
         },
       },
       {

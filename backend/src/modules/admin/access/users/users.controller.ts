@@ -216,4 +216,16 @@ export class UsersController {
   public blockUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.blockUser(id);
   }
+  /**
+   * 拉白用户
+   * @param id 用户ID
+   * @returns 用户信息
+   */
+  @ApiOperation({ description: '拉白用户' })
+  @ApiGlobalResponse(UserResponseDto)
+  @Permissions('admin.access.users.update')
+  @Post('/white/:id')
+  public whiteUser(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.whiteUser(id);
+  }
 }

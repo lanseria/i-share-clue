@@ -34,7 +34,44 @@ export class UsersService {
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
   ) {}
-
+  /**
+   * 拉白
+   * @param id 用户ID
+   * @returns
+   */
+  public async whiteUser(id: string) {
+    const userEntity = await this.usersRepository.findOne(id);
+    userEntity.status = UserStatus.Active;
+    try {
+      await this.usersRepository.save(userEntity);
+      return UserMapper.toDto(userEntity);
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+  /**
+   * 拉黑
+   * @param id 用户ID
+   * @returns
+   */
+  public async blockUser(id: string) {
+    const userEntity = await this.usersRepository.findOne(id);
+    userEntity.status = UserStatus.Blocked;
+    try {
+      await this.usersRepository.save(userEntity);
+      return UserMapper.toDto(userEntity);
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
   /**
    * Get a paginated user list
    * @param pagination {PaginationRequest}
@@ -213,21 +250,6 @@ export class UsersService {
 
     try {
       userEntity.password = await HashHelper.encrypt(newPassword);
-      await this.usersRepository.save(userEntity);
-      return UserMapper.toDto(userEntity);
-    } catch (error) {
-      if (error instanceof TimeoutError) {
-        throw new RequestTimeoutException();
-      } else {
-        throw new InternalServerErrorException();
-      }
-    }
-  }
-
-  public async blockUser(id: string) {
-    const userEntity = await this.usersRepository.findOne(id);
-    userEntity.status = UserStatus.Blocked;
-    try {
       await this.usersRepository.save(userEntity);
       return UserMapper.toDto(userEntity);
     } catch (error) {

@@ -1,6 +1,29 @@
 import r from '/@/router/axios';
 import { api } from './config';
 /**
+ * 拉白用户
+ * @param id 用户ID
+ * @returns
+ */
+export const whiteUserReq = (id: string) => {
+  return r.request({
+    url: `${api.white}/${id}`,
+    method: 'POST',
+  });
+};
+/**
+ * 拉黑用户
+ * @param id 用户ID
+ * @returns
+ */
+export const blockUserReq = (id: string) => {
+  return r.request({
+    url: `${api.block}/${id}`,
+    method: 'POST',
+  });
+};
+
+/**
  * 简单登录用户信息获取
  */
 export const userInfoReq = () => {

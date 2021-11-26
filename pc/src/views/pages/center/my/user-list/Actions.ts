@@ -36,7 +36,7 @@ export const operateColums = (optList: OptList[], count = 10): TableColumn => {
                   size: 'small',
                   onClick: () => m.func(row),
                 },
-                { default: () => m.name }
+                { default: () => (typeof m.name === 'string' ? m.name : m.name(row)) }
               )
             ),
       });
