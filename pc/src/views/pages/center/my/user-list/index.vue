@@ -4,7 +4,7 @@
       <n-space align="center">
         <n-button type="primary" @click="handleAdd()">新增</n-button>
         <n-button>批量导出</n-button>
-        <n-button>批量删除</n-button>
+        <n-button @click="handleBatchDel()">批量{{ isDelete ? '丢弃' : '删除' }}</n-button>
         <n-switch v-model:value="isDelete" size="large" @update:value="handleSearch()">
           <template #checked>关闭回收站</template>
           <template #unchecked>打开回收站</template>
@@ -32,6 +32,7 @@
       :row-key="(row) => row.id"
       @update:page="handlePageChange"
       @update:page-size="handlePageSizeChange"
+      @update:checked-row-keys="handleCheck"
     />
   </imp-page-container>
   <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
@@ -43,7 +44,7 @@ import { computed, defineComponent, h, onMounted, ref } from 'vue';
 import { operateColums, OptList } from './Actions';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import FormModal from './FormModal.vue';
-import { adminUserPageReq, blockUserReq, deleteUserReq, whiteUserReq } from '/@/api/Admin/Access/User';
+import { adminUserPageReq, blockUserReq, deleteUserReq, deleteUsersReq, whiteUserReq } from '/@/api/Admin/Access/User';
 import { UserInfoDTO, UserStatus } from '/@/types/Admin/User/dto';
 class PaginationDTO {
   page = 1;
@@ -67,6 +68,7 @@ export default defineComponent({
     // refs
     const FormModalRef = ref();
     // ref
+    const checkedRowKeysRef = ref<string[]>([]);
     const loading = ref(false);
     const searchName = ref('');
     const isDelete = ref(false);
@@ -149,6 +151,9 @@ export default defineComponent({
     const handleEdit = (row: IObj) => {
       FormModalRef.value.open(row);
     };
+    const handleCheck = (rowKeys: string[]) => {
+      checkedRowKeysRef.value = rowKeys;
+    };
     const handleChangeStatus = (row: IObj) => {
       const actionName = row.status === UserStatus.Active ? '拉黑' : '激活';
       const actionMethod = row.status === UserStatus.Active ? blockUserReq : whiteUserReq;
@@ -166,6 +171,21 @@ export default defineComponent({
         },
       });
     };
+    const handleBatchDel = () => {
+      window.$dialog.error({
+        title: '注意',
+        content: `你确定删除这些用户？(可还原)`,
+        positiveText: '确定',
+        negativeText: '不确定',
+        onPositiveClick: async () => {
+          await deleteUsersReq(checkedRowKeysRef.value);
+          loadPage();
+        },
+        onNegativeClick: () => {
+          loadPage();
+        },
+      });
+    };
     const handleDel = (row: IObj) => {
       window.$dialog.error({
         title: '注意',
@@ -173,7 +193,7 @@ export default defineComponent({
         positiveText: '确定',
         negativeText: '不确定',
         onPositiveClick: async () => {
-          await deleteUserReq(row.id);
+          await deleteUsersReq([row.id]);
           loadPage();
         },
         onNegativeClick: () => {
@@ -198,7 +218,7 @@ export default defineComponent({
         func: handleChangeStatus,
       },
       {
-        name: '删除',
+        name: () => (isDelete.value ? '丢弃' : '删除'),
         func: handleDel,
         hidden: (row) => {
           return !row.isSuperUser;
@@ -256,6 +276,7 @@ export default defineComponent({
       // refs
       FormModalRef,
       // ref
+      handleCheck,
       searchName,
       isDelete,
       loading,
@@ -268,6 +289,7 @@ export default defineComponent({
       handleSearch,
       handlePageChange,
       handlePageSizeChange,
+      handleBatchDel,
     };
   },
 });

@@ -55,6 +55,10 @@ import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
 })
 export class UsersController {
   constructor(private usersService: UsersService) {}
+  @Delete('')
+  public deleteUsers(@Body() ids: string[]) {
+    return this.usersService.deleteUsers(ids);
+  }
   @Delete('/:id')
   public deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.deleteUser(id);

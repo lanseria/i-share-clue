@@ -34,6 +34,19 @@ export class UsersService {
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
   ) {}
+  public async deleteUsers(ids: string[]) {
+    try {
+      const UserDtos = await Promise.all(ids.map((id) => this.deleteUser(id)));
+      return UserDtos;
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        Logger.debug('parents');
+        throw new InternalServerErrorException();
+      }
+    }
+  }
   /**
    * 删除用户
    * @param id 用户ID
@@ -49,6 +62,7 @@ export class UsersService {
       if (error instanceof TimeoutError) {
         throw new RequestTimeoutException();
       } else {
+        Logger.debug('child');
         throw new InternalServerErrorException();
       }
     }
@@ -100,14 +114,11 @@ export class UsersService {
     pagination: PaginationRequest,
   ): Promise<PaginationResponseDto<UserResponseDto>> {
     try {
-      // Logger.log(JSON.stringify(pagination));
       const [userEntities, totalUsers] =
         await this.usersRepository.getUsersAndCount(pagination);
-
-      // Logger.log(totalUsers, userEntities, pagination);
-      if (!userEntities?.length || totalUsers === 0) {
-        throw new NotFoundException();
-      }
+      // if (!userEntities?.length || totalUsers === 0) {
+      //   throw new NotFoundException();
+      // }
       const UserDtos = await Promise.all(
         userEntities.map(UserMapper.toDtoWithRelations),
       );
