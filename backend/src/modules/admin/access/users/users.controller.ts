@@ -55,6 +55,14 @@ import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
 })
 export class UsersController {
   constructor(private usersService: UsersService) {}
+  @Post('/restore')
+  public restoreUsers(@Body() ids: string[]) {
+    return this.usersService.restoreUsers(ids);
+  }
+  @Delete('/clear')
+  public clearUsers(@Body() ids: string[]) {
+    return this.usersService.clearUsers(ids);
+  }
   @Delete('')
   public deleteUsers(@Body() ids: string[]) {
     return this.usersService.deleteUsers(ids);

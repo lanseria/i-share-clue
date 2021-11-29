@@ -24,7 +24,6 @@ import { HashHelper, Pagination } from '@helpers';
 import { DBErrorCode } from '@common/enums';
 import { UserMapper } from './users.mapper';
 import { TimeoutError } from 'rxjs';
-import { UpdateUserInfoDto } from './dtos/update-user-info.dto';
 import { CreateUserBaseRequestDto } from './dtos/create-user-request.dto';
 import { UserStatus } from './user-status.enum';
 
@@ -34,6 +33,84 @@ export class UsersService {
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
   ) {}
+  /**
+   * 还原用户s
+   * @param ids 用户IDs
+   */
+  public async restoreUsers(ids: string[]) {
+    try {
+      const UserDtos = await Promise.all(ids.map((id) => this.restoreUser(id)));
+      return UserDtos;
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        Logger.debug('parents');
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  /**
+   * 还原用户
+   * @param id 用户ID
+   */
+  public async restoreUser(id: string) {
+    const userEntity = await this.usersRepository.findOne(id);
+    userEntity.isDelete = false;
+    try {
+      await this.usersRepository.save(userEntity);
+      return UserMapper.toDto(userEntity);
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        Logger.debug('child');
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+  /**
+   * 丢弃用户s
+   * @param ids 用户IDs
+   * @returns
+   */
+  public async clearUsers(ids: string[]) {
+    try {
+      await this.usersRepository.delete(ids);
+      return true;
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        Logger.debug('child');
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  /**
+   * 丢弃用户
+   * @param id 用户ID
+   */
+  public async clearUser(id: string) {
+    try {
+      await this.usersRepository.delete(id);
+      return true;
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        Logger.debug('child');
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+  /**
+   * 删除用户s
+   * @param ids 用户IDs
+   * @returns
+   */
   public async deleteUsers(ids: string[]) {
     try {
       const UserDtos = await Promise.all(ids.map((id) => this.deleteUser(id)));

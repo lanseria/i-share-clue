@@ -3,6 +3,8 @@ const prefix = `${modulePrefix}/users`;
 
 const api = {
   self: prefix,
+  clear: `${prefix}/clear`, //DELETE
+  restore: `${prefix}/restore`, //POST
   info: `${prefix}/info`, // GET
   information: `${prefix}/information`, // GET
   editDetail: `${prefix}/edit/detail`, // POST

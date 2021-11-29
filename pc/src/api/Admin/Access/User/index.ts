@@ -1,6 +1,30 @@
 import r from '/@/router/axios';
 import { api } from './config';
 /**
+ * 还原用户s
+ * @param id 用户IDs
+ * @returns
+ */
+export const restoreUsersReq = (ids: string[]) => {
+  return r.request({
+    url: `${api.restore}`,
+    method: 'POST',
+    data: ids,
+  });
+};
+/**
+ * 丢弃用户s
+ * @param id 用户IDs
+ * @returns
+ */
+export const clearUsersReq = (ids: string[]) => {
+  return r.request({
+    url: `${api.clear}`,
+    method: 'DELETE',
+    data: ids,
+  });
+};
+/**
  * 删除用户s
  * @param id 用户IDs
  * @returns

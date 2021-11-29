@@ -10,12 +10,12 @@ export interface OptList {
 }
 export const operateColums = (optList: OptList[], count = 10): TableColumn => {
   const hasMore = optList.length > count;
-  const charList = optList.map((m) => m.name.length);
+  const charList = optList.map((m) => (typeof m.name === 'string' ? m.name.length : 2));
   const width = hasMore ? take(charList, 2).reduce((x, y) => x + y * 30, 30) + 66 : charList.reduce((x, y) => x + y * 30, 30);
   return {
     title: '操作',
     key: 'actions',
-    width,
+    width: width / 2,
     fixed: 'right',
     render(row) {
       return h(NSpace, null, {

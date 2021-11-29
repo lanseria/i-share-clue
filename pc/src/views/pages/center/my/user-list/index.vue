@@ -44,7 +44,7 @@ import { computed, defineComponent, h, onMounted, ref } from 'vue';
 import { operateColums, OptList } from './Actions';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import FormModal from './FormModal.vue';
-import { adminUserPageReq, blockUserReq, deleteUserReq, deleteUsersReq, whiteUserReq } from '/@/api/Admin/Access/User';
+import { adminUserPageReq, blockUserReq, clearUsersReq, deleteUserReq, deleteUsersReq, restoreUsersReq, whiteUserReq } from '/@/api/Admin/Access/User';
 import { UserInfoDTO, UserStatus } from '/@/types/Admin/User/dto';
 class PaginationDTO {
   page = 1;
@@ -151,6 +151,23 @@ export default defineComponent({
     const handleEdit = (row: IObj) => {
       FormModalRef.value.open(row);
     };
+    const handleRestore = (row: IObj) => {
+      const actionName = '还原';
+      const actionMethod = restoreUsersReq;
+      window.$dialog.warning({
+        title: '警告',
+        content: `你确定${actionName}此用户？`,
+        positiveText: '确定',
+        negativeText: '不确定',
+        onPositiveClick: async () => {
+          await actionMethod([row.id]);
+          loadPage();
+        },
+        onNegativeClick: () => {
+          loadPage();
+        },
+      });
+    };
     const handleCheck = (rowKeys: string[]) => {
       checkedRowKeysRef.value = rowKeys;
     };
@@ -187,13 +204,15 @@ export default defineComponent({
       });
     };
     const handleDel = (row: IObj) => {
+      const actionName = isDelete.value ? '丢弃' : '删除(可还原)';
+      const actionMethod = isDelete.value ? clearUsersReq : deleteUsersReq;
       window.$dialog.error({
         title: '注意',
-        content: `你确定删除此用户？(可还原)`,
+        content: `你确定${actionName}此用户？`,
         positiveText: '确定',
         negativeText: '不确定',
         onPositiveClick: async () => {
-          await deleteUsersReq([row.id]);
+          await actionMethod([row.id]);
           loadPage();
         },
         onNegativeClick: () => {
@@ -210,12 +229,25 @@ export default defineComponent({
       {
         name: '编辑',
         func: handleEdit,
+        hidden: (row) => {
+          return !isDelete.value;
+        },
+      },
+      {
+        name: '还原',
+        func: handleRestore,
+        hidden: (row) => {
+          return isDelete.value;
+        },
       },
       {
         name: (row: IObj) => {
           return row.status === UserStatus.Active ? '拉黑' : '激活';
         },
         func: handleChangeStatus,
+        hidden: (row) => {
+          return !isDelete.value;
+        },
       },
       {
         name: () => (isDelete.value ? '丢弃' : '删除'),
