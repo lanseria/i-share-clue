@@ -11,7 +11,7 @@ import { BaseEntity } from '@database/entities';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { Point } from 'geojson';
 
-@Entity({ schema: 'admin', name: 'project' })
+@Entity({ schema: 'admin', name: 'projects' })
 export class ProjectEntity extends BaseEntity {
   @PrimaryColumn({ name: 'id', type: 'uuid', generated: 'uuid' })
   id?: string;
