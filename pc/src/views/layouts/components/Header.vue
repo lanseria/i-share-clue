@@ -1,7 +1,7 @@
 <template>
   <n-layout-header bordered class="nav">
     <n-text tag="div" class="ui-logo" :depth="1" @click="handleLogoClick">
-      <img src="/assets/images/naivelogo.svg" />
+      <img src="/assets/images/logo.png" />
       <span>i-share-clue</span>
     </n-text>
     <div></div>

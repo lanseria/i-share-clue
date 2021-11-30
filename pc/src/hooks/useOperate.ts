@@ -27,25 +27,25 @@ export const useIepOperate = () => {
     feedbackMsg?: string
   ) => {
     window.$dialog.warning({
-      title: "提示",
+      title: '提示',
       content: detailMsg || `是否${msg}`,
-      positiveText: "确定",
-      negativeText: "不确定",
+      positiveText: '确定',
+      negativeText: '不确定',
       onPositiveClick: async () => {
-        const { data, msg: message } = await reqFunction(id);
-        if (data) {
+        const { payload, message } = await reqFunction(id);
+        if (payload) {
           window.$message.success(feedbackMsg || `${msg}成功!`);
           loadPage();
         } else {
-          window.$message.warning(message);
+          window.$message.warning(message!);
         }
       },
       onNegativeClick: () => {
-        window.$message.error("不确定");
-      }
+        window.$message.error('不确定');
+      },
     });
   };
   return {
-    handleIepOperate
+    handleIepOperate,
   };
 };
