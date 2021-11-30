@@ -83,7 +83,6 @@ export class UsersService {
       if (error instanceof TimeoutError) {
         throw new RequestTimeoutException();
       } else {
-        Logger.debug('child');
         throw new InternalServerErrorException();
       }
     }

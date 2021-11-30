@@ -41,17 +41,13 @@
 import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
 import { computed, defineComponent, h, onMounted, ref } from 'vue';
-import { operateColums, OptList } from './Actions';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import FormModal from './FormModal.vue';
-import { adminUserPageReq, blockUserReq, clearUsersReq, deleteUserReq, deleteUsersReq, restoreUsersReq, whiteUserReq } from '/@/api/Admin/Access/User';
+import { adminUserPageReq, blockUserReq, clearUsersReq, deleteUsersReq, restoreUsersReq, whiteUserReq } from '/@/api/Admin/Access/User';
 import { UserInfoDTO, UserStatus } from '/@/types/Admin/User/dto';
-class PaginationDTO {
-  page = 1;
-  pageSize = 10;
-  pageCount = 1;
-  showSizePicker = true;
-}
+import { useImpDataTable } from '/@/hooks/useDataTable';
+import { OptList } from '/@/hooks/Actions';
+
 export default defineComponent({
   components: {
     NDataTable,
@@ -68,12 +64,8 @@ export default defineComponent({
     // refs
     const FormModalRef = ref();
     // ref
-    const checkedRowKeysRef = ref<string[]>([]);
-    const loading = ref(false);
     const searchName = ref('');
     const isDelete = ref(false);
-    const pagedTable = ref<UserPageItemVO[]>([]);
-    const pagination = ref(new PaginationDTO());
     // computed
     const currentQuery = computed(() => {
       return {
@@ -82,68 +74,8 @@ export default defineComponent({
       };
     });
     // method
-    const initPage = async () => {
-      pagination.value = new PaginationDTO();
-      const params = {
-        ...pagination.value,
-        ...currentQuery.value,
-      };
-      if (!loading.value) {
-        loading.value = true;
-        const { payload, errorType, message } = await adminUserPageReq(params);
-        if (errorType) {
-          window.$message.warning(message!);
-        } else {
-          pagedTable.value = payload.records;
-          pagination.value.page = +payload.current;
-          pagination.value.pageCount = +payload.pages;
-        }
-        loading.value = false;
-      }
-    };
-    const loadPage = async (
-      pageObj: IObj = {
-        page: pagination.value.page,
-        pageSize: pagination.value.pageSize,
-      }
-    ) => {
-      const params = {
-        ...pageObj,
-        ...currentQuery.value,
-      };
-      if (!loading.value) {
-        loading.value = true;
-        const { payload, errorType, message } = await adminUserPageReq(params);
-        if (errorType) {
-          window.$message.warning(message!);
-        } else {
-          pagedTable.value = payload.records;
-          pagination.value.page = +payload.current;
-          pagination.value.pageCount = +payload.pages;
-        }
-        loading.value = false;
-      }
-    };
     const handleSearch = () => {
       initPage();
-    };
-    const handlePageChange = async (page: number) => {
-      await loadPage({
-        page,
-        pageSize: pagination.value.pageSize,
-      });
-      if (pagedTable.value.length === 0) {
-        initPage();
-      }
-    };
-    const handlePageSizeChange = async (pageSize: number) => {
-      await loadPage({
-        page: 1,
-        pageSize,
-      });
-      if (pagedTable.value.length === 0) {
-        initPage();
-      }
     };
     const handleAdd = () => {
       FormModalRef.value.open();
@@ -167,9 +99,6 @@ export default defineComponent({
           loadPage();
         },
       });
-    };
-    const handleCheck = (rowKeys: string[]) => {
-      checkedRowKeysRef.value = rowKeys;
     };
     const handleChangeStatus = (row: IObj) => {
       const actionName = row.status === UserStatus.Active ? '拉黑' : '激活';
@@ -257,7 +186,7 @@ export default defineComponent({
         },
       },
     ];
-    const columns: TableColumn[] = [
+    const cols: TableColumn[] = [
       {
         type: 'selection',
       },
@@ -302,8 +231,26 @@ export default defineComponent({
         title: '状态',
         key: 'status',
       },
-      operateColums(operateOptions),
     ];
+
+    const {
+      loading,
+      columns,
+      pagedTable,
+      pagination,
+      checkedRowKeysRef,
+      //
+      handlePageChange,
+      handlePageSizeChange,
+      handleCheck,
+      initPage,
+      loadPage,
+    } = useImpDataTable({
+      cols,
+      operateOptions,
+      pageReq: adminUserPageReq,
+      currentQuery,
+    });
     return {
       // refs
       FormModalRef,

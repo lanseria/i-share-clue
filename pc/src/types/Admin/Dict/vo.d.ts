@@ -1,7 +1,7 @@
 interface DictBaseVO {
   id: number;
   name: string;
-  code: string;
+  value: string;
 }
 
 interface AdminDictPageItemVO extends DictBaseVO {

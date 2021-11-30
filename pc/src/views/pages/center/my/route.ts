@@ -18,6 +18,14 @@ export const myRoute: AppRouteRecordRaw[] = [
     }),
     component: () => import('./user-list/index.vue'),
   },
+  {
+    path: 'dict-list',
+    name: 'DictList',
+    meta: authMetaFunc('字典管理', {
+      icon: 'icon-Shape',
+    }),
+    component: () => import('./dict-list/index.vue'),
+  },
   // {
   //   path: "more",
   //   name: "More",
