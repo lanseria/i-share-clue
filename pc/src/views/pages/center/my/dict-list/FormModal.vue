@@ -7,6 +7,9 @@
       <n-form-item path="value" label="字典值">
         <n-input v-model:value="modelRef.value" />
       </n-form-item>
+      <n-form-item path="value" label="父字典">
+        <n-tree-select :options="dictTreeOptions" v-model:value="modelRef.parentId" />
+      </n-form-item>
     </n-form>
     <template #footer>
       <n-space>
@@ -17,18 +20,19 @@
   </imp-modal>
 </template>
 <script lang="ts">
-import { NForm, NFormItem, NInput, NSpace, NButton } from 'naive-ui';
+import { NForm, NFormItem, NInput, NSpace, NButton, NTreeSelect, TreeSelectOption } from 'naive-ui';
 import { computed, defineComponent, ref } from 'vue';
-import { createDictReq, updateDictReq } from '/@/api/Admin/Access/Dict';
+import { createDictReq, getDictTreeReq, updateDictReq } from '/@/api/Admin/Access/Dict';
 import { DictDTO } from '/@/types/Admin/Dict/dto';
 export default defineComponent({
-  emits: ['load-page'],
+  emits: ['load-page', 'update:dictTreeOptions'],
   components: {
     NForm,
     NFormItem,
     NInput,
     NSpace,
     NButton,
+    NTreeSelect,
   },
   setup(props, { emit }) {
     // refs
@@ -36,6 +40,7 @@ export default defineComponent({
     const isEdit = ref(false);
     // ref
     const modelRef = ref(new DictDTO());
+    const dictTreeOptions = ref<TreeSelectOption[]>([]);
     const actionProp = computed(() => {
       if (isEdit.value) {
         return {
@@ -50,18 +55,26 @@ export default defineComponent({
       }
     });
     // method
-    const open = (row?: IObj) => {
+    const loadOptions = async () => {
+      const { payload } = await getDictTreeReq();
+      dictTreeOptions.value = payload;
+      emit('update:dictTreeOptions', payload);
+    };
+    const open = (row?: IObj, pRow?: IObj) => {
       if (row) {
         isEdit.value = true;
         modelRef.value.mergeProperties(row);
       } else {
+        modelRef.value.mergeProperties(pRow);
         isEdit.value = false;
       }
       ImpModalRef.value.showModal = true;
+      loadOptions();
     };
     const close = () => {
       modelRef.value = new DictDTO();
       ImpModalRef.value.showModal = false;
+      loadOptions();
       emit('load-page');
     };
     const onSubmit = async () => {
@@ -78,6 +91,7 @@ export default defineComponent({
       // ref
       modelRef,
       isEdit,
+      dictTreeOptions,
       // computed
       actionProp,
       // method

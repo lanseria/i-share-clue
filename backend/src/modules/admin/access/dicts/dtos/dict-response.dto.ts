@@ -11,5 +11,5 @@ export class DictResponseDto {
   value: string;
 
   @ApiProperty()
-  parent?: DictResponseDto;
+  parentId?: string;
 }

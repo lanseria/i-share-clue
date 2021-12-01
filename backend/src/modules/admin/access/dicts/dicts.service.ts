@@ -1,4 +1,5 @@
 import { PaginationResponseDto } from '@common/dtos';
+import { ResponseTreeDto } from '@common/dtos/response.dto';
 import { DBErrorCode } from '@common/enums';
 import { ForeignKeyConflictException } from '@common/exeptions';
 import { PaginationRequest } from '@common/interfaces';
@@ -12,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TimeoutError } from 'rxjs';
+import { DictEntity } from './dict.entity';
 import { DictMapper } from './dicts.mapper';
 import { DictsRepository } from './dicts.repository';
 import { CreateDictRequestDto } from './dtos/create-dict-request.dto';
@@ -24,6 +26,27 @@ export class DictsService {
     @InjectRepository(DictsRepository)
     private dictsRepository: DictsRepository,
   ) {}
+  /**
+   * 获取字典树
+   */
+  public async getDictsTree(): Promise<ResponseTreeDto[]> {
+    try {
+      const trees = await this.dictsRepository.manager
+        .getTreeRepository(DictEntity)
+        .findTrees();
+      return trees.map((node) => DictMapper.toTreeDto(node));
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException();
+      }
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
   /**
    * 删除字典
    * @param ids
@@ -103,7 +126,11 @@ export class DictsService {
    */
   public async createDict(dictDto: CreateDictRequestDto) {
     try {
-      let dictEntity = DictMapper.toCreateEntity(dictDto);
+      const getParent = async (dto: CreateDictRequestDto) => {
+        return dto.pid ? await this.dictsRepository.findOne(dto.pid) : null;
+      };
+
+      let dictEntity = await DictMapper.toCreateEntity(dictDto, getParent);
       dictEntity = await this.dictsRepository.save(dictEntity);
       return DictMapper.toDto(dictEntity);
     } catch (error) {

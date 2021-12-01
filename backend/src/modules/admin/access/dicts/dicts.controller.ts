@@ -28,6 +28,15 @@ import { UpdateDictRequestDto } from './dtos/update-dict-request.dto';
 export class DictsController {
   constructor(private dictsService: DictsService) {}
   /**
+   * 获取字典树
+   * @returns
+   */
+  @ApiOperation({ description: '获取字典树' })
+  @Get('/tree')
+  public getDictTree() {
+    return this.dictsService.getDictsTree();
+  }
+  /**
    * 新增字典
    * @param dict
    * @returns

@@ -1,10 +1,20 @@
 import { BaseEntity } from '@database/entities';
-import { Column, Entity, JoinTable, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
+} from 'typeorm';
 
 @Entity({
   schema: 'admin',
   name: 'dicts',
 })
+@Tree('nested-set')
 export class DictEntity extends BaseEntity {
   @PrimaryColumn({
     name: 'id',
@@ -29,8 +39,14 @@ export class DictEntity extends BaseEntity {
   })
   value: string;
 
-  @ManyToOne(() => DictEntity, (dict) => dict.id)
-  parent?: DictEntity;
+  @TreeParent()
+  parent: DictEntity;
+
+  @Column({ nullable: true })
+  parentId: string;
+
+  @TreeChildren()
+  children: DictEntity[];
 
   constructor(dict?: Partial<DictEntity>) {
     super();

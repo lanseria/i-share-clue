@@ -4,4 +4,5 @@ export class DictDTO extends CommonDTO implements DictBaseVO {
   id = 0;
   name = '';
   value = '';
+  parentId = null;
 }

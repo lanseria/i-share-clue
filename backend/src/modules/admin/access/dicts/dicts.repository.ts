@@ -1,4 +1,5 @@
 import { PaginationRequest } from '@common/interfaces';
+import { Logger } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { DictEntity } from './dict.entity';
 
@@ -11,7 +12,7 @@ export class DictsRepository extends Repository<DictEntity> {
       skip,
       limit: take,
       order,
-      params: { name },
+      params: { name, pid },
     } = pagination;
     const query = this.createQueryBuilder('u')
       // .innerJoinAndSelect('u.roles', 'r')
@@ -21,14 +22,17 @@ export class DictsRepository extends Repository<DictEntity> {
       .orderBy(order);
 
     if (name) {
-      query.where(
-        `
-            u.name ILIKE :search
-            `,
-        { search: `%${name}%` },
-      );
+      query.where(`u.name ILIKE :search`, { search: `%${name}%` });
     }
-
+    if (pid) {
+      query.where(`u.parentId = :pid`, { pid: pid });
+    } else {
+      query.where({
+        parentId: null,
+      });
+    } // 回传上面API所组出來的Raw SQL, debug用
+    // const sql = query.getSql();
+    // Logger.log(sql);
     return query.getManyAndCount();
   }
 }

@@ -1,10 +1,18 @@
 import r from '/@/router/axios';
 import { DictDTO } from '/@/types/Admin/Dict/dto';
 import { api } from './config';
+import { TreeSelectOption } from 'naive-ui';
 
 export const getDictReq = (id: number) => {
   return r.request<R<DictDTO>>({
     url: `${api.dict}/${id}`,
+    method: 'GET',
+  });
+};
+
+export const getDictTreeReq = () => {
+  return r.request<R<TreeSelectOption[]>>({
+    url: `${api.dictTree}`,
     method: 'GET',
   });
 };

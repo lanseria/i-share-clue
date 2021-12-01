@@ -3,6 +3,7 @@
     <div class="data-table-header">
       <n-space align="center">
         <n-button type="primary" @click="handleAdd()">新增</n-button>
+        <n-tree-select style="width: 200px" :options="dictTreeOptions" v-model:value="pid" clearable @update:value="handleSearch" />
       </n-space>
       <n-space>
         <n-input-group>
@@ -29,13 +30,21 @@
       @update:checked-row-keys="handleCheck"
     />
   </imp-page-container>
-  <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
+  <form-modal
+    ref="FormModalRef"
+    @load-page="loadPage()"
+    @update:dictTreeOptions="
+      (v) => {
+        dictTreeOptions = v;
+      }
+    "
+  ></form-modal>
 </template>
 <script lang="ts">
-import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch } from 'naive-ui';
+import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, TreeSelectOption, NTreeSelect } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { deleteDictReq, getDictPageReq } from '/@/api/Admin/Access/Dict';
+import { deleteDictReq, getDictPageReq, getDictTreeReq } from '/@/api/Admin/Access/Dict';
 import { useImpDataTable } from '/@/hooks/useDataTable';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import FormModal from './FormModal.vue';
@@ -48,6 +57,7 @@ export default defineComponent({
     NInput,
     NIcon,
     NTag,
+    NTreeSelect,
     NSwitch,
     SearchOutlineIcon,
     FormModal,
@@ -55,6 +65,7 @@ export default defineComponent({
   setup() {
     // refs
     const FormModalRef = ref();
+    // ref
     const cols: TableColumn[] = [
       {
         type: 'selection',
@@ -69,8 +80,21 @@ export default defineComponent({
       },
     ];
     const searchName = ref('');
+    const pid = ref('');
+    const dictTreeOptions = ref<TreeSelectOption[]>([]);
+    // method
+    const loadDictTree = async () => {
+      const { payload } = await getDictTreeReq();
+      dictTreeOptions.value = payload;
+    };
+    const handleEnter = (row: IObj) => {
+      pid.value = row.id;
+      handleSearch();
+    };
     const handleAdd = () => {
-      FormModalRef.value.open();
+      FormModalRef.value.open(null, {
+        parentId: pid.value,
+      });
     };
     const handleEdit = (row: IObj) => {
       FormModalRef.value.open(row);
@@ -95,9 +119,14 @@ export default defineComponent({
     const currentQuery = computed(() => {
       return {
         name: searchName.value,
+        pid: pid.value,
       };
     });
     const operateOptions = [
+      {
+        name: '进入',
+        func: handleEnter,
+      },
       {
         name: '编辑',
         func: handleEdit,
@@ -129,16 +158,19 @@ export default defineComponent({
     };
     onMounted(() => {
       loadPage();
+      loadDictTree();
     });
     return {
       // refs
       FormModalRef,
       // ref
       searchName,
+      pid,
       loading,
       columns,
       pagedTable,
       pagination,
+      dictTreeOptions,
       //
       handlePageChange,
       handlePageSizeChange,
