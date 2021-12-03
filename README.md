@@ -131,3 +131,7 @@ yarn dev
 
 Simple permission system and file uploading, and lead sharing system on maps developed mainly with GIS
 ```
+
+## Stat
+
+![Alt](https://repobeats.axiom.co/api/embed/b0a245dbc5cbc41612e0c5b7be26d6893831aef6.svg "Repobeats analytics image")
