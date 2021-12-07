@@ -7,7 +7,6 @@ import { viteMockServe } from 'vite-plugin-mock';
 import { configVisualizerConfig } from './visualizer';
 
 export function createVitePlugins(env: Record<string, string>, command: string, mode: string) {
-  console.log(env, command);
   const isBuild = command === 'build';
   const isServe = command === 'serve';
   const isMock = mode.endsWith('mock');
@@ -34,7 +33,6 @@ export function createVitePlugins(env: Record<string, string>, command: string, 
       minify: true,
     }),
   ];
-  console.log(isBuild, isServe);
   // The following plugins only work in the production environment
   if (isBuild) {
     vitePlugins.push(

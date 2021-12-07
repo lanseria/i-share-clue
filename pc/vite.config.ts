@@ -9,7 +9,6 @@ function pathResolve(dir: string) {
 export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
   const env = loadEnv(mode, root);
-  console.log(mode);
   return {
     // /
     base: env.VITE_PUBLIC_PATH,
