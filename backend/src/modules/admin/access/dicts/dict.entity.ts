@@ -14,7 +14,7 @@ import {
   schema: 'admin',
   name: 'dicts',
 })
-@Tree('nested-set')
+@Tree('materialized-path')
 export class DictEntity extends BaseEntity {
   @PrimaryColumn({
     name: 'id',
