@@ -23,6 +23,9 @@
         <n-form-item path="lat" label="纬度">
           <n-input-number v-model:value="modelRef.location.lat" />
         </n-form-item>
+        <n-form-item path="lnglat" label="经纬度">
+          <n-input v-model:value="lnglat" />
+        </n-form-item>
       </template>
     </n-form>
     <template #footer>
@@ -34,33 +37,38 @@
   </imp-modal>
 </template>
 <script lang="ts">
-import {
-  NForm,
-  NFormItem,
-  NInput,
-  NSpace,
-  NButton,
-  NInputNumber
-} from "naive-ui";
-import { defineComponent, ref } from "vue";
-import { createProjectReq } from "/@/api/Admin/Clue/Project";
-import { CreateProjectFormDTO } from "/@/types/Admin/Clue/Project/dto";
+import { NForm, NFormItem, NInput, NSpace, NButton, NInputNumber } from 'naive-ui';
+import { defineComponent, onMounted, ref, watchEffect } from 'vue';
+import { createProjectReq } from '/@/api/Admin/Clue/Project';
+import { CreateProjectFormDTO } from '/@/types/Admin/Clue/Project/dto';
 
 export default defineComponent({
-  emits: ["load-page"],
+  emits: ['load-page'],
   components: {
     NForm,
     NFormItem,
     NInput,
     NSpace,
     NButton,
-    NInputNumber
+    NInputNumber,
   },
   setup(props, { emit }) {
     // refs
     const ImpModalRef = ref();
+    const lnglat = ref('');
     // ref
     const modelRef = ref(new CreateProjectFormDTO());
+    onMounted(() => {
+      watchEffect(() => {
+        if (lnglat.value) {
+          const arr: string[] = lnglat.value.split(',');
+          modelRef.value.location = {
+            lng: +arr[0],
+            lat: +arr[1],
+          };
+        }
+      });
+    });
     // method
     const open = (row?: IObj) => {
       if (row) {
@@ -71,7 +79,7 @@ export default defineComponent({
     const close = () => {
       modelRef.value = new CreateProjectFormDTO();
       ImpModalRef.value.showModal = false;
-      emit("load-page");
+      emit('load-page');
     };
     const handleSubmit = async () => {
       const { payload } = await createProjectReq(modelRef.value);
@@ -83,12 +91,13 @@ export default defineComponent({
       // refs
       ImpModalRef,
       // ref
+      lnglat,
       modelRef,
       // method
       open,
       close,
-      handleSubmit
+      handleSubmit,
     };
-  }
+  },
 });
 </script>

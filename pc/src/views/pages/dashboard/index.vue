@@ -70,6 +70,9 @@ export default defineComponent({
     };
 
     const handleMarkerClick = (e: any) => {
+      // TODO: 暂时这么做
+      // console.log(e);
+      showMap(e.extData.name, e.extData.desc);
       infoWindow.open(map, [e.extData.location.lng, e.extData.location.lat]);
     };
 
@@ -87,15 +90,11 @@ export default defineComponent({
       const { payload } = await searchAreaProjectsReq(bounds);
       markerList.value = payload;
     };
-    const showMap = () => {
+    const showMap = (title = '感染者情况', desc = '感染者情况具体情况') => {
       //构建信息窗体中显示的内容
       let info = [];
-      info.push(
-        '<div class=\'input-card content-window-card\'><div><img style="float:left;width:67px;height:16px;" src=" https://webapi.amap.com/images/autonavi.png "/></div> '
-      );
-      info.push('<div style="padding:7px 0px 0px 0px;"><h4>高德软件</h4>');
-      info.push("<p class='input-item'>电话 : 010-84107000   邮编 : 100102</p>");
-      info.push("<p class='input-item'>地址 :北京市朝阳区望京阜荣街10号首开广场4层</p></div></div>");
+      info.push(`<p>${title}</p>`);
+      info.push(`<p style="max-width:500px;">${desc}</p></div></div>`);
 
       infoWindow = new $Amap.InfoWindow({
         content: info.join(''), //使用默认信息窗体框样式，显示信息内容
