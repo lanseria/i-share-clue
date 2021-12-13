@@ -98,6 +98,10 @@ export default defineComponent({
     const handleResizeEvent = () => {
       emit('resize');
     };
+    // methods
+    const clearInfoWindow = () => {
+      map.value.clearInfoWindow();
+    };
     // hook
     onMounted(() => {
       const options = {
@@ -195,6 +199,8 @@ export default defineComponent({
       ContainerRef,
       // ref
       mapLoaded,
+      // methods
+      clearInfoWindow,
     };
   },
 });
@@ -204,7 +210,6 @@ export default defineComponent({
   position: relative;
   width: 100%;
   height: 100%;
-  z-index: 999;
   overflow: hidden;
   pointer-events: none;
 }

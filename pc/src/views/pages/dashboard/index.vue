@@ -1,21 +1,28 @@
 <template>
-  <div class="map-wrap">
+  <div class="map-wrap" id="dashboard-map">
     <Amap @rightclick="clickHandler" @location-complete="onAmapComplete" @resize="debounceLoadPage" @zoomend="debounceLoadPage" @moveend="debounceLoadPage">
       <PlaceSearch></PlaceSearch>
       <RightDropdown ref="RightDropdownRef" @add-msg="handleAddMsg"></RightDropdown>
       <CircleMarker v-for="marker in markerList" :key="marker.id" :location="marker.location" :ext-data="marker" @click="handleMarkerClick"></CircleMarker>
+      <InfoWindow ref="InfoWindowRef">
+        <div style="max-width: 500px; min-width: 200px">
+          <p>{{ iW.title }}</p>
+          <p>{{ iW.desc }}</p>
+        </div>
+      </InfoWindow>
     </Amap>
   </div>
   <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, getCurrentInstance, nextTick, provide } from 'vue';
+import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
 import FormModal from './FormModal.vue';
 import PlaceSearch from './PlaceSearch.vue';
 import RightDropdown from './RightDropdown.vue';
 import Amap from './Amap.vue';
 import CircleMarker from './CircleMarker.vue';
-import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
+import InfoWindow from './InfoWindow.vue';
 import { debounce } from 'lodash';
 class LngLat {
   KL = 122.10714947486878;
@@ -39,18 +46,23 @@ export default defineComponent({
     RightDropdown,
     Amap,
     CircleMarker,
+    InfoWindow,
   },
   setup() {
     const { $Amap } = getCurrentInstance()!.appContext.config.globalProperties;
     //
-    let infoWindow: any = undefined;
     let lnglat: LngLat | undefined = undefined;
     let markerList = ref<any[]>([]);
+    const iW = ref({
+      title: '',
+      desc: '',
+    });
     let map: any = null;
     // refs
     const RightDropdownRef = ref();
     const FormModalRef = ref();
-
+    const InfoWindowRef = ref();
+    const handleMapClick = () => {};
     const clickHandler = (e: any) => {
       RightDropdownRef.value.close();
       nextTick().then(() => {
@@ -71,9 +83,10 @@ export default defineComponent({
 
     const handleMarkerClick = (e: any) => {
       // TODO: 暂时这么做
-      // console.log(e);
-      showMap(e.extData.name, e.extData.desc);
-      infoWindow.open(map, [e.extData.location.lng, e.extData.location.lat]);
+      iW.value.title = e.extData.name;
+      iW.value.desc = e.extData.desc;
+      console.log(e.extData.location);
+      InfoWindowRef.value.open(e.extData.location.lng, e.extData.location.lat);
     };
 
     const debounceLoadPage = debounce(function (event) {
@@ -90,30 +103,22 @@ export default defineComponent({
       const { payload } = await searchAreaProjectsReq(bounds);
       markerList.value = payload;
     };
-    const showMap = (title = '感染者情况', desc = '感染者情况具体情况') => {
-      //构建信息窗体中显示的内容
-      let info = [];
-      info.push(`<p>${title}</p>`);
-      info.push(`<p style="max-width:500px;">${desc}</p></div></div>`);
 
-      infoWindow = new $Amap.InfoWindow({
-        content: info.join(''), //使用默认信息窗体框样式，显示信息内容
-      });
-    };
-    onMounted(async () => {
-      showMap();
-    });
+    onMounted(() => {});
 
     return {
       // ref
       markerList,
+      iW,
       // refs
       RightDropdownRef,
       FormModalRef,
+      InfoWindowRef,
 
       // method
       loadPage,
       handleAddMsg,
+      handleMapClick,
       clickHandler,
       onAmapComplete,
       debounceLoadPage,

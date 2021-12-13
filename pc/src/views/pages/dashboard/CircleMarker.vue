@@ -43,7 +43,7 @@ export default defineComponent({
     });
     onUnmounted(() => {
       const crtMap = map?.value;
-      crtMap.remove(marker);
+      crtMap && crtMap.remove(marker);
     });
     return {};
   },

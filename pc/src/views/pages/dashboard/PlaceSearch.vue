@@ -1,18 +1,20 @@
 <template>
-  <div class="myPageTop">
-    <table>
-      <tr>
-        <td>
-          <label>请输入关键字：</label>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <n-auto-complete id="tipinput" :options="options" v-model:value="searchText" type="text" placeholder="请输入关键词" clearable />
-        </td>
-      </tr>
-    </table>
-  </div>
+  <teleport to="#dashboard-map">
+    <div class="myPageTop">
+      <table>
+        <tr>
+          <td>
+            <label>请输入关键字：</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <n-auto-complete id="tipinput" :options="options" v-model:value="searchText" type="text" placeholder="请输入关键词" clearable />
+          </td>
+        </tr>
+      </table>
+    </div>
+  </teleport>
 </template>
 <script lang="ts">
 import { defineComponent, ref, watchEffect, onMounted, getCurrentInstance, inject, Ref } from 'vue';
@@ -72,6 +74,7 @@ export default defineComponent({
   border-image: initial;
   margin: 10px auto;
   padding: 6px;
+  z-index: 1;
 }
 .myPageTop label {
   margin: 0 20px 0 0;
