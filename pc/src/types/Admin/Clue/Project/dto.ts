@@ -1,4 +1,4 @@
-import { CommonDTO } from "/@/types/Common/dto";
+import { CommonDTO } from '/@/types/Common/dto';
 
 export class ProjectLocation {
   lat: number;
@@ -11,11 +11,11 @@ export class ProjectLocation {
 }
 
 class CreateProjectFormDTO extends CommonDTO {
-  name = "";
-  website = "";
-  desc = "";
-  category = "";
-  region = "";
+  name = '';
+  website = 'http://ivhik.cn';
+  desc = '描述疫情';
+  category = '1';
+  region = '1';
   location: ProjectLocation | undefined = undefined;
 }
 

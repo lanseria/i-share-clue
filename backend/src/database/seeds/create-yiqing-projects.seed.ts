@@ -7,7 +7,7 @@ import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { UserStatus } from '@modules/admin/access/users/user-status.enum';
 import * as dayjs from 'dayjs';
 import { ProjectLocation } from '@modules/admin/clue/project/dtos/location';
-const projects: ProjectJsonVo[] = require('../sql/1639378257-all-clue-projects.json');
+const projects: ProjectJsonVo[] = require('../sql/1639412646-all-clue-projects.json');
 interface ProjectJsonVo {
   createdAt: string;
   updatedAt: string;
