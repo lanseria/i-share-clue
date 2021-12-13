@@ -5,6 +5,7 @@ import { DictEntity } from './dict.entity';
 
 @EntityRepository(DictEntity)
 export class DictsRepository extends Repository<DictEntity> {
+  // TODO: 合并分页统一逻辑
   getDictsAndCount(
     pagination: PaginationRequest,
   ): Promise<[dictEntities: DictEntity[], totalDicts: number]> {

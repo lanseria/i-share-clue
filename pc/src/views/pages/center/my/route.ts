@@ -26,6 +26,14 @@ export const myRoute: AppRouteRecordRaw[] = [
     }),
     component: () => import('./dict-list/index.vue'),
   },
+  {
+    path: 'project-list',
+    name: 'ProjectList',
+    meta: authMetaFunc('项目管理', {
+      icon: 'icon-Shape',
+    }),
+    component: () => import('./project-list/index.vue'),
+  },
   // {
   //   path: "more",
   //   name: "More",

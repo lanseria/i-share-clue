@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { PaginationRequest } from '@common/interfaces';
 import { Polygon } from 'geojson';
 import { gcj02towgs84 } from 'src/helpers/convert';
 import { EntityRepository, Repository } from 'typeorm';
@@ -13,6 +13,31 @@ import { ProjectEntity } from './project.entity';
 // ]]}'
 @EntityRepository(ProjectEntity)
 export class ProjectRepository extends Repository<ProjectEntity> {
+  // TODO: 合并分页统一逻辑
+  getProjectsAndCount(
+    pagination: PaginationRequest,
+  ): Promise<[projectEntities: ProjectEntity[], totalProjects: number]> {
+    const {
+      skip,
+      limit: take,
+      order,
+      params: { name },
+    } = pagination;
+    const query = this.createQueryBuilder('p')
+      .leftJoinAndSelect('p.creator', 'u')
+      .skip(skip)
+      .take(take)
+      .orderBy(order);
+
+    if (name) {
+      query.where(`u.name ILIKE :search`, { search: `%${name}%` });
+    }
+    // 回传上面API所组出來的Raw SQL, debug用
+    // const sql = query.getSql();
+    // Logger.log(sql);
+    return query.getManyAndCount();
+  }
+
   public searchArea(bounds: [number, number, number, number]) {
     const area: Polygon = {
       type: 'Polygon',

@@ -1,4 +1,5 @@
 import { UserMapper } from '@modules/admin/access/users/users.mapper';
+import { Logger } from '@nestjs/common';
 import { Point } from 'geojson';
 import { gcj02towgs84, wgs84togcj02 } from 'src/helpers/convert';
 import { CreateProjectRequestDto } from './dtos';
