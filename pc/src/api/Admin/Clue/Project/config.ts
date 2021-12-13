@@ -5,6 +5,7 @@ const api = {
   project: `${prefix}`,
   area: `${prefix}/area`,
   page: `${prefix}/page`,
+  export: `${prefix}/export`,
 };
 
 export { api };

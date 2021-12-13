@@ -27,6 +27,14 @@ export class ProjectService {
   ) {}
 
   /**
+   * 导出所有项目为Excel
+   * @returns
+   */
+  public async exportProject() {
+    const projectEntities = await this.projectRepository.find();
+    return projectEntities.map(ProjectMapper.toJsonDto);
+  }
+  /**
    * 删除项目
    * @param ids
    * @returns

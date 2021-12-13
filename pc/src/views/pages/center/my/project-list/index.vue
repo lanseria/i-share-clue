@@ -3,6 +3,7 @@
     <div class="data-table-header">
       <n-space align="center">
         <n-button type="primary" @click="handleAdd()">新增</n-button>
+        <n-button @click="handleExport()">全部导出</n-button>
       </n-space>
       <n-space>
         <n-input-group>
@@ -31,13 +32,14 @@
   </imp-page-container>
 </template>
 <script lang="ts">
-import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, TreeSelectOption, NTreeSelect } from 'naive-ui';
+import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
 import { computed, defineComponent, onMounted, ref, h } from 'vue';
-import { deleteProjectReq, getProjectPageReq } from '/@/api/Admin/Clue/Project';
+import { deleteProjectReq, exportProjectReq, getProjectPageReq } from '/@/api/Admin/Clue/Project';
 import { useImpDataTable } from '/@/hooks/useDataTable';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import { UserInfoDTO } from '/@/types/Admin/User/dto';
+import dayjs from 'dayjs';
 export default defineComponent({
   components: {
     NDataTable,
@@ -66,10 +68,37 @@ export default defineComponent({
       {
         title: '项目描述',
         key: 'desc',
+        render(row) {
+          return h(
+            NEllipsis,
+            {
+              style: 'max-width: 240px;',
+            },
+            {
+              default: () => row.desc,
+            }
+          );
+        },
       },
       {
         title: '网站',
         key: 'website',
+      },
+      {
+        title: '更新时间',
+        key: 'updatedAt',
+        render(row: any) {
+          const updatedAt: number = row.updatedAt;
+          return dayjs.unix(updatedAt).format('YYYY-MM-DD/HH:mm');
+        },
+      },
+      {
+        title: '创建时间',
+        key: 'createdAt',
+        render(row: any) {
+          const createdAt: number = row.createdAt;
+          return dayjs.unix(createdAt).format('YYYY-MM-DD/HH:mm');
+        },
       },
       {
         title: '创建者',
@@ -100,7 +129,6 @@ export default defineComponent({
       },
     ];
     const searchName = ref('');
-    const dictTreeOptions = ref<TreeSelectOption[]>([]);
     // method
     const handleEnter = (row: IObj) => {
       // handleSearch();
@@ -109,6 +137,37 @@ export default defineComponent({
       // FormModalRef.value.open(null, {
       //   parentId: pid.value,
       // });
+    };
+    const handleExport = () => {
+      const actionName = '导出全部';
+      const actionMethod = exportProjectReq;
+      window.$dialog.info({
+        title: '提醒',
+        content: `你确定${actionName}项目？`,
+        positiveText: '确定',
+        negativeText: '不确定',
+        onPositiveClick: async () => {
+          const { payload } = await actionMethod();
+          const stringjson = JSON.stringify(payload, null, 2);
+          // 创建隐藏的可下载链接
+          const eleLink = document.createElement('a');
+          eleLink.download = `${dayjs().unix()}-all-clue-projects.json`;
+          eleLink.style.display = 'none';
+          // 字符内容转变成blob地址
+          const blob = new Blob([stringjson], { type: 'text/json' });
+          eleLink.href = URL.createObjectURL(blob);
+          // 触发点击
+          document.body.appendChild(eleLink);
+          eleLink.click();
+          // 然后移除
+          document.body.removeChild(eleLink);
+
+          loadPage();
+        },
+        onNegativeClick: () => {
+          loadPage();
+        },
+      });
     };
     const handleEdit = (row: IObj) => {
       // FormModalRef.value.open(row);
@@ -182,7 +241,6 @@ export default defineComponent({
       columns,
       pagedTable,
       pagination,
-      dictTreeOptions,
       //
       handlePageChange,
       handlePageSizeChange,
@@ -190,6 +248,7 @@ export default defineComponent({
       handleAdd,
       loadPage,
       handleSearch,
+      handleExport,
     };
   },
 });

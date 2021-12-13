@@ -26,4 +26,10 @@ export class ProjectResponseDto {
 
   @ApiProperty()
   location: ProjectLocation;
+
+  @ApiProperty()
+  createdAt: number;
+
+  @ApiProperty()
+  updatedAt: number;
 }

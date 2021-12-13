@@ -1,0 +1,483 @@
+[
+  {
+    "category": "1",
+    "desc": "12月3日：8:40打车上班（车牌浙AD70887），12:30步行至公司（钱江国际时代广场2号楼）边  上麦当劳点餐、打包回办公室。",
+    "location": {
+      "lat": 30.243360568,
+      "lng": 120.201196341
+    },
+    "name": "钱江国际时代广场2号楼",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "12月2日：在东方豪生香樟园1号包厢晚餐，同餐者包括确诊病例吴某、庄某等，21:00打车回家 （车牌浙ADP3303）。",
+    "location": {
+      "lat": 30.278749984,
+      "lng": 120.184273118
+    },
+    "name": "东方豪生香樟园1号包厢",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.17800046,
+      "lng": 119.589607894
+    },
+    "name": "临安区桥岭村8组",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "12月6日：与闫某某同办公室上班，12:20左右到宋姐之望江面馆就餐，电瓶车上下班，17:30下 班后无外出。",
+    "location": {
+      "lat": 30.250550044,
+      "lng": 120.179581943
+    },
+    "name": "疫情",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.262482585,
+      "lng": 120.200890006
+    },
+    "name": "庆春银泰卢米埃影城",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.32347011,
+      "lng": 120.140799731
+    },
+    "name": "杭州沙县小吃(温州路店)",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.222479792,
+      "lng": 119.696253673
+    },
+    "name": "木之轩·木门整木家居(临安店)",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.233201081,
+      "lng": 120.193284809
+    },
+    "name": "近江站",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.335433806,
+      "lng": 120.087040472
+    },
+    "name": "杭州水一方星辰棋牌室",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.345144784,
+      "lng": 120.133444715
+    },
+    "name": "拱墅区拱谢路111号谢村渣土码头",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.245869012,
+      "lng": 120.178272509
+    },
+    "name": "杭州城站站",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.247610893,
+      "lng": 120.182694185
+    },
+    "name": "上城区望江街道清江路清泰南苑",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.335191094,
+      "lng": 120.096203631
+    },
+    "name": "拱墅区阳光郡小区",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.242066412,
+      "lng": 120.202410424
+    },
+    "name": "城星路站",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.321012748,
+      "lng": 120.133833735
+    },
+    "name": "拱墅区运河雅苑",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.013122601,
+      "lng": 120.194508149
+    },
+    "name": "萧山戴村",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.073935873,
+      "lng": 119.981480245
+    },
+    "name": "富阳区东洲街道沿山路",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "12月6日：与闫某某同办公室上班，12:20左右到宋姐之望江面馆就餐，电瓶车上下班，17:30下 班后无外出。",
+    "location": {
+      "lat": 30.362949267,
+      "lng": 120.052864129
+    },
+    "name": "杭州宋姐之望江面馆",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.331189662,
+      "lng": 120.128240233
+    },
+    "name": "拱墅区金地大运宸府",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.224722266,
+      "lng": 119.701053414
+    },
+    "name": "临安万华广场",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "确诊病例余某某，女，33岁，现住址为上城区长庆里33号，浙江绿农生态环境有限公司职员。",
+    "location": {
+      "lat": 30.250334813,
+      "lng": 120.176720586
+    },
+    "name": "长庆里33号",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.327665339,
+      "lng": 120.175503567
+    },
+    "name": "杭州DK会所（新天地店）",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.281944807,
+      "lng": 119.984801477
+    },
+    "name": "余杭区良渚街道全季酒店",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.310993599,
+      "lng": 120.173407749
+    },
+    "name": "杭州鼎宏雀友汇棋牌室",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.253593258,
+      "lng": 120.207356143
+    },
+    "name": "钱江新城平安金融中心八月荟",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.275492886,
+      "lng": 120.21740854
+    },
+    "name": "上城区三堡运河东路",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.233491878,
+      "lng": 120.201616188
+    },
+    "name": "上城区瑜悦伽园瑜伽馆",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.279641399,
+      "lng": 119.942938946
+    },
+    "name": "余杭区金城英特尔湾",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.262737852,
+      "lng": 120.200405782
+    },
+    "name": "新白鹿（庆春银泰店）",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.24105744,
+      "lng": 119.794865399
+    },
+    "name": "临安青山湖",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.285658172,
+      "lng": 120.188810292
+    },
+    "name": "上城区机神新村",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.259367696,
+      "lng": 119.946160946
+    },
+    "name": "余杭区邓州窝子面·襄阳",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.395116086,
+      "lng": 120.097074408
+    },
+    "name": "杭州仁和街道东风4S店",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.242066412,
+      "lng": 120.202410424
+    },
+    "name": "地铁城星路站",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.34605349,
+      "lng": 120.143605486
+    },
+    "name": "杭州顺丰创新中心",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.264174798,
+      "lng": 120.195228402
+    },
+    "name": "滨江新城市广场",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  },
+  {
+    "category": "1",
+    "desc": "描述疫情",
+    "location": {
+      "lat": 30.282268565,
+      "lng": 120.160479571
+    },
+    "name": "杭州顶全便利店",
+    "region": "1",
+    "website": "http://ivhik.cn",
+    "updatedAt": 1639372762,
+    "createdAt": 1639372762
+  }
+]

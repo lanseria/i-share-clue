@@ -32,3 +32,10 @@ export const deleteProjectReq = (ids: string[]) => {
     data: ids,
   });
 };
+
+export const exportProjectReq = () => {
+  return r.request<R<any[]>>({
+    url: `${api.export}`,
+    method: 'POST',
+  });
+};

@@ -34,6 +34,15 @@ import { ProjectService } from './project.service';
 export class ProjectController {
   constructor(private projectService: ProjectService) {}
   /**
+   * 导出所有项目
+   * @returns
+   */
+  @ApiOperation({ description: '导出所有项目' })
+  @Post('/export')
+  public exportProject() {
+    return this.projectService.exportProject();
+  }
+  /**
    * 删除项目
    * @param ids
    * @returns
