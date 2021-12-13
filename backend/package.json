@@ -30,6 +30,8 @@
     "typeorm-seeding": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js",
     "seed:config": "npm run typeorm-seeding config",
     "seed": "npm run typeorm-seeding seed",
+    "seed-user": "yarn typeorm-seeding seed --seed CreateUsersSeed",
+    "seed-project": "yarn typeorm-seeding seed --seed CreateYiqingProjectsSeed",
     "upi": "yarn upgrade-interactive"
   },
   "dependencies": {
