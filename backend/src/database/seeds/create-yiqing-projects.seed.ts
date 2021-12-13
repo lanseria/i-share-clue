@@ -59,14 +59,13 @@ export default class CreateYiqingProjectsSeed implements Seeder {
               return genProject(coordinates, project, users);
             });
         } else if (typeof project.location === 'object') {
-          const coordinates = [project.location.lat, project.location.lng];
+          const coordinates = [project.location.lng, project.location.lat];
           return genProject(coordinates, project, users);
         } else {
           throw new Error('no location!');
         }
       }),
     );
-    console.log(projectEntities);
     await connection.manager.save(projectEntities);
   }
 }
