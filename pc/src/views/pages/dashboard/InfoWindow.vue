@@ -28,10 +28,10 @@ export default defineComponent({
       // });
     });
 
-    // onUnmounted(() => {
-    //   const crtMap = map?.value;
-    //   crtMap && crtMap.remove(infoWindow);
-    // });
+    onUnmounted(() => {
+      const crtMap = map?.value;
+      crtMap && crtMap.clearInfoWindow();
+    });
     return {
       el,
       // method

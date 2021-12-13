@@ -6,7 +6,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, getCurrentInstance, onMounted, provide, reactive, Ref, ref, watchEffect } from 'vue';
+import { computed, defineComponent, getCurrentInstance, onMounted, onUnmounted, provide, reactive, Ref, ref, watchEffect } from 'vue';
 import { addEvents, events } from './events';
 import { useAppStore } from '/@/store/modules/app';
 const styleThemeMap = {
@@ -171,29 +171,12 @@ export default defineComponent({
         });
         //
         map.value = newMap;
-        // //创建右键菜单
-        // const contextMenu = new AMap.ContextMenu();
-        // let contextMenuPositon = "";
-        // //右键添加Marker标记
-        // contextMenu.addItem(
-        //   "添加标记",
-        //   function (e: any) {
-        //     var marker = new AMap.Marker({
-        //       map: map,
-        //       position: contextMenuPositon //基点位置
-        //     });
-        //   },
-        //   3
-        // );
-
-        // //地图绑定鼠标右击事件——弹出右键菜单
-        // map.on("rightclick", function (e) {
-        //   contextMenu.open(map, e.lnglat);
-        //   contextMenuPositon = e.lnglat;
-        // });
       } catch (e) {
         console.error(e);
       }
+    });
+    onUnmounted(() => {
+      map.value.destroy();
     });
     return {
       ContainerRef,

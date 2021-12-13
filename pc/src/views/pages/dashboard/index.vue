@@ -85,7 +85,6 @@ export default defineComponent({
       // TODO: 暂时这么做
       iW.value.title = e.extData.name;
       iW.value.desc = e.extData.desc;
-      console.log(e.extData.location);
       InfoWindowRef.value.open(e.extData.location.lng, e.extData.location.lat);
     };
 
