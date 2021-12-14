@@ -26,8 +26,8 @@ function genProject(coordinates, project, users) {
   entity.desc = project.desc ?? '描述疫情';
   entity.category = project.category ?? '1';
   entity.region = project.region ?? '1';
-  entity.createdAt = dayjs(project.created_at).toDate();
-  entity.updatedAt = dayjs(project.updated_at).toDate();
+  entity.createdAt = dayjs.unix(project.createdAt).toDate();
+  entity.updatedAt = dayjs.unix(project.updatedAt).toDate();
   entity.creator = users[0];
   const pointObject: Point = {
     type: 'Point',

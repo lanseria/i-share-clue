@@ -27,7 +27,7 @@ export class ProjectRepository extends Repository<ProjectEntity> {
       .leftJoinAndSelect('p.creator', 'u')
       .skip(skip)
       .take(take)
-      .orderBy(order);
+      .orderBy('p.createdAt', 'DESC');
 
     if (name) {
       query.where(`u.name ILIKE :search`, { search: `%${name}%` });

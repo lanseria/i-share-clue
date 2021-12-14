@@ -15,7 +15,7 @@ import { MinioClientService } from './minio-client.service';
           accessKey: config.get('MINIO_ACCESSKEY'),
           secretKey: config.get('MINIO_SECRETKEY'),
         };
-        console.log(cfg);
+        // console.log(cfg);
         return cfg;
       },
       inject: [ConfigService],
