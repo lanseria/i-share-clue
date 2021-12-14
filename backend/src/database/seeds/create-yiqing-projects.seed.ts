@@ -6,18 +6,8 @@ import { Point } from 'geojson';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { UserStatus } from '@modules/admin/access/users/user-status.enum';
 import * as dayjs from 'dayjs';
-import { ProjectLocation } from '@modules/admin/clue/project/dtos/location';
-const projects: ProjectJsonVo[] = require('../sql/1639412646-all-clue-projects.json');
-interface ProjectJsonVo {
-  createdAt: string;
-  updatedAt: string;
-  website: string;
-  desc: string;
-  category: string;
-  region: string;
-  name: string;
-  location: string | ProjectLocation;
-}
+import { ProjectJsonVo } from '@database/sql/project.vo';
+const projects: ProjectJsonVo[] = require('@database/sql/1639412646-all-clue-projects.json');
 
 function genProject(coordinates, project, users) {
   const entity = new ProjectEntity();

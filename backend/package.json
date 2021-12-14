@@ -32,6 +32,7 @@
     "seed": "npm run typeorm-seeding seed",
     "seed-user": "yarn typeorm-seeding seed --seed CreateUsersSeed",
     "seed-project": "yarn typeorm-seeding seed --seed CreateYiqingProjectsSeed",
+    "trans-project": "ts-node src/helpers/script.ts",
     "upi": "yarn upgrade-interactive"
   },
   "dependencies": {
