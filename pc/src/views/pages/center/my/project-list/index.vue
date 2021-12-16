@@ -38,7 +38,7 @@
 import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
 import { computed, defineComponent, onMounted, ref, h } from 'vue';
-import { deleteProjectReq, downloadFiles, exportProjectReq, getProjectPageReq } from '/@/api/Admin/Clue/Project';
+import { deleteProjectReq, exportProjectReq, getProjectPageReq } from '/@/api/Admin/Clue/Project';
 import { useImpDataTable } from '/@/hooks/useDataTable';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import { UserInfoDTO } from '/@/types/Admin/User/dto';
@@ -141,9 +141,10 @@ export default defineComponent({
       // handleSearch();
     };
     const handleAdd = () => {
-      QuickFormModalRef.value.open({});
+      QuickFormModalRef.value.add({});
     };
     const handleEdit = (row: IObj) => {
+      QuickFormModalRef.value.edit(row);
       // QuickFormModalRef.value.open(row);
     };
     // const handleDownload = () => {

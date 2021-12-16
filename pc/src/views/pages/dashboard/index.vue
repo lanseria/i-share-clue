@@ -84,7 +84,7 @@ export default defineComponent({
 
     const handleAddMsg = (key: string) => {
       RightDropdownRef.value.close();
-      QuickFormModalRef.value.open({
+      QuickFormModalRef.value.add({
         location: {
           lng: lnglat?.lng,
           lat: lnglat?.lat,
@@ -100,11 +100,6 @@ export default defineComponent({
       };
       const { lng, lat } = e.extData.location;
       InfoWindowRef.value.open(lng, lat, iW);
-    };
-    const debounceLoadPage = (time: number = 500) => {
-      return debounce(async (e) => {
-        console.log('debounceLoadPage');
-      }, time);
     };
     // const onResize = debounceLoadPage(1000);
     // const onZoomend = debounceLoadPage(1000);

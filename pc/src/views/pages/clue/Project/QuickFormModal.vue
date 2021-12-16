@@ -56,6 +56,7 @@ export default defineComponent({
     // refs
     const ImpModalRef = ref();
     const lnglat = ref('');
+    const actionName = ref('添加');
     // ref
     const modelRef = ref(new CreateProjectFormDTO());
     onMounted(() => {
@@ -70,10 +71,16 @@ export default defineComponent({
       });
     });
     // method
-    const open = (row?: IObj) => {
+    const add = (row?: IObj) => {
+      actionName.value = '添加';
       if (row) {
         modelRef.value.mergeProperties(row);
       }
+      ImpModalRef.value.showModal = true;
+    };
+    const edit = (row: IObj) => {
+      actionName.value = '编辑';
+      modelRef.value.mergeProperties(row);
       ImpModalRef.value.showModal = true;
     };
     const close = () => {
@@ -94,7 +101,8 @@ export default defineComponent({
       lnglat,
       modelRef,
       // method
-      open,
+      add,
+      edit,
       close,
       handleSubmit,
     };
