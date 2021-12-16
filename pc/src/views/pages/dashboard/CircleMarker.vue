@@ -1,7 +1,9 @@
 <template></template>
 <script lang="ts">
-import { defineComponent, getCurrentInstance, inject, onMounted, onUnmounted, Ref } from 'vue';
+import { defineComponent, onMounted, onUnmounted } from 'vue';
+import { DASHBOARD_MAP } from './const';
 import { addEvents, events } from './events';
+import { useMapStore } from '/@/store/modules/map';
 export default defineComponent({
   props: {
     location: {
@@ -15,12 +17,14 @@ export default defineComponent({
   },
   emits: [...events],
   setup(props, { emit }) {
-    const { $Amap } = getCurrentInstance()!.appContext.config.globalProperties;
-    const map = inject<Ref<any>>('map');
+    // global
+    const mapStore = useMapStore();
+    const $Amap = mapStore.Amap;
+
     let marker: any = null;
     onMounted(() => {
-      const crtMap = map?.value;
-      if (crtMap) {
+      const map = mapStore.getMap(DASHBOARD_MAP);
+      if (map) {
         marker = new $Amap.CircleMarker({
           center: new $Amap.LngLat(props.location.lng, props.location.lat),
           radius: 10, //3D视图下，CircleMarker半径不要超过64px
@@ -38,12 +42,12 @@ export default defineComponent({
         addEvents(marker, events, (event: any) => {
           emit(event.type, { event, extData: props.extData });
         });
-        crtMap.add(marker);
+        map.add(marker);
       }
     });
     onUnmounted(() => {
-      const crtMap = map?.value;
-      crtMap && crtMap.remove(marker);
+      const map = mapStore.getMap(DASHBOARD_MAP);
+      map.remove(marker);
     });
     return {};
   },

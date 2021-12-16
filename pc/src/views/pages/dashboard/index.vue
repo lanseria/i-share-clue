@@ -15,7 +15,7 @@
   <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref, getCurrentInstance, nextTick, provide } from 'vue';
+import { defineComponent, onMounted, ref, nextTick } from 'vue';
 import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
 import FormModal from './FormModal.vue';
 import PlaceSearch from './PlaceSearch.vue';
@@ -24,6 +24,8 @@ import Amap from './Amap.vue';
 import CircleMarker from './CircleMarker.vue';
 import InfoWindow from './InfoWindow.vue';
 import { debounce } from 'lodash';
+import { useMapStore } from '/@/store/modules/map';
+import { DASHBOARD_MAP } from './const';
 class LngLat {
   KL = 122.10714947486878;
   kT = 30.029054686576302;
@@ -49,7 +51,7 @@ export default defineComponent({
     InfoWindow,
   },
   setup() {
-    const { $Amap } = getCurrentInstance()!.appContext.config.globalProperties;
+    const mapStore = useMapStore();
     //
     let lnglat: LngLat | undefined = undefined;
     let markerList = ref<any[]>([]);
@@ -57,7 +59,6 @@ export default defineComponent({
       title: '',
       desc: '',
     });
-    let map: any = null;
     // refs
     const RightDropdownRef = ref();
     const FormModalRef = ref();
@@ -93,11 +94,11 @@ export default defineComponent({
     }, 1500);
 
     const onAmapComplete = (e: any) => {
-      map = e.map;
       loadPage();
     };
 
     const loadPage = async () => {
+      let map = mapStore.getMap(DASHBOARD_MAP);
       const bounds = map.getBounds();
       const { payload } = await searchAreaProjectsReq(bounds);
       markerList.value = payload;

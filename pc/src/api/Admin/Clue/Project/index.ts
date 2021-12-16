@@ -39,3 +39,17 @@ export const exportProjectReq = () => {
     method: 'POST',
   });
 };
+
+export const downloadFiles = (url: string, filename: string) => {
+  fetch(url).then((res) =>
+    res.blob().then((blob) => {
+      var a = document.createElement('a');
+      var url = window.URL.createObjectURL(blob);
+      var filename = 'myfile.zip';
+      a.href = url;
+      a.download = filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    })
+  );
+};

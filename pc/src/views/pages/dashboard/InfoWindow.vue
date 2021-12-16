@@ -4,13 +4,16 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, getCurrentInstance, inject, onMounted, onUnmounted, Ref, ref } from 'vue';
+import { defineComponent, onMounted, onUnmounted, ref } from 'vue';
+import { DASHBOARD_MAP } from './const';
 import { addEvents, events } from './events';
+import { useMapStore } from '/@/store/modules/map';
 export default defineComponent({
   emits: [...events],
   setup(props, { emit }) {
-    const { $Amap } = getCurrentInstance()!.appContext.config.globalProperties;
-    const map = inject<Ref<any>>('map');
+    // global
+    const mapStore = useMapStore();
+    const $Amap = mapStore.Amap;
     const el = ref<HTMLElement>();
     let infoWindow: any = null;
 
@@ -18,8 +21,8 @@ export default defineComponent({
       infoWindow = new $Amap.InfoWindow({
         content: el.value!.outerHTML, //使用默认信息窗体框样式，显示信息内容
       });
-      const crtMap = map?.value;
-      crtMap && infoWindow.open(crtMap, [lng, lat]);
+      const map = mapStore.getMap(DASHBOARD_MAP);
+      infoWindow.open(map, [lng, lat]);
     };
 
     onMounted(() => {
@@ -29,8 +32,8 @@ export default defineComponent({
     });
 
     onUnmounted(() => {
-      const crtMap = map?.value;
-      crtMap && crtMap.clearInfoWindow();
+      const map = mapStore.getMap(DASHBOARD_MAP);
+      map.clearInfoWindow();
     });
     return {
       el,

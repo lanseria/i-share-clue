@@ -6,9 +6,11 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, getCurrentInstance, onMounted, onUnmounted, provide, reactive, Ref, ref, watchEffect } from 'vue';
+import { computed, defineComponent, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { DASHBOARD_MAP } from './const';
 import { addEvents, events } from './events';
 import { useAppStore } from '/@/store/modules/app';
+import { useMapStore } from '/@/store/modules/map';
 const styleThemeMap = {
   light: 'normal',
   dark: 'dark',
@@ -39,11 +41,9 @@ export default defineComponent({
   setup(props, { emit }) {
     // use
     const appStore = useAppStore();
-    // comp
-    let map: Ref<any> = ref<any>({});
-    provide('map', map);
     // global
-    const $Amap = getCurrentInstance()!.appContext.config.globalProperties.$Amap;
+    const mapStore = useMapStore();
+    const $Amap = mapStore.Amap;
     // refs
     const ContainerRef = ref();
     // ref
@@ -56,7 +56,7 @@ export default defineComponent({
     // method
     const handleCompleteEvent = (event: any) => {
       mapLoaded.value = true;
-      emit(event.type, { event, map });
+      emit(event.type);
     };
 
     const handleMapmoveEvent = () => {
@@ -100,7 +100,8 @@ export default defineComponent({
     };
     // methods
     const clearInfoWindow = () => {
-      map.value.clearInfoWindow();
+      const map = mapStore.getMap(DASHBOARD_MAP);
+      map.clearInfoWindow();
     };
     // hook
     onMounted(() => {
@@ -170,13 +171,14 @@ export default defineComponent({
           }
         });
         //
-        map.value = newMap;
+        mapStore.addMap(DASHBOARD_MAP, newMap);
       } catch (e) {
         console.error(e);
       }
     });
     onUnmounted(() => {
-      map.value.destroy();
+      const map = mapStore.getMap(DASHBOARD_MAP);
+      map.destroy();
     });
     return {
       ContainerRef,

@@ -4,6 +4,7 @@
       <n-space align="center">
         <n-button type="primary" @click="handleAdd()">新增</n-button>
         <n-button @click="handleExport()">全部导出</n-button>
+        <!-- <n-button @click="handleDownload()">下载</n-button> -->
       </n-space>
       <n-space>
         <n-input-group>
@@ -35,7 +36,7 @@
 import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
 import { computed, defineComponent, onMounted, ref, h } from 'vue';
-import { deleteProjectReq, exportProjectReq, getProjectPageReq } from '/@/api/Admin/Clue/Project';
+import { deleteProjectReq, downloadFiles, exportProjectReq, getProjectPageReq } from '/@/api/Admin/Clue/Project';
 import { useImpDataTable } from '/@/hooks/useDataTable';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import { UserInfoDTO } from '/@/types/Admin/User/dto';
@@ -138,6 +139,9 @@ export default defineComponent({
       //   parentId: pid.value,
       // });
     };
+    // const handleDownload = () => {
+    //   downloadFiles('https://green-manage-pro.oss-cn-hangzhou.aliyuncs.com/prod/3f4efa7f4bd44c45a16142d72f0429fc.pdf', 'demo.pdf');
+    // };
     const handleExport = () => {
       const actionName = '导出全部';
       const actionMethod = exportProjectReq;
@@ -249,6 +253,7 @@ export default defineComponent({
       loadPage,
       handleSearch,
       handleExport,
+      // handleDownload,
     };
   },
 });
