@@ -29,6 +29,7 @@
       @update:page="handlePageChange"
       @update:page-size="handlePageSizeChange"
       @update:checked-row-keys="handleCheck"
+      @update:sorter="handleSorterChange"
     />
   </imp-page-container>
 </template>
@@ -103,6 +104,8 @@ export default defineComponent({
           const updatedAt: number = row.updatedAt;
           return dayjs.unix(updatedAt).format('YY-MM-DD/HH:mm');
         },
+        sorter: true,
+        sortOrder: false,
       },
       {
         title: '创建时间',
@@ -111,6 +114,8 @@ export default defineComponent({
           const createdAt: number = row.createdAt;
           return dayjs.unix(createdAt).format('YY-MM-DD/HH:mm');
         },
+        sorter: true,
+        sortOrder: false,
       },
       {
         title: '创建者',
@@ -218,6 +223,7 @@ export default defineComponent({
       //
       handlePageChange,
       handlePageSizeChange,
+      handleSorterChange,
       handleCheck,
       initPage,
       loadPage,
@@ -246,6 +252,7 @@ export default defineComponent({
       //
       handlePageChange,
       handlePageSizeChange,
+      handleSorterChange,
       handleCheck,
       handleAdd,
       loadPage,
