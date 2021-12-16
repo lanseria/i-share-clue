@@ -65,6 +65,17 @@ export default defineComponent({
       {
         title: '项目标题',
         key: 'name',
+        render(row) {
+          return h(
+            NEllipsis,
+            {
+              style: 'max-width: 100px;',
+            },
+            {
+              default: () => row.name,
+            }
+          );
+        },
       },
       {
         title: '项目描述',
@@ -73,7 +84,7 @@ export default defineComponent({
           return h(
             NEllipsis,
             {
-              style: 'max-width: 240px;',
+              style: 'max-width: 100px;',
             },
             {
               default: () => row.desc,
@@ -90,7 +101,7 @@ export default defineComponent({
         key: 'updatedAt',
         render(row: any) {
           const updatedAt: number = row.updatedAt;
-          return dayjs.unix(updatedAt).format('YYYY-MM-DD/HH:mm');
+          return dayjs.unix(updatedAt).format('YY-MM-DD/HH:mm');
         },
       },
       {
@@ -98,7 +109,7 @@ export default defineComponent({
         key: 'createdAt',
         render(row: any) {
           const createdAt: number = row.createdAt;
-          return dayjs.unix(createdAt).format('YYYY-MM-DD/HH:mm');
+          return dayjs.unix(createdAt).format('YY-MM-DD/HH:mm');
         },
       },
       {
@@ -110,20 +121,7 @@ export default defineComponent({
             NSpace,
             { align: 'center' },
             {
-              default: () => [
-                creator.username,
-                ...(creator.isSuperUser
-                  ? [
-                      h(
-                        NTag,
-                        { type: 'success' },
-                        {
-                          default: () => '超级管理员',
-                        }
-                      ),
-                    ]
-                  : []),
-              ],
+              default: () => creator.username,
             }
           );
         },

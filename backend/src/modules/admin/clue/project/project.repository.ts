@@ -1,4 +1,5 @@
 import { PaginationRequest } from '@common/interfaces';
+import { Logger } from '@nestjs/common';
 import { Polygon } from 'geojson';
 import { gcj02towgs84 } from 'src/helpers/convert';
 import { EntityRepository, Repository } from 'typeorm';
@@ -17,19 +18,26 @@ export class ProjectRepository extends Repository<ProjectEntity> {
   getProjectsAndCount(
     pagination: PaginationRequest,
   ): Promise<[projectEntities: ProjectEntity[], totalProjects: number]> {
-    const {
+    let {
       skip,
       limit: take,
       order,
       params: { name },
     } = pagination;
-    const query = this.createQueryBuilder('p')
+    let query = this.createQueryBuilder('p');
+    query = query
       .leftJoinAndSelect('p.creator', 'u')
-      .skip(skip)
-      .take(take)
-      .orderBy('p.createdAt', 'DESC')
-      .orderBy(order);
 
+      .skip(skip)
+      .take(take);
+    query = query.orderBy('p.createdAt', 'DESC');
+    if (order) {
+      const orderIter = Object.keys(order).map((key) => {
+        return [`p.${key}`, order[key]];
+      });
+      order = Object.fromEntries(orderIter);
+      query = query.orderBy(order);
+    }
     if (name) {
       query.where(`u.name ILIKE :search`, { search: `%${name}%` });
     }
