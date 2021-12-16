@@ -1,13 +1,16 @@
 <template>
   <div ref="ContainerRef" class="cpt-fast-map" :style="{ height: height }">
-    <div class="fast-map-slot-container">
-      <slot v-if="mapLoaded"></slot>
-    </div>
+    <n-el>
+      <div class="fast-map-slot-container">
+        <slot v-if="mapLoaded"></slot>
+      </div>
+    </n-el>
   </div>
 </template>
 <script lang="ts">
+import { nanoid } from 'nanoid';
+import { NEl } from 'naive-ui';
 import { computed, defineComponent, onMounted, onUnmounted, ref, watchEffect } from 'vue';
-import { DASHBOARD_MAP } from './const';
 import { addEvents, events } from './events';
 import { useAppStore } from '/@/store/modules/app';
 import { useMapStore } from '/@/store/modules/map';
@@ -17,10 +20,17 @@ const styleThemeMap = {
 };
 export default defineComponent({
   name: 'FastAMap',
+  components: {
+    NEl,
+  },
   props: {
     height: {
       type: String,
       default: '100%',
+    },
+    mid: {
+      type: String,
+      default: nanoid(),
     },
   },
   emits: [
@@ -100,7 +110,7 @@ export default defineComponent({
     };
     // methods
     const clearInfoWindow = () => {
-      const map = mapStore.getMap(DASHBOARD_MAP);
+      const map = mapStore.getMap(props.mid);
       map.clearInfoWindow();
     };
     // hook
@@ -171,13 +181,13 @@ export default defineComponent({
           }
         });
         //
-        mapStore.addMap(DASHBOARD_MAP, newMap);
+        mapStore.addMap(props.mid, newMap);
       } catch (e) {
         console.error(e);
       }
     });
     onUnmounted(() => {
-      const map = mapStore.getMap(DASHBOARD_MAP);
+      const map = mapStore.getMap(props.mid);
       map.destroy();
     });
     return {
@@ -204,13 +214,10 @@ export default defineComponent({
 }
 .cpt-fast-map :deep(.amap-content-body),
 .cpt-fast-map :deep(.amap-lib-infowindow-title),
-.cpt-fast-map :deep(.amap-lib-infowindow-content),
-.cpt-fast-map :deep(.amap-menu-outer),
-.cpt-fast-map :deep(.amap-info-content),
-.cpt-fast-map :deep(.amap-menu-outer li:hover) {
-  background-color: var(--color);
+.cpt-fast-map :deep(.amap-lib-infowindow-content) {
+  background-color: var(--base-color);
 }
 .cpt-fast-map :deep(.amap-info-sharp) {
-  border-top: 8px solid var(--color);
+  border-top: 8px solid var(--base-color);
 }
 </style>

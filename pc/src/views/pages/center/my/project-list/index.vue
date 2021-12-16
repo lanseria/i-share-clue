@@ -32,6 +32,7 @@
       @update:sorter="handleSorterChange"
     />
   </imp-page-container>
+  <QuickFormModal ref="QuickFormModalRef" @load-page="loadPage()"></QuickFormModal>
 </template>
 <script lang="ts">
 import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis } from 'naive-ui';
@@ -41,6 +42,7 @@ import { deleteProjectReq, downloadFiles, exportProjectReq, getProjectPageReq } 
 import { useImpDataTable } from '/@/hooks/useDataTable';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import { UserInfoDTO } from '/@/types/Admin/User/dto';
+import QuickFormModal from '/@/views/pages/clue/Project/QuickFormModal.vue';
 import dayjs from 'dayjs';
 export default defineComponent({
   components: {
@@ -54,10 +56,11 @@ export default defineComponent({
     NTreeSelect,
     NSwitch,
     SearchOutlineIcon,
+    QuickFormModal,
   },
   setup() {
     // refs
-    const FormModalRef = ref();
+    const QuickFormModalRef = ref();
     // ref
     const cols: TableColumn[] = [
       {
@@ -138,9 +141,10 @@ export default defineComponent({
       // handleSearch();
     };
     const handleAdd = () => {
-      // FormModalRef.value.open(null, {
-      //   parentId: pid.value,
-      // });
+      QuickFormModalRef.value.open({});
+    };
+    const handleEdit = (row: IObj) => {
+      // QuickFormModalRef.value.open(row);
     };
     // const handleDownload = () => {
     //   downloadFiles('https://green-manage-pro.oss-cn-hangzhou.aliyuncs.com/prod/3f4efa7f4bd44c45a16142d72f0429fc.pdf', 'demo.pdf');
@@ -175,9 +179,6 @@ export default defineComponent({
           loadPage();
         },
       });
-    };
-    const handleEdit = (row: IObj) => {
-      // FormModalRef.value.open(row);
     };
     const handleDel = (row: IObj) => {
       const actionName = '删除';
@@ -242,7 +243,7 @@ export default defineComponent({
     });
     return {
       // refs
-      FormModalRef,
+      QuickFormModalRef,
       // ref
       searchName,
       loading,

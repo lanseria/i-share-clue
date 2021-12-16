@@ -1,6 +1,6 @@
 <template>
   <teleport to="#dashboard-map">
-    <div class="myPageTop">
+    <n-el tag="div" class="myPageTop">
       <table>
         <tr>
           <td>
@@ -13,19 +13,26 @@
           </td>
         </tr>
       </table>
-    </div>
+    </n-el>
   </teleport>
 </template>
 <script lang="ts">
 import { defineComponent, ref, watchEffect, onMounted, getCurrentInstance, inject, Ref } from 'vue';
-import { NAutoComplete } from 'naive-ui';
+import { NAutoComplete, NEl } from 'naive-ui';
 import { useMapStore } from '/@/store/modules/map';
-import { DASHBOARD_MAP } from './const';
+import { nanoid } from 'nanoid';
 export default defineComponent({
+  props: {
+    mid: {
+      type: String,
+      default: nanoid(),
+    },
+  },
   components: {
     NAutoComplete,
+    NEl,
   },
-  setup() {
+  setup(props) {
     // global
     const mapStore = useMapStore();
     const $Amap = mapStore.Amap;
@@ -34,7 +41,7 @@ export default defineComponent({
     const searchText = ref('');
     const options = ref<any[]>([]);
     onMounted(() => {
-      const map = mapStore.getMap(DASHBOARD_MAP);
+      const map = mapStore.getMap(props.mid);
       //构造地点查询类
       placeSearch = new $Amap.PlaceSearch({
         pageSize: 5, // 单页显示结果条数
@@ -71,7 +78,7 @@ export default defineComponent({
   top: 5px;
   right: 10px;
   font-size: 14px;
-  background-color: var(--color);
+  background-color: var(--base-color);
   border-width: 1px;
   border-style: solid;
   border-color: rgb(204, 204, 204);

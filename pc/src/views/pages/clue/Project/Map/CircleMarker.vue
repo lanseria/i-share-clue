@@ -1,7 +1,7 @@
 <template></template>
 <script lang="ts">
+import { nanoid } from 'nanoid';
 import { defineComponent, onMounted, onUnmounted } from 'vue';
-import { DASHBOARD_MAP } from './const';
 import { addEvents, events } from './events';
 import { useMapStore } from '/@/store/modules/map';
 export default defineComponent({
@@ -14,6 +14,10 @@ export default defineComponent({
       type: Object,
       default: () => {},
     },
+    mid: {
+      type: String,
+      default: nanoid(),
+    },
   },
   emits: [...events],
   setup(props, { emit }) {
@@ -23,7 +27,7 @@ export default defineComponent({
 
     let marker: any = null;
     onMounted(() => {
-      const map = mapStore.getMap(DASHBOARD_MAP);
+      const map = mapStore.getMap(props.mid);
       if (map) {
         marker = new $Amap.CircleMarker({
           center: new $Amap.LngLat(props.location.lng, props.location.lat),
@@ -46,7 +50,7 @@ export default defineComponent({
       }
     });
     onUnmounted(() => {
-      const map = mapStore.getMap(DASHBOARD_MAP);
+      const map = mapStore.getMap(props.mid);
       map.remove(marker);
     });
     return {};

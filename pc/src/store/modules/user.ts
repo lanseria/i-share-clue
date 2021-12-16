@@ -1,12 +1,12 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 // import { encryption } from "/@/utils/encrypt";
-import { loginReq, smsLoginReq } from "/@/api/Auth";
-import { setUserToken } from "/@/utils/auth";
-import { userInfoReq } from "/@/api/Admin/Access/User";
-import { getMenuListReq } from "/@/api/Admin/Access/Menu";
-import { addRouteByMenu, resetRouter, router } from "/@/router";
-import { RouteRecordRaw } from "vue-router";
-import { getDictAllMapReq } from "../../api/Admin/Access/Dict";
+import { loginReq, smsLoginReq } from '/@/api/Auth';
+import { setUserToken } from '/@/utils/auth';
+import { userInfoReq } from '/@/api/Admin/Access/User';
+import { getMenuListReq } from '/@/api/Admin/Access/Menu';
+import { addRouteByMenu, resetRouter, router } from '/@/router';
+import { RouteRecordRaw } from 'vue-router';
+import { getDictAllMapReq } from '../../api/Admin/Access/Dict';
 
 interface UserState {
   userLogin: boolean;
@@ -22,7 +22,7 @@ interface UserState {
 }
 
 export const useUserStore = defineStore({
-  id: "app-user",
+  id: 'app-user',
   state: (): UserState => ({
     userLogin: false,
     userToken: null,
@@ -31,7 +31,7 @@ export const useUserStore = defineStore({
     modules: null,
     menuComponentTreeMap: new Map(),
     enableWorkbenchList: [],
-    dataDict: new Map()
+    dataDict: new Map(),
   }),
   getters: {
     getRoles(): RoleResponseVo[] {
@@ -39,7 +39,7 @@ export const useUserStore = defineStore({
     },
     getUserInfo(): Nullable<UserInfoLoginVO> {
       return this.userInfoLogin ?? null;
-    }
+    },
   },
   actions: {
     setUserToken(userToken: Nullable<AuthTokenVO>) {
@@ -56,10 +56,7 @@ export const useUserStore = defineStore({
         this.modules = data.module;
         // console.log("拿到路由, 构建路由, 返回可访问工作台列表");
         if (this.menus && this.modules) {
-          const [enableWorkbenchList, menuComponentTreeMap] = addRouteByMenu(
-            this.menus,
-            this.modules
-          );
+          const [enableWorkbenchList, menuComponentTreeMap] = addRouteByMenu(this.menus, this.modules);
           // 通过路由映射不同的菜单组
           this.menuComponentTreeMap = menuComponentTreeMap;
           // 全部可访问的工作台
@@ -89,26 +86,25 @@ export const useUserStore = defineStore({
       // });
       const body = await loginReq(data);
       this.setUserToken(body.payload.token);
-      console.log(body);
-      await router.push("/");
+      await router.push('/');
     },
     async smsLogin(data: SmsLoginVO) {
       const body = await smsLoginReq(data);
       this.setUserToken(body.payload.token);
-      await router.push("/");
+      await router.push('/');
     },
     async logout(redirect?: string) {
       // 不管有没有请求成功都是清空用户数据
       this.removeAll();
       await router.push({
-        name: "Login",
+        name: 'Login',
         ...(redirect
           ? {
               query: {
-                redirect
-              }
+                redirect,
+              },
             }
-          : {})
+          : {}),
       });
       return true;
     },
@@ -135,6 +131,6 @@ export const useUserStore = defineStore({
       this.setUserInfo(null);
       // this.setMenusModules(null);
       // this.setDataDict(null);
-    }
-  }
+    },
+  },
 });
