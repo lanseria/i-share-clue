@@ -159,7 +159,19 @@ export default defineComponent({
         positiveText: '确定',
         negativeText: '不确定',
         onPositiveClick: async () => {
-          const { payload } = await actionMethod();
+          let { payload } = await actionMethod();
+          payload = payload.map((m) => {
+            return {
+              name: m.name,
+              desc: m.desc,
+              lng: m.location.lng,
+              lat: m.location.lat,
+              category: m.category,
+              happenedAt: m.createdAt,
+              updatedAt: dayjs().unix(),
+              createdAt: dayjs().unix(),
+            };
+          });
           const stringjson = JSON.stringify(payload, null, 2);
           // 创建隐藏的可下载链接
           const eleLink = document.createElement('a');

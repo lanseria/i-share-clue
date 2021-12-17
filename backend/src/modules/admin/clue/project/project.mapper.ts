@@ -29,9 +29,13 @@ export class ProjectMapper {
     const dto = new ProjectJsonDto();
     dto.category = entity.category;
     dto.desc = entity.desc;
+    const coordinates = wgs84togcj02(
+      entity.location.coordinates[0],
+      entity.location.coordinates[1],
+    ) as [number, number];
     dto.location = new ProjectLocation({
-      lng: entity.location.coordinates[0],
-      lat: entity.location.coordinates[1],
+      lng: coordinates[0],
+      lat: coordinates[1],
     });
     dto.name = entity.name;
     dto.region = entity.region;
