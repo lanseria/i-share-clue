@@ -106,15 +106,21 @@ export default defineComponent({
         },
       },
       {
-        title: '网站',
-        key: 'website',
+        title: '发生时间',
+        key: 'happenedAt',
+        render(row: any) {
+          const happenedAt: number = row.happenedAt;
+          return dayjs.unix(happenedAt).format('YY/MM/DD-HH:mm');
+        },
+        sorter: true,
+        sortOrder: false,
       },
       {
         title: '更新时间',
         key: 'updatedAt',
         render(row: any) {
           const updatedAt: number = row.updatedAt;
-          return dayjs.unix(updatedAt).format('YY-MM-DD/HH:mm');
+          return dayjs.unix(updatedAt).format('YY/MM/DD-HH:mm');
         },
         sorter: true,
         sortOrder: false,
@@ -124,7 +130,7 @@ export default defineComponent({
         key: 'createdAt',
         render(row: any) {
           const createdAt: number = row.createdAt;
-          return dayjs.unix(createdAt).format('YY-MM-DD/HH:mm');
+          return dayjs.unix(createdAt).format('YY/MM/DD-HH:mm');
         },
         sorter: true,
         sortOrder: false,

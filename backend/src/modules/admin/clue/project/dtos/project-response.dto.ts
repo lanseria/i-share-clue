@@ -10,10 +10,10 @@ export class ProjectResponseDto {
   name: string;
 
   @ApiProperty()
-  website: string;
+  desc: string;
 
   @ApiProperty()
-  desc: string;
+  happenedAt: number;
 
   @ApiProperty()
   category: string;
@@ -22,10 +22,13 @@ export class ProjectResponseDto {
   region: string;
 
   @ApiProperty()
+  location: ProjectLocation;
+
+  @ApiProperty()
   creator: UserResponseDto;
 
   @ApiProperty()
-  location: ProjectLocation;
+  website: string;
 
   @ApiProperty()
   createdAt: number;

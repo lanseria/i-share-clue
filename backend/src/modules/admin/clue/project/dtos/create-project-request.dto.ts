@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, MaxLength } from 'class-validator';
+import * as dayjs from 'dayjs';
 import { ProjectLocation } from './location';
 
 export class CreateProjectRequestDto {
@@ -11,14 +12,14 @@ export class CreateProjectRequestDto {
   name: string;
 
   @ApiProperty({
-    example: 'http://127.0.0.0.1',
-  })
-  website: string;
-
-  @ApiProperty({
     example: '先叫辆车',
   })
   desc: string;
+
+  @ApiProperty({
+    example: dayjs().unix(),
+  })
+  happenedAt: number;
 
   @ApiProperty()
   category: string;
@@ -30,4 +31,9 @@ export class CreateProjectRequestDto {
     description: 'gcj02',
   })
   location: ProjectLocation;
+
+  @ApiProperty({
+    example: 'http://127.0.0.0.1',
+  })
+  website: string;
 }

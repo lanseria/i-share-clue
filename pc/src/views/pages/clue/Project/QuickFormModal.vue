@@ -4,11 +4,11 @@
       <n-form-item path="name" label="信息名称">
         <n-input v-model:value="modelRef.name" />
       </n-form-item>
-      <n-form-item path="website" label="网站地址">
-        <n-input v-model:value="modelRef.website" />
-      </n-form-item>
       <n-form-item path="desc" label="信息描述">
         <n-input v-model:value="modelRef.desc" />
+      </n-form-item>
+      <n-form-item path="happenedAt" label="发生时间">
+        <n-date-picker v-model:value="modelRef.happenedAt" type="datetime" clearable />
       </n-form-item>
       <n-form-item path="category" label="类型">
         <n-input v-model:value="modelRef.category" />
@@ -27,6 +27,9 @@
           <n-input v-model:value="lnglat" />
         </n-form-item>
       </template>
+      <n-form-item path="website" label="网站地址">
+        <n-input v-model:value="modelRef.website" />
+      </n-form-item>
     </n-form>
     <template #footer>
       <n-space>
@@ -37,7 +40,7 @@
   </imp-modal>
 </template>
 <script lang="ts">
-import { NForm, NFormItem, NInput, NSpace, NButton, NInputNumber } from 'naive-ui';
+import { NForm, NFormItem, NInput, NSpace, NButton, NInputNumber, NDatePicker } from 'naive-ui';
 import { defineComponent, onMounted, ref, watchEffect } from 'vue';
 import { createProjectReq } from '/@/api/Admin/Clue/Project';
 import { CreateProjectFormDTO } from '/@/types/Admin/Clue/Project/dto';
@@ -51,6 +54,7 @@ export default defineComponent({
     NSpace,
     NButton,
     NInputNumber,
+    NDatePicker,
   },
   setup(props, { emit }) {
     // refs
@@ -89,7 +93,7 @@ export default defineComponent({
       emit('load-page');
     };
     const handleSubmit = async () => {
-      const { payload } = await createProjectReq(modelRef.value);
+      const { payload } = await createProjectReq(modelRef.value.toDto());
       if (payload) {
         close();
       }

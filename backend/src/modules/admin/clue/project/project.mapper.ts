@@ -22,6 +22,7 @@ export class ProjectMapper {
       coordinates: gcj02towgs84(dto.location.lng, dto.location.lat),
     };
     entity.location = pointObject;
+    entity.happenedAt = dayjs.unix(dto.happenedAt).toDate();
     return entity;
   }
 
@@ -40,6 +41,7 @@ export class ProjectMapper {
     dto.name = entity.name;
     dto.region = entity.region;
     dto.website = entity.website;
+    dto.happenedAt = dayjs(entity.happenedAt).unix();
     dto.updatedAt = dayjs(entity.updatedAt).unix();
     dto.createdAt = dayjs(entity.createdAt).unix();
     return dto;
@@ -54,6 +56,7 @@ export class ProjectMapper {
     dto.category = entity.category;
     dto.region = entity.region;
     dto.creator = UserMapper.toDto(entity.creator);
+    dto.happenedAt = dayjs(entity.happenedAt).unix();
     dto.createdAt = dayjs(entity.createdAt).unix();
     dto.updatedAt = dayjs(entity.updatedAt).unix();
     const location = wgs84togcj02(

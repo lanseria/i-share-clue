@@ -25,20 +25,19 @@ export class ProjectEntity extends BaseEntity {
   name: string;
 
   @Column({
-    name: 'website',
-    type: 'varchar',
-    length: 100,
-    nullable: false,
-  })
-  website: string;
-
-  @Column({
     name: 'desc',
     type: 'varchar',
     length: 100,
     nullable: false,
   })
   desc: string;
+
+  @Column({
+    name: 'happened_at',
+    type: 'timestamp with time zone',
+    nullable: true,
+  })
+  happenedAt: Date;
 
   @Column({
     name: 'category',
@@ -66,6 +65,14 @@ export class ProjectEntity extends BaseEntity {
     nullable: true,
   })
   location: Point;
+
+  @Column({
+    name: 'website',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
+  website: string;
 
   constructor(project?: Partial<ProjectEntity>) {
     super();

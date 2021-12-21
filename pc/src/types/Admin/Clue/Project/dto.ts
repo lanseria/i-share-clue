@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { CommonDTO } from '/@/types/Common/dto';
 
 export class ProjectLocation {
@@ -12,11 +13,17 @@ export class ProjectLocation {
 
 class CreateProjectFormDTO extends CommonDTO {
   name = '';
-  website = 'http://ivhik.cn';
   desc = '描述疫情';
+  happenedAt = dayjs().valueOf();
   category = '1';
   region = '1';
   location: ProjectLocation | undefined = undefined;
+  website = 'http://ivhik.cn';
+
+  toDto() {
+    this.happenedAt = dayjs(this.happenedAt).unix();
+    return this;
+  }
 }
 
 export { CreateProjectFormDTO };
