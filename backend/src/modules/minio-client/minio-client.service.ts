@@ -3,6 +3,7 @@ import { MinioService } from 'nestjs-minio-client';
 import { BufferedFile } from './file.model';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
+import { FileResponseDto } from '@modules/file-upload/dtos/';
 
 @Injectable()
 export class MinioClientService {
@@ -15,6 +16,27 @@ export class MinioClientService {
     private readonly minio: MinioService,
     private readonly configService: ConfigService, // private logger = new Logger('MinioStorageService'),
   ) {}
+
+  public getFileList(
+    size = 10,
+    baseBucket: string = this.baseBucket,
+  ): Promise<FileResponseDto[] | Error> {
+    return new Promise((resolve, reject) => {
+      const fileList: FileResponseDto[] = [];
+      const stream = this.client.listObjects(baseBucket);
+      stream.on('data', function (obj) {
+        if (fileList.length <= size) {
+          fileList.push(obj);
+        }
+      });
+      stream.on('error', function (err) {
+        reject(err);
+      });
+      stream.on('end', function () {
+        resolve(fileList);
+      });
+    });
+  }
 
   public async upload(
     file: BufferedFile,
