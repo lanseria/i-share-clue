@@ -3,6 +3,7 @@
     <div class="data-table-header">
       <n-space align="center">
         <n-button type="primary" @click="handleAdd()">新增</n-button>
+        <n-button @click="handleJsonImport()">从JSON导入</n-button>
         <n-button @click="handleExport()">全部导出</n-button>
         <!-- <n-button @click="handleDownload()">下载</n-button> -->
       </n-space>
@@ -19,6 +20,13 @@
         </n-input-group>
       </n-space>
     </div>
+    <n-alert v-if="checkedRowKeysRef.length" style="margin-bottom: 10px" type="info">
+      <template #header></template>
+      <n-space justify="space-between">
+        <div>已选中 {{ checkedRowKeysRef.length }} 项</div>
+        <n-button tertiary type="error" @click="handleDel()">删除文档</n-button>
+      </n-space>
+    </n-alert>
     <n-data-table
       remote
       :loading="loading"
@@ -35,7 +43,7 @@
   <QuickFormModal ref="QuickFormModalRef" @load-page="loadPage()"></QuickFormModal>
 </template>
 <script lang="ts">
-import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis } from 'naive-ui';
+import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis, NAlert } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
 import { computed, defineComponent, onMounted, ref, h } from 'vue';
 import { deleteProjectReq, exportProjectReq, getProjectPageReq } from '/@/api/Admin/Clue/Project';
@@ -55,6 +63,7 @@ export default defineComponent({
     NTag,
     NTreeSelect,
     NSwitch,
+    NAlert,
     SearchOutlineIcon,
     QuickFormModal,
   },
@@ -150,6 +159,7 @@ export default defineComponent({
     // const handleDownload = () => {
     //   downloadFiles('https://green-manage-pro.oss-cn-hangzhou.aliyuncs.com/prod/3f4efa7f4bd44c45a16142d72f0429fc.pdf', 'demo.pdf');
     // };
+    const handleJsonImport = () => {};
     const handleExport = () => {
       const actionName = '导出全部';
       const actionMethod = exportProjectReq;
@@ -193,16 +203,18 @@ export default defineComponent({
         },
       });
     };
-    const handleDel = (row: IObj) => {
+    const handleDel = (row?: IObj) => {
       const actionName = '删除';
       const actionMethod = deleteProjectReq;
       window.$dialog.error({
         title: '注意',
-        content: `你确定${actionName}此项目？`,
+        content: `你确定${actionName}这些项目？`,
         positiveText: '确定',
         negativeText: '不确定',
         onPositiveClick: async () => {
-          await actionMethod([row.id]);
+          const ids = row ? [row.id] : checkedRowKeysRef.value;
+          await actionMethod(ids);
+          window.$message.success('删除成功');
           loadPage();
         },
         onNegativeClick: () => {
@@ -234,6 +246,7 @@ export default defineComponent({
       columns,
       pagedTable,
       pagination,
+      checkedRowKeysRef,
       //
       handlePageChange,
       handlePageSizeChange,
@@ -263,15 +276,18 @@ export default defineComponent({
       columns,
       pagedTable,
       pagination,
+      checkedRowKeysRef,
       //
       handlePageChange,
       handlePageSizeChange,
       handleSorterChange,
       handleCheck,
       handleAdd,
+      handleDel,
       loadPage,
       handleSearch,
       handleExport,
+      handleJsonImport,
       // handleDownload,
     };
   },

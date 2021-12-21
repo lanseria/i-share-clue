@@ -66,6 +66,7 @@ export const useImpDataTable = (opt: DataTableHook) => {
         pagination.value.pageCount = +payload.pages;
       }
       loading.value = false;
+      handleCheck();
     }
   };
   const handlePageChange = async (page: number) => {
@@ -86,7 +87,7 @@ export const useImpDataTable = (opt: DataTableHook) => {
       initPage();
     }
   };
-  const handleCheck = (rowKeys: string[]) => {
+  const handleCheck = (rowKeys: string[] = []) => {
     checkedRowKeysRef.value = rowKeys;
   };
   const handleSorterChange = (sorter: SortState) => {
