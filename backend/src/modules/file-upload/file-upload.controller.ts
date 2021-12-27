@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Param,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -9,6 +10,10 @@ import { FileUploadService } from './file-upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BufferedFile } from '@modules/minio-client/file.model';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { PaginationRequest } from '@common/interfaces';
+import { PaginationParams } from '@common/decorators';
+import { PaginationResponseDto } from '@common/dtos';
+import { FileResponseDto } from './dtos';
 
 @ApiTags('FileUpload')
 @Controller({
@@ -17,6 +22,10 @@ import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 })
 export class FileUploadController {
   constructor(private fileUploadService: FileUploadService) {}
+  @Get('/download/:name')
+  async downloadFile(@Param('name') name: string) {
+    return this.fileUploadService.downloadFile(name);
+  }
   /**
    * 获取文件分页
    * @returns
@@ -25,8 +34,10 @@ export class FileUploadController {
     description: '文件管理分页',
   })
   @Get('page')
-  async getFilePage() {
-    return this.fileUploadService.getFilePage();
+  async getFilePage(
+    @PaginationParams() pagination: PaginationRequest,
+  ): Promise<PaginationResponseDto<FileResponseDto>> {
+    return this.fileUploadService.getFilePage(pagination);
   }
   /**
    * 上传图片

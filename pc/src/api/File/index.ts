@@ -1,16 +1,28 @@
-import r from "/@/router/axios";
-import { api } from "./config";
+import r from '/@/router/axios';
+import { api } from './config';
 
 interface FileUploadResponse {
   message: string;
   image_url: string;
 }
 
+interface BufferData {
+  data: Buffer;
+  type: 'Buffer';
+}
+
+export const downloadFileByName = (name: string) => {
+  return r.request<R<BufferData>>({
+    url: `${api.download}/${name}`,
+    method: 'GET',
+  });
+};
+
 export const postFileUploadAvatarReq = (data: FormData) => {
   return r.request<R<FileUploadResponse>>({
     url: api.postFileUploadAvatar,
-    method: "POST",
-    data
+    method: 'POST',
+    data,
   });
 };
 
@@ -20,16 +32,16 @@ export const postFileUploadAvatarReq = (data: FormData) => {
 // ];
 const toDataURL = (url: string) => {
   return fetch(url)
-    .then(response => {
+    .then((response) => {
       return response.blob();
     })
-    .then(blob => {
+    .then((blob) => {
       return URL.createObjectURL(blob);
     });
 };
 
 export const downloadReq = async (file: Attachment) => {
-  const a = document.createElement("a");
+  const a = document.createElement('a');
   a.href = await toDataURL(file.url);
   a.download = file.name;
   document.body.appendChild(a);
@@ -46,17 +58,17 @@ export const downloadFileReq = (file: IObj) => {
   // }, 1000 * 60);
   r.request({
     url: `${api.file}/${file.url}`,
-    method: "get",
-    responseType: "arraybuffer"
-  }).then(data => {
+    method: 'get',
+    responseType: 'arraybuffer',
+  }).then((data) => {
     // 处理返回的文件流
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const blob = new Blob([data as any]);
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
     link.download = file.name;
     document.body.appendChild(link);
-    link.style.display = "none";
+    link.style.display = 'none';
     link.click();
     // 关闭定时信息
     // window.clearTimeout(downLoadCode1);
@@ -67,14 +79,14 @@ export const downloadFileReq = (file: IObj) => {
 export const filePageReq = (params: Partial<PageParam>) => {
   return r.request<R<PageResult<IObj>>>({
     url: api.page,
-    method: "GET",
-    params
+    method: 'GET',
+    params,
   });
 };
 
 export const delFileById = (id: number) => {
   return r.request<R<boolean>>({
     url: `${api.id}/delete/${id}`,
-    method: "post"
+    method: 'post',
   });
 };

@@ -1,3 +1,5 @@
+import { PaginationRequest } from '@common/interfaces';
+import { Pagination } from '@helpers';
 import { BufferedFile } from '@modules/minio-client/file.model';
 import { MinioClientService } from '@modules/minio-client/minio-client.service';
 import { Injectable } from '@nestjs/common';
@@ -5,13 +7,17 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class FileUploadService {
   constructor(private minioClientService: MinioClientService) {}
+  downloadFile(name: string) {
+    return this.minioClientService.downloadFile(name);
+  }
   /**
    * 获取图片分页
    */
-  async getFilePage() {
-    const fileList = await this.minioClientService.getFileList();
-    return fileList;
-    // throw new Error('Method not implemented.');
+  async getFilePage(pagination: PaginationRequest) {
+    const [files, total] = await this.minioClientService.getFilesAndCount(
+      pagination,
+    );
+    return Pagination.of(pagination, total, files);
   }
   /**
    * 上传图片

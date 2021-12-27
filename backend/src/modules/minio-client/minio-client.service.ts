@@ -17,6 +17,71 @@ export class MinioClientService {
     private readonly configService: ConfigService, // private logger = new Logger('MinioStorageService'),
   ) {}
 
+  downloadFile(name: string, baseBucket: string = this.baseBucket) {
+    return new Promise((resolve, reject) => {
+      let size = 0;
+      let chunks = [];
+      this.client.getObject(baseBucket, name, function (err, dataStream) {
+        if (err) {
+          reject(err);
+        }
+        dataStream.on('data', function (chunk) {
+          chunks.push(chunk);
+          size += chunk.length;
+        });
+        dataStream.on('end', function () {
+          let data = null;
+          switch (chunks.length) {
+            case 0:
+              data = Buffer.alloc(0);
+              break;
+            case 1:
+              data = chunks[0];
+              break;
+            default:
+              data = Buffer.alloc(size);
+              for (let i = 0, pos = 0, l = chunks.length; i < l; i++) {
+                let chunk = chunks[i];
+                chunk.copy(data, pos);
+                pos += chunk.length;
+              }
+              break;
+          }
+          resolve(data);
+        });
+        dataStream.on('error', function (err) {
+          reject(err);
+        });
+      });
+    });
+  }
+
+  public getFilesAndCount(
+    pagination,
+    baseBucket: string = this.baseBucket,
+  ): Promise<[projectEntities: FileResponseDto[], totalFiles: number]> {
+    let { skip, limit: take } = pagination;
+    return new Promise((resolve, reject) => {
+      const fileList: FileResponseDto[] = [];
+      const stream = this.client.listObjects(baseBucket);
+      let total = 0;
+      stream.on('data', function (obj) {
+        total++;
+        if (skip) {
+          skip--;
+        } else if (fileList.length <= take) {
+          fileList.push(obj);
+        }
+      });
+      stream.on('error', function (err) {
+        reject(err);
+      });
+      stream.on('end', function () {
+        resolve([fileList, total]);
+      });
+    });
+  }
+
   public getFileList(
     size = 10,
     baseBucket: string = this.baseBucket,
