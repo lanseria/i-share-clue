@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   UploadedFile,
@@ -46,6 +48,30 @@ export class FileUploadController {
     return this.fileUploadService.getFilePage(pagination);
   }
   /**
+   * 上传文件
+   * @param file 文件二进制
+   * @returns
+   */
+  @ApiOperation({ description: '文件上传' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @Post('file')
+  @UseInterceptors(FileInterceptor('file'))
+  @HttpCode(HttpStatus.OK)
+  uploadFile(@UploadedFile() file: BufferedFile) {
+    return this.fileUploadService.uploadFile(file);
+  }
+  /**
    * 上传图片
    * @param image 图片二进制
    * @returns
@@ -65,8 +91,7 @@ export class FileUploadController {
   })
   @Post('single')
   @UseInterceptors(FileInterceptor('image'))
-  async uploadSingle(@UploadedFile() image: BufferedFile) {
-    // console.log(image);
-    return await this.fileUploadService.uploadSingle(image);
+  uploadSingle(@UploadedFile() image: BufferedFile) {
+    return this.fileUploadService.uploadSingle(image);
   }
 }

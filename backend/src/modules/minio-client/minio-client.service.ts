@@ -121,11 +121,24 @@ export class MinioClientService {
 
   public async upload(
     file: BufferedFile,
+    inclues: string[] = [],
     baseBucket: string = this.baseBucket,
   ) {
-    if (!(file.mimetype.includes('jpeg') || file.mimetype.includes('png'))) {
-      throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST);
+    // console.log(inclues, file.mimetype);
+    // 验证文件类型
+    if (inclues.length) {
+      let flag = false;
+      let minetype = '';
+      while ((minetype = inclues.pop())) {
+        if (file.mimetype.includes(minetype)) {
+          flag = true;
+        }
+      }
+      if (!flag) {
+        throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST);
+      }
     }
+
     let temp_filename = Date.now().toString();
     let hashedFileName = crypto
       .createHash('md5')
@@ -166,6 +179,7 @@ export class MinioClientService {
       )}:${this.configService.get('MINIO_PORT')}/${this.configService.get(
         'MINIO_BUCKET',
       )}/${filename}`,
+      name: filename,
     };
   }
 

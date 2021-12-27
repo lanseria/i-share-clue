@@ -3,9 +3,6 @@
     <div class="data-table-header">
       <n-space align="center">
         <n-button type="primary" @click="handleAdd()">新增</n-button>
-        <n-button @click="handleJsonImport()">从JSON导入</n-button>
-        <n-button @click="handleExport()">全部导出</n-button>
-        <!-- <n-button @click="handleDownload()">下载</n-button> -->
       </n-space>
       <n-space>
         <n-input-group>
@@ -40,7 +37,7 @@
       @update:sorter="handleSorterChange"
     />
   </imp-page-container>
-  <QuickFormModal ref="QuickFormModalRef" @load-page="loadPage()"></QuickFormModal>
+  <FileUploadModal ref="FileUploadModalRef" @leave="loadPage()"></FileUploadModal>
 </template>
 <script lang="ts">
 import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis, NAlert } from 'naive-ui';
@@ -49,9 +46,7 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import { deleteFileReq, downloadFileReq, filePageReq } from '/@/api/File/index';
 import { useImpDataTable } from '/@/hooks/useDataTable';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
-import { UserInfoDTO } from '/@/types/Admin/User/dto';
-import QuickFormModal from '/@/views/pages/clue/Project/QuickFormModal.vue';
-import dayjs from 'dayjs';
+import FileUploadModal from './FileUploadModal.vue';
 export default defineComponent({
   components: {
     NDataTable,
@@ -65,11 +60,11 @@ export default defineComponent({
     NSwitch,
     NAlert,
     SearchOutlineIcon,
-    QuickFormModal,
+    FileUploadModal,
   },
   setup() {
     // refs
-    const QuickFormModalRef = ref();
+    const FileUploadModalRef = ref();
     // ref
     const cols: TableColumn[] = [
       {
@@ -94,58 +89,7 @@ export default defineComponent({
       downloadFileReq(row.name);
     };
     const handleAdd = () => {
-      QuickFormModalRef.value.add({});
-    };
-    const handleEdit = (row: IObj) => {
-      QuickFormModalRef.value.edit(row);
-      // QuickFormModalRef.value.open(row);
-    };
-    // const handleDownload = () => {
-    //   downloadFiles('https://green-manage-pro.oss-cn-hangzhou.aliyuncs.com/prod/3f4efa7f4bd44c45a16142d72f0429fc.pdf', 'demo.pdf');
-    // };
-    const handleJsonImport = () => {};
-    const handleExport = () => {
-      const actionName = '导出全部';
-      const actionMethod = exportProjectReq;
-      window.$dialog.info({
-        title: '提醒',
-        content: `你确定${actionName}项目？`,
-        positiveText: '确定',
-        negativeText: '不确定',
-        onPositiveClick: async () => {
-          let { payload } = await actionMethod();
-          payload = payload.map((m) => {
-            return {
-              name: m.name,
-              desc: m.desc,
-              lng: m.location.lng,
-              lat: m.location.lat,
-              category: m.category,
-              happenedAt: m.createdAt,
-              updatedAt: dayjs().unix(),
-              createdAt: dayjs().unix(),
-            };
-          });
-          const stringjson = JSON.stringify(payload, null, 2);
-          // 创建隐藏的可下载链接
-          const eleLink = document.createElement('a');
-          eleLink.download = `${dayjs().unix()}-all-clue-projects.json`;
-          eleLink.style.display = 'none';
-          // 字符内容转变成blob地址
-          const blob = new Blob([stringjson], { type: 'text/json' });
-          eleLink.href = URL.createObjectURL(blob);
-          // 触发点击
-          document.body.appendChild(eleLink);
-          eleLink.click();
-          // 然后移除
-          document.body.removeChild(eleLink);
-
-          loadPage();
-        },
-        onNegativeClick: () => {
-          loadPage();
-        },
-      });
+      FileUploadModalRef.value.open();
     };
     const handleDel = (row?: IObj) => {
       const actionName = '删除';
@@ -175,10 +119,6 @@ export default defineComponent({
       {
         name: '下载',
         func: handleDownload,
-      },
-      {
-        name: '编辑',
-        func: handleEdit,
       },
       {
         name: '删除',
@@ -213,7 +153,7 @@ export default defineComponent({
     });
     return {
       // refs
-      QuickFormModalRef,
+      FileUploadModalRef,
       // ref
       searchName,
       loading,
@@ -230,9 +170,6 @@ export default defineComponent({
       handleDel,
       loadPage,
       handleSearch,
-      handleExport,
-      handleJsonImport,
-      // handleDownload,
     };
   },
 });
