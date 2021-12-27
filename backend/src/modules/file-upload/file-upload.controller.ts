@@ -1,5 +1,7 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -22,8 +24,12 @@ import { FileResponseDto } from './dtos';
 })
 export class FileUploadController {
   constructor(private fileUploadService: FileUploadService) {}
+  @Delete('/delete')
+  deleteFile(@Body() names: string[]) {
+    return this.fileUploadService.deleteFile(names);
+  }
   @Get('/download/:name')
-  async downloadFile(@Param('name') name: string) {
+  downloadFile(@Param('name') name: string) {
     return this.fileUploadService.downloadFile(name);
   }
   /**

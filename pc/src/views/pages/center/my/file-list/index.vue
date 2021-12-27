@@ -33,7 +33,7 @@
       :columns="columns"
       :data="pagedTable"
       :pagination="pagination"
-      :row-key="(row) => row.id"
+      :row-key="(row) => row.name"
       @update:page="handlePageChange"
       @update:page-size="handlePageSizeChange"
       @update:checked-row-keys="handleCheck"
@@ -45,8 +45,8 @@
 <script lang="ts">
 import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis, NAlert } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
-import { computed, defineComponent, onMounted, ref, h } from 'vue';
-import { downloadFileByName, filePageReq } from '/@/api/File/index';
+import { computed, defineComponent, onMounted, ref } from 'vue';
+import { deleteFileReq, downloadFileReq, filePageReq } from '/@/api/File/index';
 import { useImpDataTable } from '/@/hooks/useDataTable';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
 import { UserInfoDTO } from '/@/types/Admin/User/dto';
@@ -90,22 +90,8 @@ export default defineComponent({
     ];
     const searchName = ref('');
     // method
-    const handleDownload = async (row: IObj) => {
-      const { payload } = await downloadFileByName(row.name);
-      let ab = new ArrayBuffer(payload.data.length);
-      let view = new Uint8Array(ab);
-      for (var i = 0; i < payload.data.length; ++i) {
-        view[i] = payload.data[i];
-      }
-      const url = window.URL.createObjectURL(new Blob([ab]));
-      console.log(url);
-      const link = document.createElement('a');
-      link.style.display = 'none';
-      link.href = url;
-      link.setAttribute('download', row.name);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    const handleDownload = (row: IObj) => {
+      downloadFileReq(row.name);
     };
     const handleAdd = () => {
       QuickFormModalRef.value.add({});
@@ -163,15 +149,15 @@ export default defineComponent({
     };
     const handleDel = (row?: IObj) => {
       const actionName = '删除';
-      const actionMethod = deleteProjectReq;
+      const actionMethod = deleteFileReq;
       window.$dialog.error({
         title: '注意',
-        content: `你确定${actionName}这些项目？`,
+        content: `你确定${actionName}这些文件？`,
         positiveText: '确定',
         negativeText: '不确定',
         onPositiveClick: async () => {
-          const ids = row ? [row.id] : checkedRowKeysRef.value;
-          await actionMethod(ids);
+          const names = row ? [row.name] : checkedRowKeysRef.value;
+          await actionMethod(names);
           window.$message.success('删除成功');
           loadPage();
         },

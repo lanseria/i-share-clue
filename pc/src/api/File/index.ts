@@ -11,10 +11,36 @@ interface BufferData {
   type: 'Buffer';
 }
 
-export const downloadFileByName = (name: string) => {
-  return r.request<R<BufferData>>({
-    url: `${api.download}/${name}`,
-    method: 'GET',
+export const deleteFileReq = (names: string[]) => {
+  return r.request<R<string>>({
+    url: `${api.delete}`,
+    method: 'DELETE',
+    data: names,
+  });
+};
+
+export const downloadFileReq = (name: string) => {
+  return new Promise((resolve, reject) => {
+    r.request<R<BufferData>>({
+      url: `${api.download}/${name}`,
+      method: 'GET',
+    }).then(({ payload }) => {
+      let ab = new ArrayBuffer(payload.data.length);
+      let view = new Uint8Array(ab);
+      for (var i = 0; i < payload.data.length; ++i) {
+        view[i] = payload.data[i];
+      }
+      const url = window.URL.createObjectURL(new Blob([ab]));
+      console.log(url);
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', name);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      resolve(0);
+    });
   });
 };
 
@@ -47,33 +73,6 @@ export const downloadReq = async (file: Attachment) => {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-};
-
-export const downloadFileReq = (file: IObj) => {
-  // const downLoadCode1 = window.setTimeout(() => {
-  //   iepMessage(downLoadMessage[0]);
-  // }, 1000 * 10);
-  // const downLoadCode2 = window.setInterval(() => {
-  //   iepMessage(downLoadMessage[1]);
-  // }, 1000 * 60);
-  r.request({
-    url: `${api.file}/${file.url}`,
-    method: 'get',
-    responseType: 'arraybuffer',
-  }).then((data) => {
-    // 处理返回的文件流
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const blob = new Blob([data as any]);
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = file.name;
-    document.body.appendChild(link);
-    link.style.display = 'none';
-    link.click();
-    // 关闭定时信息
-    // window.clearTimeout(downLoadCode1);
-    // window.clearInterval(downLoadCode2);
-  });
 };
 
 export const filePageReq = (params: Partial<PageParam>) => {

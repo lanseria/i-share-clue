@@ -7,6 +7,9 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class FileUploadService {
   constructor(private minioClientService: MinioClientService) {}
+  deleteFile(names: string[]) {
+    return this.minioClientService.deleteFile(names);
+  }
   downloadFile(name: string) {
     return this.minioClientService.downloadFile(name);
   }

@@ -17,6 +17,22 @@ export class MinioClientService {
     private readonly configService: ConfigService, // private logger = new Logger('MinioStorageService'),
   ) {}
 
+  async deleteFile(names: string[], baseBucket: string = this.baseBucket) {
+    const result = await Promise.allSettled<string>(
+      names.map((name) => {
+        return new Promise((resolve, reject) => {
+          this.client.removeObject(baseBucket, name, function (err) {
+            if (err) {
+              reject(err);
+            }
+            resolve(`Removed the object: ${name}`);
+          });
+        });
+      }),
+    );
+    return result;
+  }
+
   downloadFile(name: string, baseBucket: string = this.baseBucket) {
     return new Promise((resolve, reject) => {
       let size = 0;
