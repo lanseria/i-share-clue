@@ -64,13 +64,18 @@ export default {
       });
     };
     const handleSelect = (key: Event) => {
-      // TODO: fix
       switch (key as unknown as unknown as string) {
         case 'logout':
           handleLogout();
           break;
+        case 'index':
+          pushPath('/dashboard/index');
+          break;
+        case 'transfy':
+          pushPath('/dashboard/transfy');
+          break;
         case 'dashboard':
-          pushPath('/');
+          pushPath('/dashboard/clue-map');
           break;
         case 'center':
           pushPath('/center/my');
@@ -83,8 +88,16 @@ export default {
       // const
       options: [
         {
+          label: '欢迎页',
+          key: 'index',
+        },
+        {
           label: '寻找地图',
           key: 'dashboard',
+        },
+        {
+          label: '字幕转译',
+          key: 'transfy',
         },
         {
           label: '个人信息',

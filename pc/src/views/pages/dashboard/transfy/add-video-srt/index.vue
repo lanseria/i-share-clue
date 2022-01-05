@@ -1,5 +1,5 @@
 <template>
-  <n-layout class="add-layout" content-style="padding: 36px 100px 0px;">
+  <n-layout class="add-layout" content-style="padding: 36px 100px 0px; margin:0 auto; width: 1000px;">
     <n-layout-header style="background-color: initial; padding: 25px">
       <n-h3 prefix="bar">视频字幕</n-h3>
       <n-p>上传视频文件，AI将视频中的源语言转写成文字，可翻译成目标语言。支持多语种的转写与翻译。</n-p>

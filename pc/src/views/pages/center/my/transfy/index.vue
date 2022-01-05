@@ -46,7 +46,7 @@ export default defineComponent({
   setup() {
     const { pushPath } = useImpRoute();
     const handleAddVideoSrt = () => {
-      pushPath('/dashboard/add-video-srt');
+      pushPath('/dashboard/transfy/add-video-srt');
     };
     return {
       handleAddVideoSrt,

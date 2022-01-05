@@ -43,12 +43,12 @@ export const myRoute: AppRouteRecordRaw[] = [
     component: () => import('./file-list/index.vue'),
   },
   {
-    path: 'video-srt',
-    name: 'VideoSrt',
-    meta: authMetaFunc('视频字幕', {
+    path: 'transfy-control',
+    name: 'TransfyControl',
+    meta: authMetaFunc('字幕转译', {
       icon: 'icon-Shape',
     }),
-    component: () => import('./video-srt/index.vue'),
+    component: () => import('./transfy/index.vue'),
   },
   // {
   //   path: "more",
