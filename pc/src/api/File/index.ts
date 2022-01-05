@@ -1,5 +1,6 @@
 import r from '/@/router/axios';
 import { api } from './config';
+import { FileInfo } from 'naive-ui/lib/upload/src/interface';
 
 interface FileUploadResponse {
   message: string;
@@ -10,6 +11,22 @@ interface BufferData {
   data: Buffer;
   type: 'Buffer';
 }
+
+export const uploadFileReq = (file: FileInfo, withCredentials: boolean | undefined, onProgress: Fn) => {
+  const formData = new FormData();
+  if (file.file) {
+    formData.append('file', file.file);
+  }
+  return r.request<R<string>>({
+    url: `${api.fileUpload}`,
+    method: 'POST',
+    data: formData,
+    withCredentials: withCredentials,
+    onUploadProgress: ({ loaded, total }) => {
+      onProgress({ percent: Math.ceil((loaded / total) * 100) });
+    },
+  });
+};
 
 export const deleteFileReq = (names: string[]) => {
   return r.request<R<string>>({

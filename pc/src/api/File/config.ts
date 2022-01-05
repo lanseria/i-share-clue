@@ -6,6 +6,7 @@ const api = {
   file: prefix,
   download: `${prefix}/download`,
   delete: `${prefix}/delete`,
+  fileUpload: `${prefix}/file`,
   postFileUploadAvatar: `${prefix}/single`, // GET
 };
 

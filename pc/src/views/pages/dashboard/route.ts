@@ -1,19 +1,25 @@
-import { DASHBOARD_NAME } from "/@/router/constant";
-import { AppRouteRecordRaw } from "/@/router/types";
-import { authMetaFunc } from "/@/utils/route";
+import { DASHBOARD_NAME } from '/@/router/constant';
+import { AppRouteRecordRaw } from '/@/router/types';
+import { authMetaFunc } from '/@/utils/route';
 
 export const DashboardRoute: AppRouteRecordRaw = {
-  path: "/dashboard",
+  path: '/dashboard',
   name: DASHBOARD_NAME,
-  component: () => import("/@/views/layouts/dashboard/index.vue"),
-  redirect: "/dashboard/index",
-  meta: authMetaFunc("寻找地图"),
+  component: () => import('/@/views/layouts/dashboard/index.vue'),
+  redirect: '/dashboard/index',
+  meta: authMetaFunc('首页'),
   children: [
     {
-      path: "index",
+      path: 'index',
       name: DASHBOARD_NAME,
-      component: () => import("./index.vue"),
-      meta: authMetaFunc("首页")
-    }
-  ]
+      component: () => import('./index/index.vue'),
+      meta: authMetaFunc('寻找地图'),
+    },
+    {
+      path: 'add-video-srt',
+      name: '视频字幕',
+      component: () => import('./add-video-srt/index.vue'),
+      meta: authMetaFunc('添加视频字幕'),
+    },
+  ],
 };

@@ -1,6 +1,6 @@
 <template>
   <n-card>
-    <n-page-header :title="pageTitle" @back="goBack">
+    <n-page-header v-if="showHeader" :title="pageTitle" @back="goBack">
       <template #avatar>
         <slot name="avatar"></slot>
       </template>
@@ -12,24 +12,28 @@
   </n-card>
 </template>
 <script lang="ts">
-import { NPageHeader, NCard } from "naive-ui";
-import { computed, defineComponent } from "vue";
-import { useImpRoute } from "/@/hooks/useRoute";
+import { NPageHeader, NCard } from 'naive-ui';
+import { computed, defineComponent } from 'vue';
+import { useImpRoute } from '/@/hooks/useRoute';
 export default defineComponent({
-  name: "ImpPageContainer",
+  name: 'ImpPageContainer',
   props: {
     isBack: {
       type: Boolean,
-      default: false
+      default: false,
+    },
+    showHeader: {
+      type: Boolean,
+      default: true,
     },
     title: {
       type: String,
-      default: ""
-    }
+      default: '',
+    },
   },
   components: {
     NPageHeader,
-    NCard
+    NCard,
   },
   setup(props) {
     const { goBack, crtMeta } = useImpRoute();
@@ -41,8 +45,8 @@ export default defineComponent({
       // computed
       pageTitle,
       // method
-      goBack: props.isBack ? goBack : undefined
+      goBack: props.isBack ? goBack : undefined,
     };
-  }
+  },
 });
 </script>

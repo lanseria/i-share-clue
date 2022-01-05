@@ -42,6 +42,14 @@ export const myRoute: AppRouteRecordRaw[] = [
     }),
     component: () => import('./file-list/index.vue'),
   },
+  {
+    path: 'video-srt',
+    name: 'VideoSrt',
+    meta: authMetaFunc('视频字幕', {
+      icon: 'icon-Shape',
+    }),
+    component: () => import('./video-srt/index.vue'),
+  },
   // {
   //   path: "more",
   //   name: "More",
