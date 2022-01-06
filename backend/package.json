@@ -37,6 +37,7 @@
     "upi": "yarn upgrade-interactive"
   },
   "dependencies": {
+    "@nestjs/bull": "^0.4.2",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.0.2",
     "@nestjs/core": "^8.0.0",
@@ -46,6 +47,7 @@
     "@nestjs/swagger": "^5.1.0",
     "@nestjs/typeorm": "^8.0.2",
     "bcryptjs": "^2.4.3",
+    "bull": "^4.2.0",
     "class-transformer": "0.4.0",
     "class-validator": "^0.13.1",
     "compression": "^1.7.4",
@@ -70,6 +72,7 @@
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
+    "@types/bull": "^3.15.7",
     "@types/express": "^4.17.13",
     "@types/geojson": "^7946.0.8",
     "@types/jest": "^27.0.1",
