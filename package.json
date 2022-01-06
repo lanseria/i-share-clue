@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "git@github.com:Lanseria/i-share-clue.git",
   "author": "lanseria <zhangchao564265135@hotmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "enums:sync": "node ./script/enums.async.js"
+  }
 }

@@ -1,12 +1,14 @@
+import { EngineModelKeyType, TransfyCategoryKeyType } from './enum';
+
 interface TransfyFormVO {
   name: string;
   url: string;
-  engineModelType: string;
+  engineModel: EngineModelKeyType;
+  category: TransfyCategoryKeyType;
 }
 
 interface TransfyVO extends TransfyFormVO {
   id: string;
-  posterUrl: string;
-  type: string;
+  poster: string;
   status: string;
 }

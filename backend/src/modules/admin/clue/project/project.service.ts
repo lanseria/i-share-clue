@@ -89,9 +89,8 @@ export class ProjectService {
     user: UserEntity,
   ) {
     try {
-      let projectEntity = ProjectMapper.toCreateEntity(projectDto);
-      const userEntity = await this.usersRepository.findOne(user.id);
-      projectEntity.creator = userEntity;
+      user = await this.usersRepository.findOne(user.id);
+      let projectEntity = ProjectMapper.toCreateEntity(projectDto, user);
       projectEntity = await this.projectRepository.save(projectEntity);
       return ProjectMapper.toDto(projectEntity);
     } catch (error) {

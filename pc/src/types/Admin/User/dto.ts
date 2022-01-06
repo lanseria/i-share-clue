@@ -1,5 +1,5 @@
 import { CommonDTO } from '../../Common/dto';
-import { UserStatus } from '../../../../../enums/User.enum';
+import { UserStatus } from '/@/global-enums/User.enum';
 
 export { UserStatus };
 export class LoginDTO implements LoginVO {

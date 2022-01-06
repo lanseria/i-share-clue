@@ -1,6 +1,7 @@
 import { BaseEntity } from '@database/entities';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { TransfyCategoryKeyType } from './dtos';
 
 @Entity({ schema: 'admin', name: 'transfy' })
 export class TransfyEntity extends BaseEntity {
@@ -34,6 +35,31 @@ export class TransfyEntity extends BaseEntity {
     nullable: false,
   })
   engineModel: string;
+
+  @Column({
+    name: 'category',
+    type: 'varchar',
+    length: 100,
+    nullable: false,
+  })
+  category: TransfyCategoryKeyType;
+
+  @Column({
+    name: 'status',
+    type: 'varchar',
+    length: 100,
+    nullable: false,
+    default: 'to_be_identifying',
+  })
+  status: string;
+
+  @Column({
+    name: 'poster',
+    type: 'varchar',
+    length: 100,
+    nullable: false,
+  })
+  poster: string;
 
   @ManyToOne(() => UserEntity)
   @JoinColumn()

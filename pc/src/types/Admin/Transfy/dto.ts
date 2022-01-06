@@ -1,10 +1,16 @@
-import { EngineModel } from '../../../../../enums/Transfy.enum';
-import type { EngineModelKeyType, EngineModelType } from '../../../../../enums/Transfy.enum';
 import { CommonDTO } from '../../Common/dto';
-export { EngineModel, EngineModelKeyType, EngineModelType };
+import { EngineModel } from './enum';
+import type { EngineModelKeyType, TransfyCategoryKeyType } from './enum';
+import { TransfyFormVO } from './vo';
+export { EngineModel, EngineModelKeyType };
 
 export class TransfyFormDTO extends CommonDTO implements TransfyFormVO {
+  engineModel: EngineModelKeyType = '16k_zh_video';
   name: string = '';
   url: string = '';
-  engineModelType: EngineModelKeyType = '16k_zh_video';
+  category: TransfyCategoryKeyType = 'video';
+  constructor(category: TransfyCategoryKeyType = 'video') {
+    super();
+    this.category = category;
+  }
 }

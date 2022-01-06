@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsNotEmpty, MaxLength } from 'class-validator';
-import { EngineModelKey } from './index';
+import {
+  EngineModelKey,
+  TransfyCategoryKey,
+  TransfyCategoryKeyType,
+} from './index';
 
 export class CreateTransfyRequestDto {
   @IsNotEmpty()
@@ -23,4 +27,11 @@ export class CreateTransfyRequestDto {
     example: '16k_zh_video',
   })
   engineModel: string;
+
+  @IsNotEmpty()
+  @IsIn(TransfyCategoryKey)
+  @ApiProperty({
+    example: 'video',
+  })
+  category: TransfyCategoryKeyType;
 }

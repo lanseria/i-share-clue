@@ -28,13 +28,13 @@
         <n-form-item label="上传文件：" path="url">
           <TransfyUploadVideo v-model:url="model.url"></TransfyUploadVideo>
         </n-form-item>
-        <n-form-item label="语言引擎模型：" path="engineModelType">
-          <n-select v-model:value="model.engineModelType" :options="engineModelTypeOpts" placeholder="请输入视频源语言" />
+        <n-form-item label="语言引擎模型：" path="engineModel">
+          <n-select v-model:value="model.engineModel" :options="engineModelOpts" placeholder="请输入视频源语言" />
         </n-form-item>
       </n-form>
     </n-layout-content>
     <n-layout-footer style="background-color: initial; text-align: center">
-      <n-button size="large" type="primary" strong style="width: 200px">提交</n-button>
+      <n-button size="large" type="primary" strong style="width: 200px" @click="onSubmit()">提交</n-button>
     </n-layout-footer>
   </n-layout>
 </template>
@@ -43,6 +43,7 @@ import { computed, defineComponent, ref } from 'vue';
 import { NP, NH3, NLayout, NLayoutHeader, NLayoutContent, NLayoutFooter, NDivider, NStep, NSteps, NForm, NFormItem, NInput, NButton, NSelect } from 'naive-ui';
 import TransfyUploadVideo from '/@/views/pages/transfy/UploadVideo/index.vue';
 import { EngineModel, EngineModelKeyType, TransfyFormDTO } from '/@/types/Admin/Transfy/dto';
+import { createTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
 export default defineComponent({
   components: {
     NP,
@@ -64,7 +65,7 @@ export default defineComponent({
   setup() {
     const currentRef = ref<number | undefined>(1);
     const model = ref(new TransfyFormDTO());
-    const engineModelTypeOpts = computed(() => {
+    const engineModelOpts = computed(() => {
       const options = [];
       for (const key in EngineModel) {
         if (Object.prototype.hasOwnProperty.call(EngineModel, key)) {
@@ -77,11 +78,17 @@ export default defineComponent({
       }
       return options;
     });
+    const onSubmit = async () => {
+      const { errorType } = await createTransfyReq(model.value);
+      if (!errorType) {
+        window.$message.success('操作成功');
+      }
+    };
     return {
       model,
       currentStatus: ref<'wait' | 'error' | 'finish' | 'process'>('process'),
       current: currentRef,
-      engineModelTypeOpts,
+      engineModelOpts,
       // method
       next() {
         if (currentRef.value === undefined) currentRef.value = 1;
@@ -93,6 +100,7 @@ export default defineComponent({
         else if (currentRef.value === undefined) currentRef.value = 4;
         else currentRef.value--;
       },
+      onSubmit,
     };
   },
 });

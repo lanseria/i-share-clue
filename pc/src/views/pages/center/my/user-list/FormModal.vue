@@ -72,7 +72,6 @@ export default defineComponent({
     };
     const onSubmit = async () => {
       const { errorType } = await actionProp.value.actionMethod(modelRef.value);
-      console.log(errorType);
       if (!errorType) {
         window.$message.success('操作成功');
         close();

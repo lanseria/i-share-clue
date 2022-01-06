@@ -1,3 +1,4 @@
+import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { UserMapper } from '@modules/admin/access/users/users.mapper';
 import { Logger } from '@nestjs/common';
 import * as dayjs from 'dayjs';
@@ -10,13 +11,18 @@ import { ProjectResponseDto } from './dtos/project-response.dto';
 import { ProjectEntity } from './project.entity';
 
 export class ProjectMapper {
-  public static toCreateEntity(dto: CreateProjectRequestDto): ProjectEntity {
+  public static toCreateEntity(
+    dto: CreateProjectRequestDto,
+    user: UserEntity,
+  ): ProjectEntity {
     const entity = new ProjectEntity();
     entity.name = dto.name;
     entity.website = dto.website;
     entity.desc = dto.desc;
     entity.category = dto.category;
     entity.region = dto.region;
+
+    entity.creator = user;
     const pointObject: Point = {
       type: 'Point',
       coordinates: gcj02towgs84(dto.location.lng, dto.location.lat),

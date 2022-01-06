@@ -1,3 +1,3 @@
-import { UserStatus } from '../../../../../../enums/User.enum';
+import { UserStatus } from '@global-enums/user.enum';
 
 export { UserStatus };
