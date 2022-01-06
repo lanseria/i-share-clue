@@ -6,7 +6,7 @@ import { ProjectRepository } from './project.repository';
 import { UsersRepository } from '@modules/admin/access/users/users.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProjectRepository, UsersRepository])],
+  imports: [TypeOrmModule.forFeature([UsersRepository, ProjectRepository])],
   providers: [ProjectService],
   controllers: [ProjectController],
 })

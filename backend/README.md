@@ -22,6 +22,26 @@ $ npm i -g yarn
 $ yarn install
 ```
 
+## 继续开发此项目
+
+- 生成模块
+
+```bash
+$ nest g mo modules/admin/transfy-ai/transfy
+```
+
+- 生成控制器
+
+```bash
+$ nest g co modules/admin/transfy-ai/transfy
+```
+
+- 生成服务器
+
+```bash
+$ nest g s modules/admin/transfy-ai/transfy
+```
+
 ## Running the app
 
 ```bash

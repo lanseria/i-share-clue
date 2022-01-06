@@ -1,14 +1,11 @@
 {
   "name": "i-share-clue-ui",
   "version": "1.0.0",
-  "description": "",
+  "description": "Based Vuejs3 i-share-clue frontend",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Lanseria/i-share-clue.git"
-  },
+  "repository": "git@github.com:Lanseria/i-share-clue.git",
+  "author": "lanseria <zhangchao564265135@hotmail.com>",
   "keywords": [],
-  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Lanseria/i-share-clue/issues"

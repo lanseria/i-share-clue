@@ -71,6 +71,7 @@ export class ProjectController {
    * @param user
    * @returns
    */
+  @ApiOperation({ description: '添加项目' })
   @Post()
   public createProject(
     @Body(ValidationPipe) projectDto: CreateProjectRequestDto,
@@ -86,6 +87,7 @@ export class ProjectController {
    * @param swlng 西南维度
    * @returns
    */
+  @ApiOperation({ description: '在范围内查询项目' })
   @Get('/area/:nelat/:nelng/:swlat/:swlng')
   public searchAreaProjects(
     @Param('nelat', ParseFloatPipe) nelat: number,

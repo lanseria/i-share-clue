@@ -1,0 +1,8 @@
+{
+  "name": "i-share-clue",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Lanseria/i-share-clue.git",
+  "author": "lanseria <zhangchao564265135@hotmail.com>",
+  "license": "MIT"
+}

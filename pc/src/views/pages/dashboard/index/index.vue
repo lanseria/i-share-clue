@@ -1,5 +1,5 @@
 <template>
-  <n-empty description="是一个飞机">
+  <n-empty style="padding: 100px 0" description="是一个飞机">
     <template #icon>
       <n-icon>
         <AirplaneIcon />

@@ -1,8 +1,9 @@
 {
   "name": "i-share-clue-nestjs",
   "version": "0.0.1",
-  "description": "Nestjs Boilerplate",
-  "author": "Ferdys Durán",
+  "description": "Based Nestjs i-share-clue backend",
+  "repository": "git@github.com:Lanseria/i-share-clue.git",
+  "author": "lanseria <zhangchao564265135@hotmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

@@ -28,23 +28,21 @@
         <n-form-item label="上传文件：" path="url">
           <TransfyUploadVideo v-model:url="model.url"></TransfyUploadVideo>
         </n-form-item>
-        <n-form-item label="视频源语言：" path="source">
-          <n-input placeholder="请输入视频源语言" v-model:value="model.source" />
-        </n-form-item>
-        <n-form-item label="内容行业领域：" path="area">
-          <n-input placeholder="请输入内容行业领域" v-model:value="model.area" />
+        <n-form-item label="语言引擎模型：" path="engineModelType">
+          <n-select v-model:value="model.engineModelType" :options="engineModelTypeOpts" placeholder="请输入视频源语言" />
         </n-form-item>
       </n-form>
     </n-layout-content>
     <n-layout-footer style="background-color: initial; text-align: center">
-      <n-button size="large" type="primary" strong>提交</n-button>
+      <n-button size="large" type="primary" strong style="width: 200px">提交</n-button>
     </n-layout-footer>
   </n-layout>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { NP, NH3, NLayout, NLayoutHeader, NLayoutContent, NLayoutFooter, NDivider, NStep, NSteps, NForm, NFormItem, NInput, NButton } from 'naive-ui';
+import { computed, defineComponent, ref } from 'vue';
+import { NP, NH3, NLayout, NLayoutHeader, NLayoutContent, NLayoutFooter, NDivider, NStep, NSteps, NForm, NFormItem, NInput, NButton, NSelect } from 'naive-ui';
 import TransfyUploadVideo from '/@/views/pages/transfy/UploadVideo/index.vue';
+import { EngineModel, EngineModelKeyType, TransfyFormDTO } from '/@/types/Admin/Transfy/dto';
 export default defineComponent({
   components: {
     NP,
@@ -60,20 +58,31 @@ export default defineComponent({
     NFormItem,
     NInput,
     NButton,
+    NSelect,
     TransfyUploadVideo,
   },
   setup() {
     const currentRef = ref<number | undefined>(1);
-    const model = ref({
-      name: '',
-      url: '',
-      source: '',
-      area: '',
+    const model = ref(new TransfyFormDTO());
+    const engineModelTypeOpts = computed(() => {
+      const options = [];
+      for (const key in EngineModel) {
+        if (Object.prototype.hasOwnProperty.call(EngineModel, key)) {
+          const element = EngineModel[key as EngineModelKeyType];
+          options.push({
+            label: element,
+            value: key,
+          });
+        }
+      }
+      return options;
     });
     return {
       model,
       currentStatus: ref<'wait' | 'error' | 'finish' | 'process'>('process'),
       current: currentRef,
+      engineModelTypeOpts,
+      // method
       next() {
         if (currentRef.value === undefined) currentRef.value = 1;
         else if (currentRef.value >= 4) currentRef.value = undefined;
