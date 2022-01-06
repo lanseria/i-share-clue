@@ -22,7 +22,7 @@
           <n-h3 prefix="bar" type="info">我的任务</n-h3>
           <n-grid x-gap="12" :cols="4">
             <n-gi v-for="item in pagedTable" :key="item.id">
-              <TransfyItem :item="item"></TransfyItem>
+              <TransfyItem :item="item" @load-page="loadPage()"></TransfyItem>
             </n-gi>
           </n-grid>
           <n-empty v-if="!pagedTable.length" description="你什么也找不到">
@@ -92,6 +92,7 @@ export default defineComponent({
       loading,
       pagedTable,
       handleAddVideoSrt,
+      loadPage,
     };
   },
 });

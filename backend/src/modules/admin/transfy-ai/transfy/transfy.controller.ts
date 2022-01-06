@@ -10,6 +10,7 @@ import {
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   UseGuards,
@@ -28,6 +29,22 @@ import { TransfyService } from './transfy.service';
 })
 export class TransfyController {
   constructor(private transfyService: TransfyService) {}
+
+  @ApiOperation({ description: '删除项目' })
+  @Delete()
+  public deleteTransfy(@Body() ids: string[]) {
+    return this.transfyService.deleteTransfy(ids);
+  }
+  /**
+   * 字幕转译分页
+   * @param pagination 分页参数
+   * @returns 分页
+   */
+  @ApiOperation({ description: '字幕转译项目分页' })
+  @Get('/page')
+  public getTransfyPage(@PaginationParams() pagination: PaginationRequest) {
+    return this.transfyService.getTransfyPage(pagination);
+  }
   /**
    * 创建字幕转译项目
    */
@@ -38,11 +55,5 @@ export class TransfyController {
     @CurrentUser() user: UserEntity,
   ) {
     return this.transfyService.createTransfy(transfyFormDto, user);
-  }
-
-  @ApiOperation({ description: '字幕转译项目分页' })
-  @Get('/page')
-  public getTransfyPage(@PaginationParams() pagination: PaginationRequest) {
-    return this.transfyService.getTransfyPage(pagination);
   }
 }

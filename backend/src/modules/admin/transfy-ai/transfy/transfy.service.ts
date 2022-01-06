@@ -23,7 +23,26 @@ export class TransfyService {
     @InjectRepository(TransfyRepository)
     private transfyRepository: TransfyRepository,
   ) {}
-
+  /**
+   * 删除项目
+   * @param ids IDs
+   */
+  public async deleteTransfy(ids: string[]) {
+    try {
+      await this.transfyRepository.delete(ids);
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+  /**
+   * 转译分页
+   * @param pagination 分页
+   * @returns 分页数据
+   */
   public async getTransfyPage(pagination: PaginationRequest) {
     try {
       const [transfyEntities, total] =

@@ -23,7 +23,7 @@
             开始识别
           </n-button>
 
-          <n-button text>
+          <n-button text @click="handleDel(item)">
             <template #icon>
               <n-icon>
                 <TrashOutlineIcon />
@@ -44,6 +44,8 @@ import { TransfyVO } from '/@/types/Admin/Transfy/vo';
 import { TransfyStatus, TransfyCategory } from '/@/types/Admin/Transfy/enum';
 import { useElementHover, templateRef } from '@vueuse/core';
 import { Play as PlayIcon, TrashOutline as TrashOutlineIcon } from '@vicons/ionicons5';
+import { deleteTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
+import { emit } from 'process';
 export default defineComponent({
   components: {
     NCard,
@@ -60,9 +62,31 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  emits: ['load-page'],
+  setup(props, { emit }) {
     const TransfyCardRef = ref();
     const isHovered = useElementHover(TransfyCardRef);
+    // method
+    const loadPage = () => {
+      emit('load-page');
+    };
+    const handleDel = (row: TransfyVO) => {
+      window.$dialog.error({
+        title: '注意',
+        content: `你确定删除这些项目？`,
+        positiveText: '确定',
+        negativeText: '不确定',
+        onPositiveClick: async () => {
+          const ids = [row.id];
+          await deleteTransfyReq(ids);
+          window.$message.success('删除成功');
+          loadPage();
+        },
+        onNegativeClick: () => {
+          loadPage();
+        },
+      });
+    };
     return {
       // const
       // refs
@@ -72,6 +96,8 @@ export default defineComponent({
       TransfyCategory,
       // ref
       isHovered,
+      // method
+      handleDel,
     };
   },
 });
