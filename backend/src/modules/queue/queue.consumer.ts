@@ -5,7 +5,9 @@ import { Job } from 'bull';
 export class TransfyQueueConsumerSerive {
   @Process('video')
   async consume(job: Job<unknown>) {
-    console.log(job.data);
+    setTimeout(() => {
+      console.log(job.data);
+    }, 10000);
     return;
   }
 }

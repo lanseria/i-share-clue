@@ -3,10 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 
 @Injectable()
-export class QueueProducerService {
+export class QueueProducer {
   constructor(@InjectQueue('transfy') private transfyQueue: Queue) {}
 
   async sendVideo(message: string) {
-    await this.transfyQueue.add('video');
+    await this.transfyQueue.add(message);
   }
 }
