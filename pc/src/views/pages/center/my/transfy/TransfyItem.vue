@@ -1,0 +1,104 @@
+<template>
+  <div ref="TransfyCardRef">
+    <n-card :title="item.name" hoverable embedded :bordered="false" header-style="padding:15px 24px 10px 24px" content-style="padding:0 24px 10px 24px">
+      <template #cover>
+        <div class="poster-cover">
+          <img :src="item.poster" />
+          <div class="category-wrap">
+            <div class="category-text">
+              <span class="span-text">{{ TransfyCategory[item.category] }}</span>
+            </div>
+          </div>
+        </div>
+      </template>
+      <div v-if="!isHovered">{{ TransfyStatus[item.status] }}</div>
+      <template #footer>
+        <n-space v-if="isHovered" justify="space-between" style="height: 53px">
+          <n-button text>
+            <template #icon>
+              <n-icon>
+                <play-icon />
+              </n-icon>
+            </template>
+            开始识别
+          </n-button>
+
+          <n-button text>
+            <template #icon>
+              <n-icon>
+                <TrashOutlineIcon />
+              </n-icon>
+            </template>
+            删除
+          </n-button>
+        </n-space>
+        <n-time v-else :time="item.updatedAt" format="yyyy-MM-dd hh:mm:ss" unix />
+      </template>
+    </n-card>
+  </div>
+</template>
+<script lang="ts">
+import { defineComponent, PropType, ref } from 'vue';
+import { NCard, NTime, NIcon, NButton, NSpace } from 'naive-ui';
+import { TransfyVO } from '/@/types/Admin/Transfy/vo';
+import { TransfyStatus, TransfyCategory } from '/@/types/Admin/Transfy/enum';
+import { useElementHover, templateRef } from '@vueuse/core';
+import { Play as PlayIcon, TrashOutline as TrashOutlineIcon } from '@vicons/ionicons5';
+export default defineComponent({
+  components: {
+    NCard,
+    NTime,
+    NIcon,
+    NButton,
+    NSpace,
+    PlayIcon,
+    TrashOutlineIcon,
+  },
+  props: {
+    item: {
+      type: Object as PropType<TransfyVO>,
+      required: true,
+    },
+  },
+  setup() {
+    const TransfyCardRef = ref();
+    const isHovered = useElementHover(TransfyCardRef);
+    return {
+      // const
+      // refs
+      TransfyCardRef,
+      // const
+      TransfyStatus,
+      TransfyCategory,
+      // ref
+      isHovered,
+    };
+  },
+});
+</script>
+<style lang="css" scoped>
+.poster-cover {
+  position: relative;
+}
+.category-wrap {
+  position: absolute;
+  opacity: 0.8;
+  background: rgb(0, 0, 0);
+  top: 0px;
+  left: 0px;
+  height: 24px;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: center;
+  align-items: center;
+  display: -webkit-flex;
+}
+.category-text {
+  color: rgb(255, 255, 255);
+  padding: 0px 6px;
+}
+.span-text {
+  color: rgb(255, 255, 255);
+  padding: 0px 6px;
+}
+</style>

@@ -1,9 +1,12 @@
+import { PaginationRequest } from '@common/interfaces';
+import { Pagination } from '@helpers';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { UsersRepository } from '@modules/admin/access/users/users.repository';
 import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,6 +24,32 @@ export class TransfyService {
     private transfyRepository: TransfyRepository,
   ) {}
 
+  public async getTransfyPage(pagination: PaginationRequest) {
+    try {
+      const [transfyEntities, total] =
+        await this.transfyRepository.getTransfysAndCount(pagination);
+      const TransfyDtos = await Promise.all(
+        transfyEntities.map(TransfyMapper.toDto),
+      );
+      return Pagination.of(pagination, total, TransfyDtos);
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException();
+      }
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+  /**
+   * 创建字幕转译
+   * @param transfyFormDto 字幕转译表单
+   * @param user 当前用户
+   * @returns 创建完的字幕转译表单
+   */
   public async createTransfy(
     transfyFormDto: CreateTransfyRequestDto,
     user: UserEntity,

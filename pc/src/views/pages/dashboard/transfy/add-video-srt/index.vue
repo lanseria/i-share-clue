@@ -44,6 +44,7 @@ import { NP, NH3, NLayout, NLayoutHeader, NLayoutContent, NLayoutFooter, NDivide
 import TransfyUploadVideo from '/@/views/pages/transfy/UploadVideo/index.vue';
 import { EngineModel, EngineModelKeyType, TransfyFormDTO } from '/@/types/Admin/Transfy/dto';
 import { createTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
+import { useImpRoute } from '/@/hooks/useRoute';
 export default defineComponent({
   components: {
     NP,
@@ -63,6 +64,7 @@ export default defineComponent({
     TransfyUploadVideo,
   },
   setup() {
+    const { pushPath } = useImpRoute();
     const currentRef = ref<number | undefined>(1);
     const model = ref(new TransfyFormDTO());
     const engineModelOpts = computed(() => {
@@ -82,6 +84,7 @@ export default defineComponent({
       const { errorType } = await createTransfyReq(model.value);
       if (!errorType) {
         window.$message.success('操作成功');
+        pushPath('/center/my/transfy-control');
       }
     };
     return {

@@ -1,26 +1,24 @@
-import { DataTableColumn } from 'naive-ui';
-import { SortState, TableColumn } from 'naive-ui/lib/data-table/src/interface';
 import { ComputedRef, reactive, ref } from 'vue';
-import { operateColums, OptList } from './Actions';
 class PaginationDTO {
   page = 1;
-  pageSize = 10;
+  pageSize = 8;
   pageCount = 1;
   showSizePicker = true;
+  constructor(pageSize = 8) {
+    this.pageSize = pageSize;
+  }
 }
 interface DataTableHook {
-  cols: TableColumn[];
-  operateOptions: OptList[];
+  pageSize?: number;
   currentQuery?: ComputedRef<IObj>;
   pageReq: Function;
 }
-export const useImpDataTable = (opt: DataTableHook) => {
-  const { cols, operateOptions, currentQuery, pageReq } = opt;
+export const useImpDataGrid = (opt: DataTableHook) => {
+  const { pageSize, currentQuery, pageReq } = opt;
   const loading = ref(false);
-  const columns = reactive<DataTableColumn[]>([...cols, operateColums(operateOptions)]);
   const order: IObj = {};
   const pagedTable = ref<any[]>([]);
-  const pagination = ref(new PaginationDTO());
+  const pagination = ref(new PaginationDTO(pageSize));
   const checkedRowKeysRef = ref<string[]>([]);
   //
 
@@ -90,31 +88,8 @@ export const useImpDataTable = (opt: DataTableHook) => {
   const handleCheck = (rowKeys: string[] = []) => {
     checkedRowKeysRef.value = rowKeys;
   };
-  const handleSorterChange = (sorter: SortState) => {
-    console.log(sorter);
-    // columnKey: 'createdAt';
-    // order: false;
-    // sorter: true;
-    order[sorter.columnKey] = sorter.order ? sorter.order.split('end')[0].toUpperCase() : 'DESC';
-    const idx = columns.findIndex((m) => m.key === sorter.columnKey);
-    columns[idx].sortOrder = sorter.order;
-    initPage();
-    // if (!sorter || sorter.columnKey === 'column1') {
-    //   if (!loadingRef.value) {
-    //     loadingRef.value = true;
-    //     query(paginationReactive.page, paginationReactive.pageSize, !sorter ? false : sorter.order, column2Reactive.filterOptionValues).then((data) => {
-    //       column1Reactive.sortOrder = !sorter ? false : sorter.order;
-    //       dataRef.value = data.data;
-    //       paginationReactive.pageCount = data.pageCount;
-    //       paginationReactive.itemCount = data.total;
-    //       loadingRef.value = false;
-    //     });
-    //   }
-    // }
-  };
   return {
     loading,
-    columns,
     pagedTable,
     pagination,
     checkedRowKeysRef,
@@ -122,7 +97,6 @@ export const useImpDataTable = (opt: DataTableHook) => {
     handlePageChange,
     handlePageSizeChange,
     handleCheck,
-    handleSorterChange,
 
     initPage,
     loadPage,

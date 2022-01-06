@@ -17,7 +17,7 @@ export class ProjectRepository extends Repository<ProjectEntity> {
   // TODO: 合并分页统一逻辑
   getProjectsAndCount(
     pagination: PaginationRequest,
-  ): Promise<[projectEntities: ProjectEntity[], totalProjects: number]> {
+  ): Promise<[projectEntities: ProjectEntity[], total: number]> {
     let {
       skip,
       limit: take,

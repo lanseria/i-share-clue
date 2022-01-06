@@ -60,12 +60,12 @@ export class ProjectService {
     pagination: PaginationRequest,
   ): Promise<PaginationResponseDto<ProjectResponseDto>> {
     try {
-      const [projectEntities, totolProjects] =
+      const [projectEntities, total] =
         await this.projectRepository.getProjectsAndCount(pagination);
       const ProjectDtos = await Promise.all(
         projectEntities.map(ProjectMapper.toDto),
       );
-      return Pagination.of(pagination, totolProjects, ProjectDtos);
+      return Pagination.of(pagination, total, ProjectDtos);
     } catch (error) {
       Logger.error(error);
       if (error instanceof NotFoundException) {
@@ -109,9 +109,10 @@ export class ProjectService {
    */
   public async searchAreaProjects(bounds: [number, number, number, number]) {
     try {
-      const [projectEntities, totalProjects] =
-        await this.projectRepository.searchArea(bounds);
-      // console.log(projectEntities, totalProjects);
+      const [projectEntities, total] = await this.projectRepository.searchArea(
+        bounds,
+      );
+      // console.log(projectEntities, total);
       return projectEntities.map((m) => {
         return ProjectMapper.toDto(m);
       });

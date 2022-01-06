@@ -227,7 +227,8 @@ export default defineComponent({
           loadPage();
         },
       });
-    }; // computed
+    };
+    // computed
     const currentQuery = computed(() => {
       return {
         name: searchName.value,
@@ -271,7 +272,6 @@ export default defineComponent({
     };
     onMounted(() => {
       loadPage();
-      // loadDictTree();
     });
     return {
       // refs

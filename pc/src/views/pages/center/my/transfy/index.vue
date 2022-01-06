@@ -20,7 +20,12 @@
       <n-gi>
         <div class="green grid-box">
           <n-h3 prefix="bar" type="info">我的任务</n-h3>
-          <n-empty description="你什么也找不到">
+          <n-grid x-gap="12" :cols="4">
+            <n-gi v-for="item in pagedTable" :key="item.id">
+              <TransfyItem :item="item"></TransfyItem>
+            </n-gi>
+          </n-grid>
+          <n-empty v-if="!pagedTable.length" description="你什么也找不到">
             <template #extra>
               <n-button>看看别的</n-button>
             </template>
@@ -31,9 +36,12 @@
   </imp-page-container>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { NGrid, NGi, NH3, NCard, NEmpty, NButton } from 'naive-ui';
 import { useImpRoute } from '/@/hooks/useRoute';
+import { useImpDataGrid } from '/@/hooks/useDataGrid';
+import TransfyItem from './TransfyItem.vue';
+import { getTransfyPageReq } from '/@/api/Admin/TransfyAi/Transfy';
 export default defineComponent({
   components: {
     NGrid,
@@ -42,13 +50,47 @@ export default defineComponent({
     NCard,
     NEmpty,
     NButton,
+    TransfyItem,
   },
   setup() {
     const { pushPath } = useImpRoute();
+    const searchName = ref('');
+    // computed
+    const currentQuery = computed(() => {
+      return {
+        name: searchName.value,
+      };
+    });
+    const {
+      loading,
+      pagedTable,
+      pagination,
+      checkedRowKeysRef,
+      //
+      handlePageChange,
+      handlePageSizeChange,
+      handleCheck,
+      initPage,
+      loadPage,
+    } = useImpDataGrid({
+      pageSize: 8,
+      pageReq: getTransfyPageReq,
+      currentQuery,
+    });
+
+    const handleSearch = () => {
+      initPage();
+    };
+    onMounted(() => {
+      loadPage();
+    });
     const handleAddVideoSrt = () => {
       pushPath('/dashboard/transfy/add-video-srt');
     };
     return {
+      // ref
+      loading,
+      pagedTable,
       handleAddVideoSrt,
     };
   },
