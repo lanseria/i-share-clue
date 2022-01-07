@@ -34,15 +34,15 @@ const errorInterceptors = (error: any) => {
 
 const responseInterceptors = (res: AxiosResponse<any>) => {
   const userStore = useUserStore();
-  const showNotification = (msg: string) => {
+  const showNotification = (title: string, content?: string) => {
     try {
       window.$notification.warning({
-        content: '提醒',
-        meta: msg,
+        content: title,
+        meta: content,
         duration: 2000,
       });
     } catch (err) {
-      console.warn(msg, err);
+      console.warn(title, err);
     }
   };
   const clearInfoToLogin = () => {
@@ -62,6 +62,7 @@ const responseInterceptors = (res: AxiosResponse<any>) => {
   };
   const status = res.status.toString();
   const resData = res.data;
+  const msgContent = resData.message ? (typeof resData.message === 'string' ? resData.message : resData.message.join(',')) : '';
   const errorCode = {
     // 4dd
     '400': '请求内容错误',
@@ -87,12 +88,12 @@ const responseInterceptors = (res: AxiosResponse<any>) => {
   }
   // debugger;
   if (/4\d\d/.test(status)) {
-    const msg = getErrorCode(status);
+    const msgTitle = getErrorCode(status);
     // 除了验证400以外的全部报错
     if (status === '401') {
       clearInfoToLogin();
-      showNotification(msg);
-      throw Error(msg);
+      showNotification(msgTitle, msgContent);
+      throw Error(msgTitle);
     } else {
       if (status == '404') {
         // TODO: 暂时处理
@@ -100,7 +101,7 @@ const responseInterceptors = (res: AxiosResponse<any>) => {
         showNotification('接口不存在');
       } else {
         // 显示验证错误信息
-        showNotification(resData.message);
+        showNotification(msgTitle, msgContent);
       }
       return resData;
     }

@@ -25,8 +25,8 @@
         <n-form-item label="项目名称：" path="name">
           <n-input placeholder="请输入项目名称" v-model:value="model.name" />
         </n-form-item>
-        <n-form-item label="上传文件：" path="url">
-          <TransfyUploadVideo v-model:url="model.url"></TransfyUploadVideo>
+        <n-form-item label="上传文件：" path="objectName">
+          <TransfyUploadVideo v-model:objectName="model.objectName"></TransfyUploadVideo>
         </n-form-item>
         <n-form-item label="语言引擎模型：" path="engineModel">
           <n-select v-model:value="model.engineModel" :options="engineModelOpts" placeholder="请输入视频源语言" />

@@ -1613,6 +1613,16 @@ bcryptjs@^2.4.3:
   resolved "https://registry.npm.taobao.org/bcryptjs/download/bcryptjs-2.4.3.tgz#9ab5627b93e60621ff7cdac5da9733027df1d0cb"
   integrity sha1-mrVie5PmBiH/fNrF2pczAn3x0Ms=
 
+betajs-scoped@~0.0.13:
+  version "0.0.22"
+  resolved "https://registry.npmmirror.com/betajs-scoped/download/betajs-scoped-0.0.22.tgz#f4d9550896a9e0648c1326d03ec09423b40512e4"
+  integrity sha1-9NlVCJap4GSMEybQPsCUI7QFEuQ=
+
+betajs@~1.0.96:
+  version "1.0.233"
+  resolved "https://registry.npmmirror.com/betajs/download/betajs-1.0.233.tgz#bc873bef04c2c904514bae394ff35f081195d79d"
+  integrity sha1-vIc77wTCyQRRS645T/NfCBGV150=
+
 binary-extensions@^2.0.0:
   version "2.2.0"
   resolved "https://registry.nlark.com/binary-extensions/download/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
@@ -2418,6 +2428,11 @@ dir-glob@^3.0.1:
   integrity sha1-Vtv3PZkqSpO6FYT0U0Bj/S5BcX8=
   dependencies:
     path-type "^4.0.0"
+
+docker-polyfill@~0.0.1:
+  version "0.0.10"
+  resolved "https://registry.npmmirror.com/docker-polyfill/download/docker-polyfill-0.0.10.tgz#67c21970f53ce1a7d07cbd53ca908343efeced24"
+  integrity sha1-Z8IZcPU84afQfL1TypCDQ+/s7SQ=
 
 doctrine@^3.0.0:
   version "3.0.0"
@@ -4132,6 +4147,17 @@ jest@^27.0.6:
     import-local "^3.0.2"
     jest-cli "^27.4.6"
 
+js-ffmpeg@^0.0.34:
+  version "0.0.34"
+  resolved "https://registry.npmmirror.com/js-ffmpeg/download/js-ffmpeg-0.0.34.tgz#4c377942f866c71b6e5d6642c801689587ffd346"
+  integrity sha512-GpmX74gU4WcqhRlxcRGI+twbxye2YiC5wmMLqrzhvD3qN04p7VeBNRNWe7/8qFmGAzXTgejjWCiBArIXPC1tnQ==
+  dependencies:
+    betajs "~1.0.96"
+    betajs-scoped "~0.0.13"
+    docker-polyfill "~0.0.1"
+    node-getopt "^0.3.2"
+    tmp "0.0.33"
+
 js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.nlark.com/js-tokens/download/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -4704,6 +4730,11 @@ node-fetch@^2.6.1:
   integrity sha1-F1GnwBg06OFpd1hzLp77burfr4k=
   dependencies:
     whatwg-url "^5.0.0"
+
+node-getopt@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.nlark.com/node-getopt/download/node-getopt-0.3.2.tgz#57507cd22f6f69650aa99252304a842f1224e44c"
+  integrity sha1-V1B80i9vaWUKqZJSMEqELxIk5Ew=
 
 node-int64@^0.4.0:
   version "0.4.0"
@@ -5974,7 +6005,7 @@ through@^2.3.6:
   resolved "https://registry.npm.taobao.org/through/download/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
 
-tmp@^0.0.33:
+tmp@0.0.33, tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.nlark.com/tmp/download/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
   integrity sha1-bTQzWIl2jSGyvNoKonfO07G/rfk=

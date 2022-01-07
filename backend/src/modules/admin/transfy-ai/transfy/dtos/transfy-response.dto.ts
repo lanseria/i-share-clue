@@ -9,6 +9,9 @@ export class TransfyResponseDto {
   name: string;
 
   @ApiProperty()
+  objectName: string;
+
+  @ApiProperty()
   url: string;
 
   @ApiProperty()

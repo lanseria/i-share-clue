@@ -28,7 +28,7 @@ export class TransfyMapper {
   ): TransfyEntity {
     const entity = new TransfyEntity();
     entity.name = dto.name;
-    entity.url = dto.url;
+    entity.objectName = dto.objectName;
     entity.category = dto.category;
     entity.engineModel = dto.engineModel;
     entity.creator = user;
@@ -39,7 +39,7 @@ export class TransfyMapper {
     const dto = new TransfyResponseDto();
     dto.id = entity.id;
     dto.name = entity.name;
-    dto.url = entity.url;
+    dto.objectName = entity.objectName;
     dto.category = entity.category;
     dto.status = entity.status;
     dto.poster = entity.poster;

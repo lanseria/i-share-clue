@@ -1,4 +1,5 @@
 import { BaseEntity } from '@database/entities';
+import { TransfyStatusKeyType } from '@global-enums/transfy.enum';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { TransfyCategoryKeyType } from './dtos';
@@ -21,12 +22,12 @@ export class TransfyEntity extends BaseEntity {
   name: string;
 
   @Column({
-    name: 'url',
+    name: 'object_name',
     type: 'varchar',
     length: 100,
     nullable: false,
   })
-  url: string;
+  objectName: string;
 
   @Column({
     name: 'engine_model',
@@ -51,7 +52,7 @@ export class TransfyEntity extends BaseEntity {
     nullable: false,
     default: 'to_be_identifying',
   })
-  status: string;
+  status: TransfyStatusKeyType;
 
   @Column({
     name: 'poster',

@@ -2,6 +2,12 @@ import r from '/@/router/axios';
 import { api } from './config';
 import { TransfyFormDTO } from '/@/types/Admin/Transfy/dto';
 
+export const runTransfyRecTaskReq = (id: string) => {
+  return r.request<R<boolean>>({
+    url: `${api.runRec}/${id}`,
+  });
+};
+
 export const deleteTransfyReq = (ids: string[]) => {
   return r.request<R<boolean>>({
     url: `${api.transfy}`,

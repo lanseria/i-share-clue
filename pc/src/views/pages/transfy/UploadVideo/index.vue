@@ -43,13 +43,14 @@ export default defineComponent({
     NCard,
   },
   props: {
-    url: {
+    objectName: {
       type: String,
       required: true,
     },
   },
   setup(props, { emit }) {
-    const uploadUrl = useVModel(props, 'url', emit);
+    const uploadObjectName = useVModel(props, 'objectName', emit);
+    const uploadUrl = ref('');
     const UploadRef = ref();
     const accept = ref('.mkv,.mp4,.flv,.avi,.mov');
     const showVideo = ref(false);
@@ -78,11 +79,13 @@ export default defineComponent({
     const handleFinish = (payload: any) => {
       showVideo.value = true;
       // console.log(payload);
+      uploadObjectName.value = payload.name;
       uploadUrl.value = 'http://' + payload.url;
     };
     const handleRemove = () => {
       console.log('remove');
       showVideo.value = false;
+      uploadObjectName.value = '';
       uploadUrl.value = '';
     };
     return {

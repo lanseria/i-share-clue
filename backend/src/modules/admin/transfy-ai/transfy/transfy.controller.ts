@@ -12,6 +12,8 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
+  ParseUUIDPipe,
   Post,
   UseGuards,
   ValidationPipe,
@@ -29,6 +31,11 @@ import { TransfyService } from './transfy.service';
 })
 export class TransfyController {
   constructor(private transfyService: TransfyService) {}
+
+  @Get('/run_rec/:id')
+  public runRecQueueTask(@Param('id', ParseUUIDPipe) id: string) {
+    return this.transfyService.runRecQueueTask(id);
+  }
 
   @ApiOperation({ description: '删除项目' })
   @Delete()

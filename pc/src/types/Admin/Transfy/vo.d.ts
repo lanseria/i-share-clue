@@ -2,7 +2,7 @@ import { EngineModelKeyType, TransfyCategoryKeyType, TransfyStatusKeyType } from
 
 interface TransfyFormVO {
   name: string;
-  url: string;
+  objectName: string;
   engineModel: EngineModelKeyType;
   category: TransfyCategoryKeyType;
 }

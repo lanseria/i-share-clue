@@ -17,9 +17,9 @@ export class CreateTransfyRequestDto {
   @IsNotEmpty()
   @MaxLength(100)
   @ApiProperty({
-    example: 'http://localhost:9000/demo.mp4',
+    example: 'demo.mp4',
   })
-  url: string;
+  objectName: string;
 
   @IsNotEmpty()
   @IsIn(EngineModelKey)

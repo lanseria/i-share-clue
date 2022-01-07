@@ -105,7 +105,7 @@ export class DictsService {
     try {
       const [dictEntities, totolDicts] =
         await this.dictsRepository.getDictsAndCount(pagination);
-      const DictDtos = await Promise.all(dictEntities.map(DictMapper.toDto));
+      const DictDtos = dictEntities.map((m) => DictMapper.toDto(m));
       return Pagination.of(pagination, totolDicts, DictDtos);
     } catch (error) {
       Logger.error(error);

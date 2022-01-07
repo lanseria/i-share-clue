@@ -1,13 +1,22 @@
 import { UsersRepository } from '@modules/admin/access/users/users.repository';
+import { MinioClientModule } from '@modules/minio-client/minio-client.module';
+import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TransfyConsumer } from './queue/transfy.consumer';
+import { TransfyProducer } from './queue/transfy.producer';
 import { TransfyController } from './transfy.controller';
+import { TransfyMapper } from './transfy.mapper';
 import { TransfyRepository } from './transfy.repository';
 import { TransfyService } from './transfy.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsersRepository, TransfyRepository])],
+  imports: [
+    MinioClientModule,
+    TypeOrmModule.forFeature([UsersRepository, TransfyRepository]),
+    BullModule.registerQueue({ name: 'transfy-queue' }),
+  ],
   controllers: [TransfyController],
-  providers: [TransfyService],
+  providers: [TransfyService, TransfyProducer, TransfyConsumer, TransfyMapper],
 })
 export class TransfyModule {}

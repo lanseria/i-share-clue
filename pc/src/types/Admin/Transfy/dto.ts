@@ -7,7 +7,7 @@ export { EngineModel, EngineModelKeyType };
 export class TransfyFormDTO extends CommonDTO implements TransfyFormVO {
   engineModel: EngineModelKeyType = '16k_zh_video';
   name: string = '';
-  url: string = '';
+  objectName: string = '';
   category: TransfyCategoryKeyType = 'video';
   constructor(category: TransfyCategoryKeyType = 'video') {
     super();

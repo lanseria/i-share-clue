@@ -62,9 +62,7 @@ export class ProjectService {
     try {
       const [projectEntities, total] =
         await this.projectRepository.getProjectsAndCount(pagination);
-      const ProjectDtos = await Promise.all(
-        projectEntities.map(ProjectMapper.toDto),
-      );
+      const ProjectDtos = projectEntities.map((m) => ProjectMapper.toDto(m));
       return Pagination.of(pagination, total, ProjectDtos);
     } catch (error) {
       Logger.error(error);

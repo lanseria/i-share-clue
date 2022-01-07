@@ -4,6 +4,7 @@ import { BufferedFile } from './file.model';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { FileResponseDto } from '@modules/file-upload/dtos/';
+import { Stream } from 'stream';
 
 @Injectable()
 export class MinioClientService {
@@ -33,20 +34,23 @@ export class MinioClientService {
     return result;
   }
 
-  downloadFile(name: string, baseBucket: string = this.baseBucket) {
+  downloadFile(
+    name: string,
+    baseBucket: string = this.baseBucket,
+  ): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       let size = 0;
-      let chunks = [];
-      this.client.getObject(baseBucket, name, function (err, dataStream) {
+      let chunks: Buffer[] = [];
+      this.client.getObject(baseBucket, name, (err, dataStream: Stream) => {
         if (err) {
           reject(err);
         }
-        dataStream.on('data', function (chunk) {
+        dataStream.on('data', (chunk: Buffer) => {
           chunks.push(chunk);
           size += chunk.length;
         });
-        dataStream.on('end', function () {
-          let data = null;
+        dataStream.on('end', () => {
+          let data: Buffer = null;
           switch (chunks.length) {
             case 0:
               data = Buffer.alloc(0);
@@ -65,7 +69,7 @@ export class MinioClientService {
           }
           resolve(data);
         });
-        dataStream.on('error', function (err) {
+        dataStream.on('error', (err) => {
           reject(err);
         });
       });
@@ -174,22 +178,26 @@ export class MinioClientService {
     );
 
     return {
-      url: `${this.configService.get(
-        'MINIO_ENDPOINT',
-      )}:${this.configService.get('MINIO_PORT')}/${this.configService.get(
-        'MINIO_BUCKET',
-      )}/${filename}`,
+      url: this.getFileUrl(filename),
       name: filename,
     };
   }
 
-  async delete(objetName: string, baseBucket: string = this.baseBucket) {
-    this.client.removeObject(baseBucket, objetName, function (err, res) {
+  async delete(objectName: string, baseBucket: string = this.baseBucket) {
+    this.client.removeObject(baseBucket, objectName, function (err, res) {
       if (err)
         throw new HttpException(
           'Oops Something wrong happend',
           HttpStatus.BAD_REQUEST,
         );
     });
+  }
+
+  getFileUrl(objectName: string) {
+    return `${this.configService.get(
+      'MINIO_ENDPOINT',
+    )}:${this.configService.get('MINIO_PORT')}/${this.configService.get(
+      'MINIO_BUCKET',
+    )}/${objectName}`;
   }
 }

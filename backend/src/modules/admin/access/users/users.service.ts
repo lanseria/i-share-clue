@@ -196,7 +196,7 @@ export class UsersService {
       //   throw new NotFoundException();
       // }
       const UserDtos = await Promise.all(
-        userEntities.map(UserMapper.toDtoWithRelations),
+        userEntities.map((m) => UserMapper.toDtoWithRelations(m)),
       );
       return Pagination.of(pagination, totalUsers, UserDtos);
     } catch (error) {

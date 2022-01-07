@@ -14,7 +14,7 @@
       <div v-if="!isHovered">{{ TransfyStatus[item.status] }}</div>
       <template #footer>
         <n-space v-if="isHovered" justify="space-between" style="height: 53px">
-          <n-button text>
+          <n-button text @click="handleRunRec(item)">
             <template #icon>
               <n-icon>
                 <play-icon />
@@ -42,10 +42,9 @@ import { defineComponent, PropType, ref } from 'vue';
 import { NCard, NTime, NIcon, NButton, NSpace } from 'naive-ui';
 import { TransfyVO } from '/@/types/Admin/Transfy/vo';
 import { TransfyStatus, TransfyCategory } from '/@/types/Admin/Transfy/enum';
-import { useElementHover, templateRef } from '@vueuse/core';
+import { useElementHover } from '@vueuse/core';
 import { Play as PlayIcon, TrashOutline as TrashOutlineIcon } from '@vicons/ionicons5';
-import { deleteTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
-import { emit } from 'process';
+import { deleteTransfyReq, runTransfyRecTaskReq } from '/@/api/Admin/TransfyAi/Transfy';
 export default defineComponent({
   components: {
     NCard,
@@ -69,6 +68,23 @@ export default defineComponent({
     // method
     const loadPage = () => {
       emit('load-page');
+    };
+    const handleRunRec = (row: TransfyVO) => {
+      window.$dialog.info({
+        title: '注意',
+        content: `即将开始执行识别录音任务？`,
+        positiveText: '执行',
+        negativeText: '取消',
+        onPositiveClick: async () => {
+          const res = await runTransfyRecTaskReq(row.id);
+          console.log(res);
+          window.$message.success('执行成功');
+          loadPage();
+        },
+        onNegativeClick: () => {
+          loadPage();
+        },
+      });
     };
     const handleDel = (row: TransfyVO) => {
       window.$dialog.error({
@@ -98,6 +114,7 @@ export default defineComponent({
       isHovered,
       // method
       handleDel,
+      handleRunRec,
     };
   },
 });
