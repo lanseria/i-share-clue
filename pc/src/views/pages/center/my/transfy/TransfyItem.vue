@@ -14,7 +14,7 @@
       <div v-if="!isHovered">{{ TransfyStatus[item.status] }}</div>
       <template #footer>
         <n-space v-if="isHovered" justify="space-between" style="height: 53px">
-          <n-button text @click="handleRunRec(item)">
+          <n-button type="primary" text @click="handleRunRec(item)">
             <template #icon>
               <n-icon>
                 <play-icon />
@@ -23,7 +23,7 @@
             开始识别
           </n-button>
 
-          <n-button text @click="handleDel(item)">
+          <n-button type="error" text @click="handleDel(item)">
             <template #icon>
               <n-icon>
                 <TrashOutlineIcon />

@@ -4,6 +4,7 @@ import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { UsersRepository } from '@modules/admin/access/users/users.repository';
 import { MinioClientService } from '@modules/minio-client/minio-client.service';
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -34,20 +35,27 @@ export class TransfyService {
    * @returns
    */
   public async runRecQueueTask(id: string) {
+    let transfyEntity: TransfyEntity;
+    let res = null;
     try {
-      let res = null;
-      const transfyEntity = await this.transfyRepository.findOne(id);
-      transfyEntity.status = 'identifying';
-      if (transfyEntity.category === 'audio') {
-        res = await this.transfyProducer.runAudioRecTask(transfyEntity);
+      transfyEntity = await this.transfyRepository.findOne(id);
+      if (
+        ['to_be_identifying', 'identify_failed'].includes(transfyEntity.status)
+      ) {
+        transfyEntity.status = 'identifying';
+        if (transfyEntity.category === 'audio') {
+          res = await this.transfyProducer.runAudioRecTask(transfyEntity);
+        }
+        if (transfyEntity.category === 'video') {
+          res = await this.transfyProducer.runVideoRecTask(transfyEntity);
+        }
+        if (transfyEntity.category === 'translation') {
+          res = await this.transfyProducer.runTranslationRecTask(transfyEntity);
+        }
+        return res;
+      } else {
+        throw new BadRequestException();
       }
-      if (transfyEntity.category === 'video') {
-        res = await this.transfyProducer.runVideoRecTask(transfyEntity);
-      }
-      if (transfyEntity.category === 'translation') {
-        res = await this.transfyProducer.runTranslationRecTask(transfyEntity);
-      }
-      return res;
     } catch (error) {
       Logger.error(error);
       if (error instanceof NotFoundException) {
@@ -55,6 +63,8 @@ export class TransfyService {
       } else {
         throw new InternalServerErrorException();
       }
+    } finally {
+      await this.transfyRepository.save(transfyEntity);
     }
   }
   /**

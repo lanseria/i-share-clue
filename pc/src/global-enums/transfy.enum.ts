@@ -26,6 +26,7 @@ export type TransfyCategoryKeyType = keyof TransfyCategoryType;
 export const TransfyStatus = {
   to_be_identifying: "待识别",
   identifying: "识别中",
+  identify_failed: "识别失败",
   to_be_proofread: "待校对",
   proofread: "校对过",
 };

@@ -1,33 +1,50 @@
+import { Logger } from '@nestjs/common';
+import { exec } from 'child_process';
 import * as path from 'path';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ffmpeg = require('js-ffmpeg');
 export class Ffmpeg {
-  generateCover(videoPath: string, coverPath: string) {
+  static generateCover(videoPath: string): Promise<string> {
+    const coverPath = `${videoPath}.jpg`;
     return new Promise((resolve, reject) => {
-      ffmpeg
-        .ffmpeg(
-          videoPath,
-          [
-            '-vf "select=eq(pict_type,I)"',
-            '-frames:v 1',
-            '-q:v 1',
-            '-pix_fmt yuvj422p',
-            '-vsync vfr',
-            '-f image2',
-          ],
-          coverPath,
-          () => {},
-        )
-        .success((data: any) => {
-          resolve(data);
-        })
-        .error((error: any) => {
-          reject(error);
-        });
+      exec(
+        `ffmpeg -i ${videoPath} -vf "select=eq(pict_type\\,I)" -vf scale=320:180 -frames:v 1 -q:v 1 -pix_fmt yuvj422p -vsync vfr -f image2  ${coverPath} -hide_banner -loglevel error`,
+        (err, stdout: string, stderr: string) => {
+          if (err) {
+            reject(err);
+          }
+          Logger.log(stdout);
+          Logger.log(stderr);
+          resolve(coverPath);
+        },
+      );
+      // ffmpeg
+      //   .ffmpeg(
+      //     videoPath,
+      //     [
+      //       `-vf  select=\'eq(pict_type\\,I)\'`,
+      //       '-frames:v 1',
+      //       '-q:v 1',
+      //       '-pix_fmt yuvj422p',
+      //       '-vsync vfr',
+      //       '-f image2',
+      //     ],
+      //     coverPath,
+      //     () => {},
+      //   )
+      //   .success((data: any) => {
+      //     resolve(coverPath);
+      //   })
+      //   .error((error: any) => {
+      //     reject(error);
+      //   });
     });
   }
 
-  extractVideoAudio(videoName: string, audioName?: string): Promise<string> {
+  static extractVideoAudio(
+    videoName: string,
+    audioName?: string,
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       const videoPath = path.join(process.cwd(), videoName);
       const filename = path.basename(videoPath);
