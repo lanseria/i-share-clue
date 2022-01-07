@@ -10,6 +10,13 @@ import { TransfyEntity } from '../transfy.entity';
 import { TransfyRepository } from '../transfy.repository';
 import { Ffmpeg } from './ffmpeg';
 
+const SUCCESS = 'SUCCESS!';
+const PENDING = 'PENDING...';
+const FAILED = 'FAILED!!!';
+
+const VIDEO_REC = '视频识别任务';
+const AUDIO_REC = '音频识别任务';
+
 @Processor('transfy-queue')
 export class TransfyConsumer {
   constructor(
@@ -21,9 +28,28 @@ export class TransfyConsumer {
 
   @Process('video-rec')
   async videoRec(job: Job<TransfyEntity>) {
-    Logger.log('pending...', '视频封面输出任务');
-    let transfyEntity = job.data;
     const jobId = job.id;
+    Logger.log(PENDING, `${VIDEO_REC}[${jobId}]`);
+    let transfyEntity = job.data;
+    await this.generateVideoCover(transfyEntity);
+    Logger.log(PENDING, `${VIDEO_REC}`);
+  }
+
+  @Process('audio-rec')
+  async audioRec(job: Job<TransfyEntity>) {
+    const jobId = job.id;
+    Logger.log(PENDING, `${AUDIO_REC}[${jobId}]`);
+    // TODO:
+  }
+  /**
+   * 视频封面输出任务
+   * @param transfyEntity
+   */
+  private async generateVideoCover(
+    transfyEntity: TransfyEntity,
+    CONTEXT = '视频封面输出任务',
+  ) {
+    Logger.log(PENDING, CONTEXT);
     try {
       const data = await this.minioClientService.downloadFile(
         transfyEntity.objectName,
@@ -34,18 +60,13 @@ export class TransfyConsumer {
       const { url } = await this.minioClientService.upload(coverBufedFile);
       transfyEntity.poster = '//' + url;
       transfyEntity.status = 'to_be_proofread';
-      Logger.log('success!!!', '视频封面输出任务');
+      Logger.log(SUCCESS, CONTEXT);
     } catch (error) {
+      Logger.error(FAILED, CONTEXT);
       Logger.error(error);
       transfyEntity.status = 'identify_failed';
-      throw new InternalServerErrorException();
     } finally {
       await this.transfyRepository.save(transfyEntity);
     }
-  }
-
-  @Process('audio-rec')
-  async audioRec(job: Job<TransfyEntity>) {
-    Logger.log('pending...', '音频识别任务');
   }
 }
