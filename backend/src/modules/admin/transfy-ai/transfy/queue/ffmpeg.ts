@@ -13,56 +13,26 @@ export class Ffmpeg {
           if (err) {
             reject(err);
           }
-          Logger.log(stdout);
-          Logger.log(stderr);
           resolve(coverPath);
         },
       );
-      // ffmpeg
-      //   .ffmpeg(
-      //     videoPath,
-      //     [
-      //       `-vf  select=\'eq(pict_type\\,I)\'`,
-      //       '-frames:v 1',
-      //       '-q:v 1',
-      //       '-pix_fmt yuvj422p',
-      //       '-vsync vfr',
-      //       '-f image2',
-      //     ],
-      //     coverPath,
-      //     () => {},
-      //   )
-      //   .success((data: any) => {
-      //     resolve(coverPath);
-      //   })
-      //   .error((error: any) => {
-      //     reject(error);
-      //   });
     });
   }
 
-  static extractVideoAudio(
-    videoName: string,
-    audioName?: string,
-  ): Promise<string> {
+  static extractVideoAudio(videoPath: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      const videoPath = path.join(process.cwd(), videoName);
       const filename = path.basename(videoPath);
       if (!filename) {
         throw new Error('错误的文件路径');
       }
-      const ext = path.extname(filename);
-      const fileN = filename.split(ext)[0];
-      const timestamp = (new Date().getTime() / 1000).toFixed(0);
-      const tempAudioName = audioName ?? `${fileN}-${timestamp}.aac`;
+      const audioPath = `${videoPath}.aac`;
       ffmpeg
-        .ffmpeg(videoPath, ['-vn'], tempAudioName, function (progress: any) {
-          console.log(progress);
+        .ffmpeg(videoPath, ['-vn'], audioPath, function (progress: any) {
+          Logger.log(progress, '音频分离中');
         })
         .success(function (json: any) {
-          console.log('[shell log]: ', json);
-          console.log(`音频分离成功 ${tempAudioName}`);
-          resolve(tempAudioName);
+          Logger.log(`${audioPath}`, '音频分离成功');
+          resolve(audioPath);
         })
         .error(function (error: any) {
           reject(error);

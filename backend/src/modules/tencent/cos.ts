@@ -2,6 +2,7 @@ import * as COS from 'cos-nodejs-sdk-v5';
 import * as path from 'path';
 import * as fs from 'fs';
 import { TencentOpt } from './tencent';
+import { BufferedFile } from '@modules/minio-client/file.model';
 
 /**
  * 环境依赖
@@ -48,9 +49,9 @@ export class CosClient {
    * @param filePath 相对于执行cwd的路径
    * @returns
    */
-  uploadFile(filePath: string): Promise<COS.PutObjectResult> {
+  uploadFile(bufferedFile: BufferedFile): Promise<COS.PutObjectResult> {
     return new Promise((resolve, reject) => {
-      const baseName = path.basename(filePath);
+      const baseName = bufferedFile.originalname;
       this.client.putObject(
         {
           /* 填入您自己的存储桶，必须字段 */
@@ -61,8 +62,8 @@ export class CosClient {
           Key: baseName,
           StorageClass: 'STANDARD',
           /* 当Body为stream类型时，ContentLength必传，否则onProgress不能返回正确的进度信息 */
-          Body: fs.createReadStream(filePath), // 上传文件对象
-          ContentLength: fs.statSync(filePath).size,
+          Body: fs.createReadStream(bufferedFile.buffer), // 上传文件对象
+          ContentLength: bufferedFile.size,
           onProgress: function (progressData) {
             console.log(JSON.stringify(progressData));
           },

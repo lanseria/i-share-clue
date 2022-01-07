@@ -1,5 +1,6 @@
 import { UsersRepository } from '@modules/admin/access/users/users.repository';
 import { MinioClientModule } from '@modules/minio-client/minio-client.module';
+import { TencentModule } from '@modules/tencent/tencent.module';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,6 +14,7 @@ import { TransfyService } from './transfy.service';
 @Module({
   imports: [
     MinioClientModule,
+    TencentModule,
     TypeOrmModule.forFeature([UsersRepository, TransfyRepository]),
     BullModule.registerQueue({ name: 'transfy-queue' }),
   ],
