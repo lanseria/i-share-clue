@@ -6,6 +6,7 @@ import { AuthModule } from '@modules/auth/auth.module';
 import { DatabaseModule } from '@database/database.module';
 import { MinioClientModule } from './modules/minio-client/minio-client.module';
 import { FileUploadModule } from './modules/file-upload/file-upload.module';
+import { TencentModule } from './modules/tencent/tencent.module';
 
 @Module({
   imports: [
@@ -19,10 +20,11 @@ import { FileUploadModule } from './modules/file-upload/file-upload.module';
       envFilePath: ['.env'],
     }),
     DatabaseModule,
-    AdminModule,
-    AuthModule,
     MinioClientModule,
     FileUploadModule,
+    TencentModule,
+    AdminModule,
+    AuthModule,
   ],
 })
 export class AppModule {
