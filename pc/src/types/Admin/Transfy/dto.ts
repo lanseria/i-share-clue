@@ -1,7 +1,8 @@
 import { CommonDTO } from '../../Common/dto';
-import { EngineModel } from './enum';
+import { EngineModel, TransfyStatusKeyType } from './enum';
 import type { EngineModelKeyType, TransfyCategoryKeyType } from './enum';
-import { TransfyFormVO } from './vo';
+import { TransfyFormVO, TransfyVO } from './vo';
+import { UserInfoDTO } from '../User/dto';
 export { EngineModel, EngineModelKeyType };
 
 export class TransfyFormDTO extends CommonDTO implements TransfyFormVO {
@@ -13,4 +14,17 @@ export class TransfyFormDTO extends CommonDTO implements TransfyFormVO {
     super();
     this.category = category;
   }
+}
+
+export class TransfyDTO extends CommonDTO implements TransfyVO {
+  id: string = '';
+  url: string = '';
+  poster: string = '';
+  status: TransfyStatusKeyType = 'to_be_identifying';
+  updatedAt: number = 0;
+  name: string = '';
+  objectName: string = '';
+  engineModel: EngineModelKeyType = '16k_zh_video';
+  category: TransfyCategoryKeyType = 'video';
+  creator = new UserInfoDTO();
 }

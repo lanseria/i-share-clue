@@ -32,6 +32,7 @@ import { TransfyService } from './transfy.service';
 export class TransfyController {
   constructor(private transfyService: TransfyService) {}
 
+  @ApiOperation({ description: '运行自动转译任务' })
   @Get('/run_rec/:id')
   public runRecQueueTask(@Param('id', ParseUUIDPipe) id: string) {
     return this.transfyService.runRecQueueTask(id);
@@ -62,5 +63,15 @@ export class TransfyController {
     @CurrentUser() user: UserEntity,
   ) {
     return this.transfyService.createTransfy(transfyFormDto, user);
+  }
+  /**
+   * 获取单个详情
+   * @param id ID
+   * @returns
+   */
+  @ApiOperation({ description: '查询详情' })
+  @Get('/:id')
+  public getTransfy(@Param('id', ParseUUIDPipe) id: string) {
+    return this.transfyService.getTransfy(id);
   }
 }

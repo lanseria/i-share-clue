@@ -45,7 +45,7 @@ export class TransfyMapper {
     dto.category = entity.category;
     dto.status = entity.status;
     dto.poster = entity.poster;
-    dto.creator = UserMapper.toDto(entity.creator);
+    entity.creator && (dto.creator = UserMapper.toDto(entity.creator));
     dto.createdAt = dayjs(entity.createdAt).unix();
     dto.updatedAt = dayjs(entity.updatedAt).unix();
     return dto;

@@ -1,6 +1,13 @@
 import r from '/@/router/axios';
 import { api } from './config';
 import { TransfyFormDTO } from '/@/types/Admin/Transfy/dto';
+import { TransfyVO } from '/@/types/Admin/Transfy/vo';
+
+export const getTransfyReq = (id: string) => {
+  return r.request<R<TransfyVO>>({
+    url: `${api.transfy}/${id}`,
+  });
+};
 
 export const runTransfyRecTaskReq = (id: string) => {
   return r.request<R<boolean>>({
@@ -17,15 +24,14 @@ export const deleteTransfyReq = (ids: string[]) => {
 };
 
 export const getTransfyPageReq = (params: Partial<PageParam>) => {
-  return r.request<R<PageResult<any>>>({
+  return r.request<R<PageResult<TransfyVO>>>({
     url: api.page,
-    method: 'GET',
     params,
   });
 };
 
 export const createTransfyReq = (data: TransfyFormDTO) => {
-  return r.request<R<any>>({
+  return r.request<R<TransfyVO>>({
     url: `${api.transfy}`,
     method: 'POST',
     data,

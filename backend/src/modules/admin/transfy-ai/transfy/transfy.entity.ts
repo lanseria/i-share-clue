@@ -81,7 +81,6 @@ export class TransfyEntity extends BaseEntity {
   })
   poster: string;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn()
+  @ManyToOne(() => UserEntity, (user) => user.transfys)
   creator: UserEntity;
 }

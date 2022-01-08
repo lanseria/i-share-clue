@@ -1,8 +1,16 @@
-import { Entity, Column, ManyToMany, JoinTable, PrimaryColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToMany,
+  JoinTable,
+  PrimaryColumn,
+  OneToMany,
+} from 'typeorm';
 import { BaseEntity } from '@database/entities';
 import { PermissionEntity } from '../permissions/permission.entity';
 import { RoleEntity } from '../roles/role.entity';
 import { UserStatus } from './user-status.enum';
+import { TransfyEntity } from '@modules/admin/transfy-ai/transfy/transfy.entity';
 
 @Entity({ schema: 'admin', name: 'users' })
 export class UserEntity extends BaseEntity {
@@ -106,6 +114,9 @@ export class UserEntity extends BaseEntity {
     },
   })
   permissions: Promise<PermissionEntity[]>;
+
+  @OneToMany(() => TransfyEntity, (transfy) => transfy.creator)
+  transfys: TransfyEntity[];
 
   constructor(user?: Partial<UserEntity>) {
     super();

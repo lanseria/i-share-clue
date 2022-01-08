@@ -9,7 +9,9 @@ interface TransfyFormVO {
 
 interface TransfyVO extends TransfyFormVO {
   id: string;
+  url: string;
   poster: string;
   status: TransfyStatusKeyType;
   updatedAt: number;
+  creator: UserInfoVO;
 }

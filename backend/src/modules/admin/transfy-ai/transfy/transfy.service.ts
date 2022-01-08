@@ -30,6 +30,22 @@ export class TransfyService {
     private transfyRepository: TransfyRepository,
   ) {}
   /**
+   * 查询详情
+   * @param id
+   */
+  public async getTransfy(id: string) {
+    let transfyEntity: TransfyEntity;
+    try {
+      transfyEntity = await this.transfyRepository.findOne(id, {
+        relations: ['creator'],
+      });
+      return this.toDto(transfyEntity);
+    } catch (error) {
+      Logger.error(error);
+      throw new InternalServerErrorException();
+    }
+  }
+  /**
    * 开始识别录音
    * @param id ID
    * @returns
@@ -134,7 +150,9 @@ export class TransfyService {
   }
 
   private toDto(entity: TransfyEntity) {
+    // Logger.log(JSON.stringify(entity));
     const dto = TransfyMapper.toDto(entity);
+    // Logger.log(JSON.stringify(dto));
     dto.url = this.minioClientService.getFileUrl(dto.objectName);
     return dto;
   }
