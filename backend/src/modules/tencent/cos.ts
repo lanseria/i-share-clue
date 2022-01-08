@@ -1,5 +1,4 @@
 import * as COS from 'cos-nodejs-sdk-v5';
-import * as path from 'path';
 import * as fs from 'fs';
 import { TencentOpt } from './tencent';
 import { BufferedFile } from '@modules/minio-client/file.model';
@@ -15,13 +14,15 @@ export class CosClient {
   private client: COS;
   private Region: string;
   private Bucket: string;
-  constructor(tencentOpt: TencentOpt) {
+  private log: Function;
+  constructor(tencentOpt: TencentOpt, log = console.log) {
     this.Region = tencentOpt.Region;
     this.Bucket = tencentOpt.Bucket;
     this.client = new COS({
       SecretId: tencentOpt.SecretId,
       SecretKey: tencentOpt.SecretKey,
     });
+    this.log = log;
   }
   /**
    * 获取该区域 bucket 服务信息
@@ -62,10 +63,10 @@ export class CosClient {
           Key: baseName,
           StorageClass: 'STANDARD',
           /* 当Body为stream类型时，ContentLength必传，否则onProgress不能返回正确的进度信息 */
-          Body: fs.createReadStream(bufferedFile.buffer), // 上传文件对象
+          Body: fs.createReadStream(bufferedFile.fieldname), // 上传文件对象
           ContentLength: bufferedFile.size,
-          onProgress: function (progressData) {
-            console.log(JSON.stringify(progressData));
+          onProgress: (progressData) => {
+            this.log(JSON.stringify(progressData), 'COS-uploadFile');
           },
         },
         function (err, data) {

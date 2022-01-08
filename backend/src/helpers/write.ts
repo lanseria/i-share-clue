@@ -18,4 +18,5 @@ export const writeJson = async (data: any, key: string) => {
     JSON.stringify(data, null, 2),
     {},
   );
+  return `${key}.json`;
 };

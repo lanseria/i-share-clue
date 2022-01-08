@@ -1,4 +1,8 @@
 import {
+  EngineModelKeyType,
+  EngineModelType,
+} from '@global-enums/transfy.enum';
+import {
   CreateRecTaskResponse,
   DescribeTaskStatusResponse,
   TaskStatus,
@@ -6,22 +10,30 @@ import {
 import { Asr } from './asr';
 import { TencentOpt } from './tencent';
 
+export interface RecOpt {
+  Name: string;
+  Url: string;
+  EngineModelType: EngineModelKeyType;
+}
+
 export class RecClient {
   private asrClient;
-  constructor(tencentOpt: TencentOpt) {
+  private log: Function;
+  constructor(tencentOpt: TencentOpt, log = console.log) {
     const asr = new Asr(tencentOpt, 'asr.tencentcloudapi.com');
     this.asrClient = asr.asr;
+    this.log = log;
   }
 
-  private createRecTask(url: string): Promise<CreateRecTaskResponse> {
+  private createRecTask(recOpt: RecOpt): Promise<CreateRecTaskResponse> {
     return new Promise((resolve, reject) => {
       this.asrClient
         .CreateRecTask({
-          EngineModelType: '16k_zh_video',
+          EngineModelType: recOpt.EngineModelType ?? '16k_zh_video',
           ChannelNum: 1,
           ResTextFormat: 2,
           SourceType: 0,
-          Url: url,
+          Url: recOpt.Url,
           FilterPunc: 1,
         })
         .then(
@@ -54,25 +66,29 @@ export class RecClient {
     });
   }
 
-  getDescResultData(Url: string): Promise<TaskStatus> {
+  getDescResultData(recOpt: RecOpt): Promise<TaskStatus> {
     return new Promise(async (resolve, reject) => {
-      const createResult = await this.createRecTask(Url);
+      const createResult = await this.createRecTask(recOpt);
       if (createResult.Data.TaskId) {
         const { TaskId } = createResult.Data;
         const timer = setInterval(async () => {
           const descResult = await this.describeTaskStatus(TaskId);
           const { StatusStr, Status } = descResult.Data;
-          console.log(`识别结果查询响应：${StatusStr}`);
+          this.log(
+            `识别结果查询响应：${StatusStr}`,
+            'RecClient-getDescResultData',
+          );
           if ([0, 1].includes(Status)) {
             // console.log('继续查询');
           } else {
             // 退出轮询
             clearInterval(timer);
             if (Status === 2) {
-              console.log('执行成功');
+              this.log('执行成功', 'getDescResultData-getDescResultData');
               resolve(descResult.Data);
             } else {
-              console.log('执行失败', Url, descResult);
+              this.log(JSON.stringify(descResult));
+              this.log('执行失败', 'getDescResultData-getDescResultData');
               reject('执行失败');
             }
           }

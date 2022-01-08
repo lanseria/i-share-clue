@@ -1,7 +1,8 @@
 <template>
   <n-upload abstract ref="UploadRef" :max="1" :accept="accept" :customRequest="customRequest" :on-remove="handleRemove">
     <div>
-      <vue3VideoPlay v-show="showVideo" v-bind="options" />
+      <video v-show="showVideo" controls :src="uploadUrl" style="width: 480px; height: 240px"></video>
+      <!-- <vue3VideoPlay v-show="showVideo" v-bind="options" /> -->
       <n-upload-trigger #="{ handleClick }" abstract>
         <n-upload>
           <n-upload-dragger v-show="!showVideo" @click.stop="handleClick">
@@ -57,6 +58,7 @@ export default defineComponent({
     const options = computed(() => {
       const themeVars = useThemeVars();
       return {
+        autoPlay: false,
         width: '480px', //播放器高度
         height: '240px', //播放器高度
         color: themeVars.value.primaryColor, //主题色

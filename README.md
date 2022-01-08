@@ -13,6 +13,20 @@
 
 ## 开发工作
 
+### 可能工作（在根目录执行）
+
+1. 同步前后端枚举配置
+
+```
+yarn enums:sync
+```
+
+2. 添加 data 目录
+
+```
+yarn make:dir
+```
+
 ### 后端
 
 1. 配置后端文件
@@ -67,13 +81,7 @@ yarn schema:sync
 yarn seed
 ```
 
-12. 同步前后端枚举配置
-
-```
-yarn enums:sync
-```
-
-13. 运行开发模式
+12. 运行开发模式
 
 ```
 yarn start

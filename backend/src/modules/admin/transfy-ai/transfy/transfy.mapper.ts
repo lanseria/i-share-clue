@@ -40,6 +40,8 @@ export class TransfyMapper {
     dto.id = entity.id;
     dto.name = entity.name;
     dto.objectName = entity.objectName;
+    dto.recResJsonObjectName = entity.recResJsonObjectName;
+    dto.errorDetail = entity.errorDetail;
     dto.category = entity.category;
     dto.status = entity.status;
     dto.poster = entity.poster;

@@ -1,5 +1,6 @@
 import { AppMimeType, BufferedFile } from '@modules/minio-client/file.model';
 import { promises } from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
 
 // const DATA = './data/';
@@ -13,10 +14,10 @@ export const readFileRetBufedFile = async (
   return {
     originalname,
     buffer,
-    size: 0,
+    size: fs.statSync(filePath).size,
     mimetype,
     encoding: '',
-    fieldname: '',
+    fieldname: filePath,
   };
 };
 

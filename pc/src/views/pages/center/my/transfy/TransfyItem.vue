@@ -14,13 +14,21 @@
       <div v-if="!isHovered">{{ TransfyStatus[item.status] }}</div>
       <template #footer>
         <n-space v-if="isHovered" justify="space-between" style="height: 53px">
-          <n-button type="primary" text @click="handleRunRec(item)">
+          <n-button v-if="['identify_failed', 'to_be_identifying'].includes(item.status)" type="primary" text @click="handleRunRec(item)">
             <template #icon>
               <n-icon>
                 <play-icon />
               </n-icon>
             </template>
             开始识别
+          </n-button>
+          <n-button v-else type="primary" text @click="handleRunProofread(item)">
+            <template #icon>
+              <n-icon>
+                <play-icon />
+              </n-icon>
+            </template>
+            校对字幕
           </n-button>
 
           <n-button type="error" text @click="handleDel(item)">
@@ -45,6 +53,7 @@ import { TransfyStatus, TransfyCategory } from '/@/types/Admin/Transfy/enum';
 import { useElementHover } from '@vueuse/core';
 import { Play as PlayIcon, TrashOutline as TrashOutlineIcon } from '@vicons/ionicons5';
 import { deleteTransfyReq, runTransfyRecTaskReq } from '/@/api/Admin/TransfyAi/Transfy';
+import { useImpRoute } from '/@/hooks/useRoute';
 export default defineComponent({
   components: {
     NCard,
@@ -63,11 +72,15 @@ export default defineComponent({
   },
   emits: ['load-page'],
   setup(props, { emit }) {
+    const { pushPath } = useImpRoute();
     const TransfyCardRef = ref();
     const isHovered = useElementHover(TransfyCardRef);
     // method
     const loadPage = () => {
       emit('load-page');
+    };
+    const handleRunProofread = (row: TransfyVO) => {
+      pushPath(`/dashboard/transfy/${row.id}/video-edit`);
     };
     const handleRunRec = (row: TransfyVO) => {
       window.$dialog.info({
@@ -115,6 +128,7 @@ export default defineComponent({
       // method
       handleDel,
       handleRunRec,
+      handleRunProofread,
     };
   },
 });

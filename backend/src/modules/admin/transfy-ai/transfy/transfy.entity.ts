@@ -1,5 +1,8 @@
 import { BaseEntity } from '@database/entities';
-import { TransfyStatusKeyType } from '@global-enums/transfy.enum';
+import {
+  EngineModelKeyType,
+  TransfyStatusKeyType,
+} from '@global-enums/transfy.enum';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { TransfyCategoryKeyType } from './dtos';
@@ -30,12 +33,28 @@ export class TransfyEntity extends BaseEntity {
   objectName: string;
 
   @Column({
+    name: 'rec_res_json_object_name',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
+  recResJsonObjectName?: string;
+
+  @Column({
+    name: 'error_detail',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
+  errorDetail?: string;
+
+  @Column({
     name: 'engine_model',
     type: 'varchar',
     length: 100,
     nullable: false,
   })
-  engineModel: string;
+  engineModel: EngineModelKeyType;
 
   @Column({
     name: 'category',

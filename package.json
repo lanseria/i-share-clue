@@ -6,6 +6,7 @@
   "author": "lanseria <zhangchao564265135@hotmail.com>",
   "license": "MIT",
   "scripts": {
-    "enums:sync": "node ./script/enums.async.js"
+    "enums:sync": "node ./script/enums.async.js",
+    "make:dir": "node ./script/makedir.js"
   }
 }

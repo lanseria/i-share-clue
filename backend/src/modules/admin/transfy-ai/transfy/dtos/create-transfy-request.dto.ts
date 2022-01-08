@@ -1,3 +1,4 @@
+import { EngineModelKeyType } from '@global-enums/transfy.enum';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsNotEmpty, MaxLength } from 'class-validator';
 import {
@@ -26,7 +27,7 @@ export class CreateTransfyRequestDto {
   @ApiProperty({
     example: '16k_zh_video',
   })
-  engineModel: string;
+  engineModel: EngineModelKeyType;
 
   @IsNotEmpty()
   @IsIn(TransfyCategoryKey)

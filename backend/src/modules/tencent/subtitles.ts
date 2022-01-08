@@ -31,8 +31,8 @@ interface FormatSliceItem {
 export class Subtitles {
   private rawData: TaskStatus;
   private sliceData: SliceItem[];
-  constructor(rawJsonPath = 'config/descResult.json') {
-    this.rawData = require(utilCwdPath(rawJsonPath));
+  constructor(rawData: TaskStatus) {
+    this.rawData = rawData;
     this.sliceData = [];
   }
 

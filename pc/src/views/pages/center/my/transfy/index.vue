@@ -102,9 +102,9 @@ export default defineComponent({
   padding: 25px;
 }
 .light-green {
-  background-color: rgba(131, 131, 131, 0.2);
+  background-color: rgba(131, 131, 131, 0.1);
 }
 .green {
-  background-color: rgba(131, 131, 131, 0.1);
+  background-color: rgba(131, 131, 131, 0);
 }
 </style>
