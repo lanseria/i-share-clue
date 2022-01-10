@@ -1,4 +1,4 @@
-const symbolZhcn = [' ', '？', '。', '，', '！', '；', '?', '.', ',', '!'];
+const symbolZhcn = ['？', '。', '，', '！', '；', '?', '.', ',', '!'];
 export const getTextBlock = (text: string): number[] => {
   const blocks: number[] = [];
   const textArr = text.split('');

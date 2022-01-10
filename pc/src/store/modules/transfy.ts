@@ -8,6 +8,7 @@ import { buildFile } from '/@/utils/transfy';
 interface TransfyState {
   transfy: TransfyDTO;
   subtitles: SubtitlesItem[];
+  loaded: boolean;
   subtitlesLoading: boolean;
 }
 
@@ -16,6 +17,7 @@ export const useTransfyStore = defineStore({
   state: (): TransfyState => ({
     transfy: new TransfyDTO(),
     subtitles: [],
+    loaded: false,
     subtitlesLoading: false,
   }),
   actions: {
@@ -24,6 +26,9 @@ export const useTransfyStore = defineStore({
     },
     setTransfy(transfy: TransfyDTO) {
       this.transfy = transfy;
+    },
+    setLoaded(loaded: boolean) {
+      this.loaded = loaded;
     },
     async saveSubtitles() {
       const { payload } = await updateSubtitleForTransfyReq(this.transfy.id, this.subtitles);
@@ -43,7 +48,7 @@ export const useTransfyStore = defineStore({
           res.map((m, i) => {
             return {
               ...m,
-              id: i,
+              id: i + 1,
             };
           })
         );

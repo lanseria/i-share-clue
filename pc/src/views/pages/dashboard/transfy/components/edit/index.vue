@@ -5,7 +5,7 @@
         <n-empty style="padding: 100px 0" description="加载中">
           <template #icon>
             <n-icon>
-              <AirplaneIcon />
+              <airplane-icon />
             </n-icon>
           </template>
           <template #extra>
@@ -14,18 +14,6 @@
         </n-empty>
       </template>
     </n-data-table>
-    <!-- <n-list>
-      
-      <n-list-item v-for="(item, i) in subtitles" :key="i">
-        <template #prefix>
-          <SrtTimestamp v-model:timestamp="item.StartMs"></SrtTimestamp>
-          <SrtTimestamp v-model:timestamp="item.EndMs"></SrtTimestamp>
-        </template>
-        <template #suffix></template>
-
-        <n-input type="text" size="small" v-model:value="item.FinalSentence" />
-      </n-list-item>
-    </n-list> -->
   </n-spin>
 </template>
 <script lang="ts">

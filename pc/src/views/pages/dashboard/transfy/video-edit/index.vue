@@ -24,23 +24,26 @@
     </n-layout-header>
     <n-layout style="height: 550px; margin: 24px" has-sider>
       <n-layout-sider width="666" content-style="padding: 24px;display: flex;align-items: center;">
-        <video :src="transfyDto.url" controls style="width: 618px"></video>
+        <video :src="transfyDto.url" controls style="width: 618px" @canplay="onCanplay"></video>
       </n-layout-sider>
       <n-layout-content content-style="padding: 24px;">
-        <SubtitlesEdit ref="SubtitlesEditRef"></SubtitlesEdit>
+        <subtitles-edit></subtitles-edit>
       </n-layout-content>
     </n-layout>
-    <n-layout-footer>成府路</n-layout-footer>
+    <n-layout-footer>
+      <wave-footer></wave-footer>
+    </n-layout-footer>
   </n-layout>
 </template>
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { NPageHeader, NSpace, NButton, NAvatar, NLayout, NLayoutContent, NLayoutFooter, NLayoutHeader, NLayoutSider, NGrid, NGi, NTime } from 'naive-ui';
+import { NPageHeader, NSpace, NButton, NAvatar, NLayout, NLayoutContent, NLayoutFooter, NLayoutHeader, NLayoutSider, NGrid, NGi, NTime, NCard } from 'naive-ui';
 import SubtitlesEdit from '../components/subtitles-edit/index.vue';
 import { TransfyDTO } from '/@/types/Admin/Transfy/dto';
 import { getTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
 import { useImpRoute } from '/@/hooks/useRoute';
 import { useTransfyStore } from '/@/store/modules/transfy';
+import WaveFooter from '../components/wave/index.vue';
 export default defineComponent({
   components: {
     NPageHeader,
@@ -55,19 +58,24 @@ export default defineComponent({
     NGrid,
     NGi,
     NTime,
+    NCard,
     SubtitlesEdit,
+    WaveFooter,
   },
   setup() {
     const transfyStore = useTransfyStore();
     const { route, goBack } = useImpRoute();
     // ref
-    const SubtitlesEditRef = ref();
     const transfyDto = ref(new TransfyDTO());
     // computed
     const id = computed(() => {
       return route.params.id as string;
     });
-
+    // events
+    const onCanplay = (e: Event) => {
+      console.log(e);
+      transfyStore.setLoaded(true);
+    };
     // method
     const handleSave = async () => {
       const res = await transfyStore.saveSubtitles();
@@ -98,9 +106,10 @@ export default defineComponent({
     });
     return {
       // refs
-      SubtitlesEditRef,
       // ref
       transfyDto,
+      // event
+      onCanplay,
       // method
       handleSave,
       handleExport,

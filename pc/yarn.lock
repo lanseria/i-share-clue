@@ -1443,6 +1443,11 @@
   resolved "https://registry.npmmirror.com/@types/crypto-js/download/@types/crypto-js-4.1.0.tgz#09ba1b49bcce62c9a8e6d5e50a3364aa98975578"
   integrity sha512-DCFfy/vh2lG6qHSGezQ+Sn2Ulf/1Mx51dqOdmOKyW5nMK3maLlxeS3onC7r212OnBM2pBR95HkAmAjjF08YkxQ==
 
+"@types/debounce@*":
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/@types/debounce/download/@types/debounce-1.2.1.tgz#79b65710bc8b6d44094d286aecf38e44f9627852"
+  integrity sha1-ebZXELyLbUQJTShq7POORPlieFI=
+
 "@types/echarts@^4.9.3":
   version "4.9.12"
   resolved "https://registry.npmmirror.com/@types/echarts/download/@types/echarts-4.9.12.tgz#c9b39f0ba2e8be99a6063a613683161e7f47a2cc"
@@ -1528,6 +1533,13 @@
   version "2.0.2"
   resolved "https://registry.npmjs.org/@types/store/-/store-2.0.2.tgz#6263d4f1aab225032ea55b17d94f3b725a21c943"
   integrity sha512-ZPHnXkzmGMfk+pHqAGzTSpA9CbsHmJLgkvOl5w52LZ0XTxB1ZIHWZzQ7lEtjTNWScBbsQekg8TjApMXkMe4nkw==
+
+"@types/wavesurfer.js@^5.2.2":
+  version "5.2.2"
+  resolved "https://registry.npmmirror.com/@types/wavesurfer.js/download/@types/wavesurfer.js-5.2.2.tgz#ccf5c30b50b918d53a08582ef19f895b09a49f3a"
+  integrity sha1-zPXDC1C5GNU6CFgu8Z+JWwmknzo=
+  dependencies:
+    "@types/debounce" "*"
 
 "@types/zrender@*":
   version "4.0.1"
@@ -3091,6 +3103,11 @@ highlight.js@^11.0.1:
   resolved "https://registry.npmmirror.com/highlight.js/download/highlight.js-11.3.1.tgz#813078ef3aa519c61700f84fe9047231c5dc3291"
   integrity sha512-PUhCRnPjLtiLHZAQ5A/Dt5F8cWZeMyj9KRsACsWT+OD6OP0x6dp5OmT5jdx0JgEyPxPZZIPQpRN2TciUT7occw==
 
+highlight.js@^11.4.0:
+  version "11.4.0"
+  resolved "https://registry.npmmirror.com/highlight.js/download/highlight.js-11.4.0.tgz#34ceadd49e1596ee5aba3d99346cdfd4845ee05a"
+  integrity sha512-nawlpCBCSASs7EdvZOYOYVkJpGmAOKMYZgZtUqSRqodZE0GRVcFKwo1RcpeOemqh9hyttTdd5wDBwHkuSyUfnA==
+
 hls.js@^1.0.10:
   version "1.1.2"
   resolved "https://registry.npmmirror.com/hls.js/download/hls.js-1.1.2.tgz#71691e11928e54ead9696bc64b88c1b9914c394d"
@@ -4578,6 +4595,11 @@ vueuc@^0.4.19:
     seemly "^0.3.1"
     vdirs "^0.1.4"
     vooks "^0.2.4"
+
+wavesurfer.js@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.nlark.com/wavesurfer.js/download/wavesurfer.js-5.2.0.tgz#efae107b5b561e9bfe3fffc50e6158136a17643e"
+  integrity sha1-764Qe1tWHpv+P//FDmFYE2oXZD4=
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
