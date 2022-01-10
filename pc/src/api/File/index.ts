@@ -69,10 +69,6 @@ export const postFileUploadAvatarReq = (data: FormData) => {
   });
 };
 
-// const downLoadMessage = [
-//   "文件较大，正在下载中，请耐心等候",
-//   "文件过大，需要较长下载时间，请耐心等候"
-// ];
 const toDataURL = (url: string) => {
   return fetch(url)
     .then((response) => {
@@ -105,4 +101,19 @@ export const delFileById = (id: number) => {
     url: `${api.id}/delete/${id}`,
     method: 'post',
   });
+};
+
+// 下载文件方法
+export const stringDownload = (content: string, filename: string) => {
+  const eleLink = document.createElement('a');
+  eleLink.download = filename;
+  eleLink.style.display = 'none';
+  // 字符内容转变成blob地址
+  const blob = new Blob([content]);
+  eleLink.href = URL.createObjectURL(blob);
+  // 触发点击
+  document.body.appendChild(eleLink);
+  eleLink.click();
+  // 然后移除
+  document.body.removeChild(eleLink);
 };

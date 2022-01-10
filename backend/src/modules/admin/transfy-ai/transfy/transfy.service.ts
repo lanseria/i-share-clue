@@ -1,4 +1,5 @@
 import { PaginationRequest } from '@common/interfaces';
+import { SliceItem } from '@global-enums/subtitles.enum';
 import { Pagination } from '@helpers';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { UsersRepository } from '@modules/admin/access/users/users.repository';
@@ -12,7 +13,10 @@ import {
   RequestTimeoutException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { constant } from 'lodash';
 import { TimeoutError } from 'rxjs';
+import { readFileRetBufedFile } from 'src/helpers/read';
+import { writeFileRetpath, writeJson } from 'src/helpers/write';
 import { CreateTransfyRequestDto } from './dtos';
 import { TransfyProducer } from './queue/transfy.producer';
 import { TransfyEntity } from './transfy.entity';
@@ -29,6 +33,30 @@ export class TransfyService {
     @InjectRepository(TransfyRepository)
     private transfyRepository: TransfyRepository,
   ) {}
+  /**
+   * 更新字幕文件
+   * @param id
+   * @param subtitles
+   */
+  public async updateSubtitlesTransfy(id: string, subtitles: SliceItem[]) {
+    let transfyEntity: TransfyEntity;
+    try {
+      transfyEntity = await this.transfyRepository.findOne(id);
+      const subtitlesRawJsonPath = await writeJson(
+        subtitles,
+        // .json.json多一个后缀
+        transfyEntity.recResJsonObjectName,
+      );
+      const res = await this.minioClientService.upload(
+        await readFileRetBufedFile(subtitlesRawJsonPath),
+      );
+      transfyEntity.recResJsonObjectName = res.name;
+      return await this.transfyRepository.save(transfyEntity);
+    } catch (error) {
+      Logger.error(error);
+      throw new InternalServerErrorException();
+    }
+  }
   /**
    * 查询详情
    * @param id

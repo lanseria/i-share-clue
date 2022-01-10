@@ -15,8 +15,8 @@
         <template #extra>
           <n-space>
             <n-button>导入字幕</n-button>
-            <n-button>保存</n-button>
-            <n-button type="primary">导出下载</n-button>
+            <n-button @click="handleSave()">保存</n-button>
+            <n-button type="primary" @click="handleExport()">导出下载</n-button>
           </n-space>
         </template>
         <template #footer>创建者：{{ transfyDto.creator.firstName + transfyDto.creator.lastName }}</template>
@@ -38,9 +38,9 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import { NPageHeader, NSpace, NButton, NAvatar, NLayout, NLayoutContent, NLayoutFooter, NLayoutHeader, NLayoutSider, NGrid, NGi, NTime } from 'naive-ui';
 import SubtitlesEdit from '../components/subtitles-edit/index.vue';
 import { TransfyDTO } from '/@/types/Admin/Transfy/dto';
-import { getSubtitlesReq, getTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
+import { getTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
 import { useImpRoute } from '/@/hooks/useRoute';
-import { SliceItem } from '/@/global-enums/subtitles.enum';
+import { useTransfyStore } from '/@/store/modules/transfy';
 export default defineComponent({
   components: {
     NPageHeader,
@@ -58,20 +58,41 @@ export default defineComponent({
     SubtitlesEdit,
   },
   setup() {
-    const SubtitlesEditRef = ref();
+    const transfyStore = useTransfyStore();
     const { route, goBack } = useImpRoute();
+    // ref
+    const SubtitlesEditRef = ref();
     const transfyDto = ref(new TransfyDTO());
-    const subtitlesList = ref<SliceItem[]>([]);
+    // computed
     const id = computed(() => {
       return route.params.id as string;
     });
+
+    // method
+    const handleSave = async () => {
+      const res = await transfyStore.saveSubtitles();
+      if (res) {
+        window.$message.success('保存成功');
+      } else {
+        window.$message.error('保存失败');
+      }
+    };
+
+    const handleExport = () => {
+      transfyStore.exportSubtitles();
+    };
+
+    const handleBack = () => {
+      goBack();
+    };
+
     const loadPage = async () => {
       const { payload } = await getTransfyReq(id.value);
       transfyDto.value.mergeProperties(payload);
-      const res = await getSubtitlesReq(transfyDto.value.recResJsonUrl);
-      subtitlesList.value = res;
-      SubtitlesEditRef.value.setSubtitlesValue(subtitlesList.value);
+      transfyStore.setTransfy(transfyDto.value);
+      await transfyStore.loadSubtitles();
     };
+    // hook
     onMounted(() => {
       loadPage();
     });
@@ -80,11 +101,10 @@ export default defineComponent({
       SubtitlesEditRef,
       // ref
       transfyDto,
-      subtitlesList,
       // method
-      handleBack() {
-        goBack();
-      },
+      handleSave,
+      handleExport,
+      handleBack,
     };
   },
 });

@@ -3,3 +3,7 @@ export interface SliceItem {
   StartMs: number;
   EndMs: number;
 }
+
+export interface SubtitlesItem extends SliceItem {
+  id: number;
+}

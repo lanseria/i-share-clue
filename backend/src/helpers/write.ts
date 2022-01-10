@@ -13,10 +13,8 @@ export const writeFileRetpath = async (
 };
 
 export const writeJson = async (data: any, key: string) => {
-  await promises.writeFile(
-    path.join(process.cwd(), `${key}.json`),
-    JSON.stringify(data, null, 2),
-    {},
-  );
-  return `${key}.json`;
+  const basename = `${key}.json`;
+  const filePath = path.join(process.cwd(), DATA, basename);
+  await promises.writeFile(filePath, JSON.stringify(data, null, 2), {});
+  return filePath;
 };

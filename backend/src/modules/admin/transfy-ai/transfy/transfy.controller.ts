@@ -1,5 +1,6 @@
 import { PaginationParams } from '@common/decorators';
 import { PaginationRequest } from '@common/interfaces';
+import { SliceItem } from '@global-enums/subtitles.enum';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import {
   CurrentUser,
@@ -14,6 +15,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   UseGuards,
   ValidationPipe,
@@ -31,6 +33,15 @@ import { TransfyService } from './transfy.service';
 })
 export class TransfyController {
   constructor(private transfyService: TransfyService) {}
+
+  @ApiOperation({ description: '运行自动转译任务' })
+  @Patch('/subtitles/:id')
+  public updateSubtitlesTransfy(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() subtitles: SliceItem[],
+  ) {
+    return this.transfyService.updateSubtitlesTransfy(id, subtitles);
+  }
 
   @ApiOperation({ description: '运行自动转译任务' })
   @Get('/run_rec/:id')

@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { NTabs, NTabPane, NScrollbar, NButton, NIcon } from 'naive-ui';
-import { SliceItem } from '/@/global-enums/subtitles.enum';
+import { SubtitlesItem } from '/@/global-enums/subtitles.enum';
 import Edit from '../edit/index.vue';
 export default defineComponent({
   components: {
@@ -31,7 +31,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const EditRef = ref();
 
-    const setSubtitlesValue = (subtitles: SliceItem[]) => {
+    const setSubtitlesValue = (subtitles: SubtitlesItem[]) => {
       EditRef.value.setValue(subtitles);
     };
     return {

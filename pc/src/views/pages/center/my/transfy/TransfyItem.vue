@@ -1,6 +1,6 @@
 <template>
   <div ref="TransfyCardRef">
-    <n-card :title="item.name" hoverable embedded :bordered="false" header-style="padding:15px 24px 10px 24px" content-style="padding:0 24px 10px 24px">
+    <n-card :title="item.name" hoverable header-style="padding:15px 24px 10px 24px" content-style="padding:0 24px 10px 24px">
       <template #cover>
         <div class="poster-cover">
           <img :src="item.poster" />
