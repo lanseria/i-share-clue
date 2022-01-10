@@ -1,4 +1,4 @@
-import { utilCwdPath } from 'src/helpers/read';
+import { SliceItem } from '@global-enums/subtitles.enum';
 import {
   SentenceDetail,
   SentenceWords,
@@ -10,12 +10,6 @@ import {
   makeSubtitleText,
   replaceStrs,
 } from '../../helpers/str';
-
-interface SliceItem {
-  FinalSentence: string;
-  StartMs: number;
-  EndMs: number;
-}
 
 interface FormatSliceItem {
   FinalSentence: string;

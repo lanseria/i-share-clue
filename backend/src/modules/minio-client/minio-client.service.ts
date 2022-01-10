@@ -194,7 +194,7 @@ export class MinioClientService {
   }
 
   getFileUrl(objectName: string) {
-    return `${this.configService.get(
+    return `//${this.configService.get(
       'MINIO_ENDPOINT',
     )}:${this.configService.get('MINIO_PORT')}/${this.configService.get(
       'MINIO_BUCKET',

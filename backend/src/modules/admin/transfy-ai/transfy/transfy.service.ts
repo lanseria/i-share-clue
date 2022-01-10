@@ -154,6 +154,9 @@ export class TransfyService {
     const dto = TransfyMapper.toDto(entity);
     // Logger.log(JSON.stringify(dto));
     dto.url = this.minioClientService.getFileUrl(dto.objectName);
+    dto.recResJsonUrl = this.minioClientService.getFileUrl(
+      dto.recResJsonObjectName,
+    );
     return dto;
   }
 }

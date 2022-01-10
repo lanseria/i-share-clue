@@ -12,13 +12,16 @@ export class TransfyResponseDto {
   objectName: string;
 
   @ApiProperty()
+  url: string;
+
+  @ApiProperty()
   recResJsonObjectName?: string;
 
   @ApiProperty()
-  errorDetail?: string;
+  recResJsonUrl?: string;
 
   @ApiProperty()
-  url: string;
+  errorDetail?: string;
 
   @ApiProperty()
   creator: UserResponseDto;

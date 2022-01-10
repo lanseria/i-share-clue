@@ -82,7 +82,7 @@ export default defineComponent({
       showVideo.value = true;
       // console.log(payload);
       uploadObjectName.value = payload.name;
-      uploadUrl.value = 'http://' + payload.url;
+      uploadUrl.value = payload.url;
     };
     const handleRemove = () => {
       console.log('remove');

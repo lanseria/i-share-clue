@@ -17,6 +17,8 @@ export class TransfyFormDTO extends CommonDTO implements TransfyFormVO {
 }
 
 export class TransfyDTO extends CommonDTO implements TransfyVO {
+  recResJsonObjectName: string = '';
+  recResJsonUrl: string = '';
   id: string = '';
   url: string = '';
   poster: string = '';

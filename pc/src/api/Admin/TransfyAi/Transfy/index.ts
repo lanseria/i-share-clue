@@ -2,6 +2,16 @@ import r from '/@/router/axios';
 import { api } from './config';
 import { TransfyFormDTO } from '/@/types/Admin/Transfy/dto';
 import { TransfyVO } from '/@/types/Admin/Transfy/vo';
+import { SliceItem } from '/@/global-enums/subtitles.enum';
+
+export const getSubtitlesReq = async (url: string) => {
+  const response: SliceItem[] = await fetch(url, {
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+  }).then((response) => response.json());
+  return response;
+};
 
 export const getTransfyReq = (id: string) => {
   return r.request<R<TransfyVO>>({
