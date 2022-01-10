@@ -1,4 +1,12 @@
-# 线索分享平台
+# 线索分享平台 + 字幕转译功能
+
+## 项目截图
+
+![](./assets/transfy-video-edit.png)
+
+![](./assets/share-clue.png)
+
+![](./assets/add-video.png)
 
 ## 技术栈
 
@@ -10,6 +18,7 @@
 - AMap@2 gis-show
 - minio file-save-server
 - docker build
+- 腾讯云 API
 
 ## 开发工作
 
@@ -34,6 +43,8 @@ yarn make:dir
 ```bash
 cp .env.example .env
 ```
+
+如果需要使用字幕转译功能, 需要配置腾讯云 API
 
 2. 下载 `docker@4.2` 并设置相应镜像
 
@@ -121,6 +132,7 @@ yarn dev
 1. 线索位置搜索
 1. 用户管理 CRUD
 1. 视频字幕功能添加
+1. 字幕生成功能
 
 ## 待完成
 
@@ -130,7 +142,7 @@ yarn dev
 1. 字典功能
 1. 线索与项目生成关联与讨论
 1. 打赏与线索更新机制讨论
-1. 字幕生成功能
+1. 字幕画面与调整功能
 
 ## 简单案例
 
