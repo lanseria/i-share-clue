@@ -24,7 +24,7 @@
     </n-layout-header>
     <n-layout style="height: 550px; margin: 24px" has-sider>
       <n-layout-sider width="666" content-style="padding: 24px;display: flex;align-items: center;">
-        <video :src="transfyDto.url" controls style="width: 618px" @canplay="onCanplay"></video>
+        <video id="MediaRef" :src="transfyDto.url" controls style="width: 618px" @canplay="onCanplay"></video>
       </n-layout-sider>
       <n-layout-content content-style="padding: 24px;">
         <subtitles-edit></subtitles-edit>
@@ -73,8 +73,12 @@ export default defineComponent({
     });
     // events
     const onCanplay = (e: Event) => {
-      console.log(e);
-      transfyStore.setLoaded(true);
+      document.querySelector('#MediaRef')?.setAttribute('controls', 'true');
+      // const avHtml = document.querySelector('#MediaRef') as HTMLMediaElement;
+      // transfyStore.setMediaElt(avHtml);
+      transfyStore.$patch({
+        videoLoaded: true,
+      });
     };
     // method
     const handleSave = async () => {

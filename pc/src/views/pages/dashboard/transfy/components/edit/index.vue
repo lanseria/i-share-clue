@@ -1,6 +1,15 @@
 <template>
   <n-spin :show="subtitlesLoading">
-    <n-data-table ref="table" :columns="columns" :data="subtitles" :max-height="400" :row-key="(row) => row.id" virtual-scroll>
+    <n-data-table
+      class="subtitles-data-table"
+      ref="table"
+      :columns="columns"
+      :data="subtitles"
+      :max-height="400"
+      :row-key="(row) => row.id"
+      :row-props="rowProps"
+      virtual-scroll
+    >
       <template #empty>
         <n-empty style="padding: 100px 0" description="加载中">
           <template #icon>
@@ -168,6 +177,15 @@ export default defineComponent({
       transfyStore.loadSubtitles();
     };
     return {
+      rowProps: (row: SubtitlesItem) => {
+        return {
+          class: { active: row.id === transfyStore.waveId, hover: true },
+          onClick: () => {
+            window.$message.info(`跳转到 ${row.StartMs}ms`);
+            transfyStore.setMediaTime(row.StartMs, row.id);
+          },
+        };
+      },
       columns,
       subtitles,
       subtitlesLoading,
@@ -177,3 +195,14 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="css" scoped>
+.subtitles-data-table :deep(tr.hover:hover > .n-data-table-td:first-of-type) {
+  border-left: 2px solid var(--n-th-icon-color-active);
+}
+.subtitles-data-table :deep(tr.active > .n-data-table-td:first-of-type) {
+  border-left: 2px solid var(--n-th-icon-color-active);
+}
+.subtitles-data-table :deep(tr.hover:hover > td) {
+  background-color: var(--n-merged-th-color-hover);
+}
+</style>
