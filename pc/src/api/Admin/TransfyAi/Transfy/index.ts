@@ -4,6 +4,12 @@ import { TransfyFormDTO } from '/@/types/Admin/Transfy/dto';
 import { TransfyVO } from '/@/types/Admin/Transfy/vo';
 import { SubtitlesItem } from '/@/global-enums/subtitles.enum';
 
+export const resplitSubtitleReq = (id: string) => {
+  return r.request<R<any>>({
+    url: `${api.resplit}/${id}`,
+  });
+};
+
 export const updateSubtitleForTransfyReq = (id: string, data: SubtitlesItem[]) => {
   return r.request<R<boolean>>({
     url: `${api.subtitles}/${id}`,

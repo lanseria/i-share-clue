@@ -15,6 +15,7 @@
         <template #extra>
           <n-space>
             <n-button>导入字幕</n-button>
+            <n-button @click="handleResplit()">重新分割</n-button>
             <n-button @click="handleSave()">保存</n-button>
             <n-button type="primary" @click="handleExport()">导出下载</n-button>
           </n-space>
@@ -40,7 +41,7 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import { NPageHeader, NSpace, NButton, NAvatar, NLayout, NLayoutContent, NLayoutFooter, NLayoutHeader, NLayoutSider, NGrid, NGi, NTime, NCard } from 'naive-ui';
 import SubtitlesEdit from '../components/subtitles-edit/index.vue';
 import { TransfyDTO } from '/@/types/Admin/Transfy/dto';
-import { getTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
+import { getTransfyReq, resplitSubtitleReq } from '/@/api/Admin/TransfyAi/Transfy';
 import { useImpRoute } from '/@/hooks/useRoute';
 import { useTransfyStore } from '/@/store/modules/transfy';
 import WaveFooter from '../components/wave/index.vue';
@@ -81,6 +82,13 @@ export default defineComponent({
       });
     };
     // method
+    const handleResplit = async () => {
+      const { payload } = await resplitSubtitleReq(id.value);
+      if (payload) {
+        loadPage();
+      }
+    };
+
     const handleSave = async () => {
       const res = await transfyStore.saveSubtitles();
       if (res) {
@@ -115,6 +123,7 @@ export default defineComponent({
       // event
       onCanplay,
       // method
+      handleResplit,
       handleSave,
       handleExport,
       handleBack,

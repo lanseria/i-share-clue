@@ -1,6 +1,7 @@
 import { BufferedFile } from '@modules/minio-client/file.model';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { TaskStatus } from 'tencentcloud-sdk-nodejs/tencentcloud/services/asr/v20190614/asr_models';
 import { CosClient } from './cos';
 import { RecClient, RecOpt } from './rec';
 import { Subtitles } from './subtitles';
@@ -51,17 +52,13 @@ export class TencentService {
     }
   }
 
-  public async genSliceSubtitles(recOpt: RecOpt) {
+  public async genSliceSubtitles(taskStatusResult: TaskStatus) {
     try {
       Logger.log('recOpt', '开始智能分割字幕');
-      if (recOpt.taskStatusResult) {
-        const subtitles = new Subtitles(recOpt.taskStatusResult);
-        const sliceData = subtitles.buildSliceData();
-        Logger.log('sliceData', '智能分割字幕成功');
-        return sliceData;
-      } else {
-        throw new Error('taskStatusResult 参数未传');
-      }
+      const subtitles = new Subtitles(taskStatusResult);
+      const sliceData = subtitles.buildSliceData();
+      Logger.log('sliceData', '智能分割字幕成功');
+      return sliceData;
     } catch (error) {
       throw new Error(error);
     }

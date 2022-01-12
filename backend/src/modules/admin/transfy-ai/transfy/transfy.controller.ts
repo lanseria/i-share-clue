@@ -34,7 +34,13 @@ import { TransfyService } from './transfy.service';
 export class TransfyController {
   constructor(private transfyService: TransfyService) {}
 
-  @ApiOperation({ description: '运行自动转译任务' })
+  @ApiOperation({ description: '重置分割字幕' })
+  @Get('/resplit/:id')
+  public resplitSubtitles(@Param('id', ParseUUIDPipe) id: string) {
+    return this.transfyService.resplitSubtitles(id);
+  }
+
+  @ApiOperation({ description: '更新修改的字幕文件与属性' })
   @Patch('/subtitles/:id')
   public updateSubtitlesTransfy(
     @Param('id', ParseUUIDPipe) id: string,

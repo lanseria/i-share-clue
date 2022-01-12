@@ -4,6 +4,7 @@ import { Pagination } from '@helpers';
 import { UserEntity } from '@modules/admin/access/users/user.entity';
 import { UsersRepository } from '@modules/admin/access/users/users.repository';
 import { MinioClientService } from '@modules/minio-client/minio-client.service';
+import { TencentService } from '@modules/tencent/tencent.service';
 import {
   BadRequestException,
   Injectable,
@@ -27,12 +28,39 @@ import { TransfyRepository } from './transfy.repository';
 export class TransfyService {
   constructor(
     private minioClientService: MinioClientService,
+    private tencentService: TencentService,
     private transfyProducer: TransfyProducer,
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
     @InjectRepository(TransfyRepository)
     private transfyRepository: TransfyRepository,
   ) {}
+  /**
+   * 重置字幕数据
+   * @param id
+   */
+  public async resplitSubtitles(id: string) {
+    let transfyEntity: TransfyEntity;
+    try {
+      transfyEntity = await this.transfyRepository.findOne(id);
+      const data = await this.minioClientService.downloadFile(
+        transfyEntity.recRawJsonObjectName,
+      );
+      const taskStatusResult = JSON.parse(data.toString());
+      const sliceData = await this.tencentService.genSliceSubtitles(
+        taskStatusResult,
+      );
+      // 保存分割完 json 文件至 minio
+      return await this.uploadEntityJsonPath(
+        sliceData,
+        'recResJsonObjectName',
+        transfyEntity,
+      );
+    } catch (error) {
+      Logger.error(error);
+      throw new InternalServerErrorException();
+    }
+  }
   /**
    * 更新字幕文件
    * @param id
@@ -42,16 +70,11 @@ export class TransfyService {
     let transfyEntity: TransfyEntity;
     try {
       transfyEntity = await this.transfyRepository.findOne(id);
-      const subtitlesRawJsonPath = await writeJson(
+      return await this.uploadEntityJsonPath(
         subtitles,
-        // .json.json多一个后缀
-        transfyEntity.recResJsonObjectName,
+        'recResJsonObjectName',
+        transfyEntity,
       );
-      const res = await this.minioClientService.upload(
-        await readFileRetBufedFile(subtitlesRawJsonPath),
-      );
-      transfyEntity.recResJsonObjectName = res.name;
-      return await this.transfyRepository.save(transfyEntity);
     } catch (error) {
       Logger.error(error);
       throw new InternalServerErrorException();
@@ -177,6 +200,30 @@ export class TransfyService {
     }
   }
 
+  /**
+   * RecJsonFile 上传并保存
+   * @param data 上传 json 数据
+   * @param fileProps TransfyEntity 字段两个字段
+   * @param transfyEntity 实体
+   */
+  public async uploadEntityJsonPath(
+    data: any,
+    fileProps: 'recResJsonObjectName' | 'recRawJsonObjectName',
+    transfyEntity: TransfyEntity,
+  ) {
+    try {
+      const subtitlesFileJsonPath = await writeJson(data, fileProps);
+      const res = await this.minioClientService.upload(
+        await readFileRetBufedFile(subtitlesFileJsonPath),
+      );
+      transfyEntity[fileProps] = res.name;
+      return await this.transfyRepository.save(transfyEntity);
+    } catch (error) {
+      Logger.error(error);
+      throw new Error(error);
+    }
+  }
+
   private toDto(entity: TransfyEntity) {
     // Logger.log(JSON.stringify(entity));
     const dto = TransfyMapper.toDto(entity);
@@ -186,5 +233,9 @@ export class TransfyService {
       dto.recResJsonObjectName,
     );
     return dto;
+  }
+
+  private log(message: string, Context) {
+    Logger.log(message, `${Context}`);
   }
 }

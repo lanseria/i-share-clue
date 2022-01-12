@@ -10,6 +10,7 @@ import { readFileRetBufedFile } from 'src/helpers/read';
 import { writeFileRetpath, writeJson } from 'src/helpers/write';
 import { TransfyEntity } from '../transfy.entity';
 import { TransfyRepository } from '../transfy.repository';
+import { TransfyService } from '../transfy.service';
 import { Ffmpeg } from './ffmpeg';
 
 const SUCCESS = 'SUCCESS!';
@@ -26,6 +27,7 @@ export class TransfyConsumer {
   constructor(
     private minioClientService: MinioClientService,
     private tencentService: TencentService,
+    private transfyService: TransfyService,
     @InjectRepository(TransfyRepository)
     private transfyRepository: TransfyRepository,
   ) {}
@@ -62,33 +64,6 @@ export class TransfyConsumer {
     this.log(SUCCESS, AUDIO_REC);
   }
   /**
-   * RecJsonFile 上传并保存
-   * @param subtitlesRawJsonPath RecJsonFile 上传并保存
-   * @param fileProps TransfyEntity 字段
-   */
-  private async uploadRecFile(
-    data: any,
-    fileProps: 'recResJsonObjectName' | 'recRawJsonObjectName',
-    CONTEXT = 'RecJsonFile上传并保存',
-  ) {
-    this.log(PENDING, CONTEXT);
-    try {
-      this.log(fileProps, CONTEXT);
-      const subtitlesRawJsonPath = await writeJson(data, fileProps);
-      const res = await this.minioClientService.upload(
-        await readFileRetBufedFile(subtitlesRawJsonPath),
-      );
-      this.transfyEntity[fileProps] = res.name;
-      this.log(SUCCESS, CONTEXT);
-    } catch (error) {
-      Logger.error(error);
-      this.error(CONTEXT, error);
-      throw new Error(error);
-    } finally {
-      await this.transfyRepository.save(this.transfyEntity);
-    }
-  }
-  /**
    * 上传至COS
    * 进行识别
    * 并
@@ -111,11 +86,21 @@ export class TransfyConsumer {
       const taskStatusResult = await this.tencentService.recAudio(recOpt);
       recOpt.taskStatusResult = taskStatusResult;
       // 保存原始 json 文件至 minio
-      await this.uploadRecFile(taskStatusResult, 'recRawJsonObjectName');
+      await this.transfyService.uploadEntityJsonPath(
+        taskStatusResult,
+        'recRawJsonObjectName',
+        this.transfyEntity,
+      );
       // 进行分割
-      const sliceData = await this.tencentService.genSliceSubtitles(recOpt);
+      const sliceData = await this.tencentService.genSliceSubtitles(
+        recOpt.taskStatusResult,
+      );
       // 保存分割完 json 文件至 minio
-      await this.uploadRecFile(sliceData, 'recResJsonObjectName');
+      await this.transfyService.uploadEntityJsonPath(
+        sliceData,
+        'recResJsonObjectName',
+        this.transfyEntity,
+      );
       this.log(SUCCESS, CONTEXT);
     } catch (error) {
       Logger.error(error);
