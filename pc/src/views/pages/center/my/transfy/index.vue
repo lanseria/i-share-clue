@@ -6,7 +6,7 @@
           <n-h3 prefix="bar">添加任务</n-h3>
           <n-grid x-gap="12" :cols="4">
             <n-gi>
-              <n-card title="视频字幕" hoverable embedded :bordered="false" @click="handleAddVideoSrt()">视频语音转文字，可进行翻译，生成字幕</n-card>
+              <n-card title="视频字幕" hoverable embedded :bordered="false" v-advance-click="handleAddVideoSrt">视频语音转文字，可进行翻译，生成字幕</n-card>
             </n-gi>
             <n-gi>
               <n-card title="音频字幕" hoverable embedded :bordered="false">音频语音转文字，可进行翻译，生成字幕</n-card>
@@ -51,6 +51,22 @@ export default defineComponent({
     NEmpty,
     NButton,
     TransfyItem,
+  },
+  directives: {
+    advanceClick: {
+      mounted(el: HTMLElement, binding) {
+        let move = false;
+        el.addEventListener('mousemove', () => {
+          move = true;
+        });
+        el.addEventListener('mousedown', () => {
+          move = false;
+        });
+        el.addEventListener('mouseup', (e) => {
+          move ? e.preventDefault() : binding.value();
+        });
+      },
+    },
   },
   setup() {
     const { pushPath } = useImpRoute();
