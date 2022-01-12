@@ -16,8 +16,8 @@
           <n-space>
             <n-button>导入字幕</n-button>
             <n-button @click="handleResplit()">重新分割</n-button>
-            <n-button @click="handleSave()">保存</n-button>
-            <n-button type="primary" @click="handleExport()">导出下载</n-button>
+            <n-button type="primary" @click="handleSave()">保存</n-button>
+            <!-- <n-button type="primary" @click="handleExport()">导出下载</n-button> -->
           </n-space>
         </template>
         <template #footer>创建者：{{ transfyDto.creator.firstName + transfyDto.creator.lastName }}</template>
@@ -98,9 +98,9 @@ export default defineComponent({
       }
     };
 
-    const handleExport = () => {
-      transfyStore.exportSubtitles();
-    };
+    // const handleExport = () => {
+    //   transfyStore.exportSubtitles();
+    // };
 
     const handleBack = () => {
       goBack();
@@ -125,7 +125,7 @@ export default defineComponent({
       // method
       handleResplit,
       handleSave,
-      handleExport,
+      // handleExport,
       handleBack,
     };
   },

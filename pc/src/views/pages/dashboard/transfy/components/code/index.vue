@@ -1,5 +1,5 @@
 <template>
-  <n-scrollbar style="max-height: 400px">
+  <n-scrollbar style="max-height: 450px">
     <n-form>
       <n-form-item label="ffmpeg 命令">
         <n-card>
@@ -7,7 +7,7 @@
         </n-card>
       </n-form-item>
       <n-form-item label="字幕文件内容">
-        <div>
+        <n-space>
           <n-radio-group v-model:value="value" name="radiogroup">
             <n-space>
               <n-radio v-for="item in types" :key="item.value" :value="item.value">
@@ -15,27 +15,34 @@
               </n-radio>
             </n-space>
           </n-radio-group>
+          <n-scrollbar style="max-height: 200px">
+            <n-input
+              :value="valueString"
+              type="textarea"
+              placeholder="字幕文件内容"
+              :autosize="{
+                minRows: 3,
+              }"
+              disabled
+            />
+          </n-scrollbar>
+        </n-space>
+      </n-form-item>
+
+      <n-form-item>
+        <div style="display: flex; justify-content: center; width: 100%">
+          <n-button type="primary" @click="handleExport()">导出下载</n-button>
         </div>
-        <n-scrollbar style="max-height: 200px">
-          <n-input
-            :value="valueString"
-            type="textarea"
-            placeholder="字幕文件内容"
-            :autosize="{
-              minRows: 3,
-            }"
-            disabled
-          />
-        </n-scrollbar>
       </n-form-item>
     </n-form>
   </n-scrollbar>
 </template>
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
-import { NCode, NInput, NScrollbar, NForm, NFormItem, NCard, NRadio, NRadioGroup, NSpace } from 'naive-ui';
+import { NCode, NInput, NScrollbar, NForm, NFormItem, NCard, NRadio, NRadioGroup, NSpace, NButton } from 'naive-ui';
 import { useTransfyStore } from '/@/store/modules/transfy';
 import { buildFile, srt2webvtt } from '/@/utils/transfy';
+import { stringDownload } from '/@/api/File';
 export default defineComponent({
   components: {
     NCode,
@@ -47,17 +54,21 @@ export default defineComponent({
     NRadio,
     NRadioGroup,
     NSpace,
+    NButton,
   },
   setup() {
     const transfyStore = useTransfyStore();
     const value = ref('srt');
     const valueString = computed(() => {
       const srtContent = buildFile(transfyStore.subtitles);
-      if (value.value === 'webvtt') {
+      if (value.value === 'vtt') {
         return srt2webvtt(srtContent);
       }
       return buildFile(transfyStore.subtitles);
     });
+    const handleExport = () => {
+      stringDownload(valueString.value, `${transfyStore.transfy.name}.${value.value}`);
+    };
     return {
       value,
       valueString,
@@ -68,10 +79,12 @@ export default defineComponent({
           label: '.SRT',
         },
         {
-          value: 'webvtt',
+          value: 'vtt',
           label: '.WebVtt',
         },
       ],
+      // methods
+      handleExport,
     };
   },
 });

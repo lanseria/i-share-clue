@@ -51,13 +51,14 @@ export class Subtitles {
   useBlockFindLastWord(Fpg: FormatSliceItem, Words: SentenceWords[]) {
     for (let i = 0; i < Fpg.Blocks.length; i++) {
       let w = undefined;
-      let blockBeginTime = Fpg.StartMs;
       let first = true;
+      let blockBeginTime = Fpg.StartMs;
       const text = Fpg.TextBlocks[i];
       while ((w = Words.shift())) {
         if (first) {
           first = false;
           blockBeginTime = blockBeginTime + w.OffsetStartMs;
+          // console.log(w.Word.trim(), w.OffsetStartMs);
         }
         if (text.endsWith(w.Word.trim())) {
           this.fillSliceData({
@@ -65,7 +66,10 @@ export class Subtitles {
             StartMs: blockBeginTime,
             EndMs: Fpg.StartMs + w.OffsetEndMs,
           });
+          // console.log(w.Word.trim(), w.OffsetEndMs);
           first = true;
+          // 移除多余标点符号
+          Words.shift();
           break;
         }
       }

@@ -95,10 +95,13 @@ export const useTransfyStore = defineStore({
   },
   actions: {
     async setMediaTime(ms: number, id: number) {
-      const s = ms / 1000;
-      await this.wavesurfer.play(s);
-      this.wavesurfer.pause();
-      this.waveId = id;
+      if (this.waveId !== id) {
+        const s = ms / 1000;
+        await this.wavesurfer.play(s);
+        this.wavesurfer.pause();
+        this.waveId = id;
+        window.$message.info(`跳转到 ${ms}ms`);
+      }
     },
     setSubtitlesFSentence(value: string, id: number) {
       const itemIdx = this.subtitles.findIndex((m) => m.id === id);
@@ -121,10 +124,10 @@ export const useTransfyStore = defineStore({
       return payload;
     },
 
-    async exportSubtitles() {
-      const srtString = buildFile(this.subtitles);
-      stringDownload(srtString, `${this.transfy.name}.srt`);
-    },
+    // async exportSubtitles() {
+    //   const srtString = buildFile(this.subtitles);
+    //   stringDownload(srtString, `${this.transfy.name}.srt`);
+    // },
     async loadSubtitles() {
       this.subtitlesLoading = true;
       setTimeout(async () => {

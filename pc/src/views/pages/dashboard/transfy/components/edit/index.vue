@@ -180,7 +180,6 @@ export default defineComponent({
         return {
           class: { active: row.id === transfyStore.waveId, hover: true },
           onClick: () => {
-            window.$message.info(`跳转到 ${row.StartMs}ms`);
             transfyStore.setMediaTime(row.StartMs, row.id);
           },
         };
