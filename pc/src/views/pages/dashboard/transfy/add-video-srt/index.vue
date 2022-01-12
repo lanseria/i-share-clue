@@ -70,13 +70,13 @@ export default defineComponent({
     const engineModelOpts = computed(() => {
       const options = [];
       for (const key in EngineModel) {
-        if (Object.prototype.hasOwnProperty.call(EngineModel, key)) {
-          const element = EngineModel[key as EngineModelKeyType];
-          options.push({
-            label: element,
-            value: key,
-          });
-        }
+        // if (Object.prototype.hasOwnProperty.call(EngineModel, key)) {
+        // }
+        const element = EngineModel[key as EngineModelKeyType];
+        options.push({
+          label: element,
+          value: key,
+        });
       }
       return options;
     });

@@ -100,6 +100,10 @@ export const useTransfyStore = defineStore({
       this.wavesurfer.pause();
       this.waveId = id;
     },
+    setSubtitlesFSentence(value: string, id: number) {
+      const itemIdx = this.subtitles.findIndex((m) => m.id === id);
+      this.subtitles[itemIdx].FinalSentence = value;
+    },
     setSubtitles(subtitles: SubtitlesItem[]) {
       this.subtitles = subtitles;
     },

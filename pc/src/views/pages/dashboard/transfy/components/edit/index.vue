@@ -8,7 +8,6 @@
       :max-height="400"
       :row-key="(row) => row.id"
       :row-props="rowProps"
-      virtual-scroll
     >
       <template #empty>
         <n-empty style="padding: 100px 0" description="加载中">
@@ -124,7 +123,7 @@ export default defineComponent({
             size: 'small',
             value: item.FinalSentence,
             onUpdateValue: (value) => {
-              item.FinalSentence = value;
+              transfyStore.setSubtitlesFSentence(value, item.id);
             },
           });
         },

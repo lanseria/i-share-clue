@@ -1,18 +1,22 @@
-import { isRef, ref } from "vue";
-import { FieldErrorList } from "async-validator";
+import { isRef, ref } from 'vue';
+import { ValidateError } from 'async-validator';
 
 export function useImpSubmit() {
   const impSubmitLoading = ref<boolean>(false);
 
-  const showValidMessage = (error: FieldErrorList) => {
+  const showValidMessage = (error: ValidateError[][]) => {
+    console.log(error);
     for (const key in error) {
-      if (Object.prototype.hasOwnProperty.call(error, key)) {
-        const i = Object.keys(error).indexOf(key);
-        if (i === 0) {
-          const element = error[key];
-          window.$message.warning(element[0].message);
-          break;
+      // if (Object.prototype.hasOwnProperty.call(error, key)) {
+      // }
+      const i = Object.keys(error).indexOf(key);
+      if (i === 0) {
+        const element = error[key];
+        // console.log(element);
+        if (element.length) {
+          window.$message.warning(element[0].message!);
         }
+        break;
       }
     }
   };
@@ -32,16 +36,16 @@ export function useImpSubmit() {
     try {
       impSubmitLoading.value = true;
       if (!formRef) {
-        window.$message.warning("ref组件未加载成功");
+        window.$message.warning('ref组件未加载成功');
       }
       if (isRef(formRef)) {
-        window.$message.warning("refs 组件未添加.value");
+        window.$message.warning('refs 组件未添加.value');
       }
       const valid = await promiseValidate(formRef);
       if (valid) {
         await cb();
       }
-    } catch (errors) {
+    } catch (errors: any) {
       showValidMessage(errors);
     } finally {
       impSubmitLoading.value = false;
@@ -49,6 +53,6 @@ export function useImpSubmit() {
   };
   return {
     impSubmitLoading,
-    impSubmit
+    impSubmit,
   };
 }
