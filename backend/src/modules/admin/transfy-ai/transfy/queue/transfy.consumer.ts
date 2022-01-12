@@ -1,12 +1,13 @@
 import { BufferedFile } from '@modules/minio-client/file.model';
 import { MinioClientService } from '@modules/minio-client/minio-client.service';
+import { RecOpt } from '@modules/tencent/rec';
 import { TencentService } from '@modules/tencent/tencent.service';
 import { Process, Processor } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Bull, { Job } from 'bull';
 import { readFileRetBufedFile } from 'src/helpers/read';
-import { writeFileRetpath } from 'src/helpers/write';
+import { writeFileRetpath, writeJson } from 'src/helpers/write';
 import { TransfyEntity } from '../transfy.entity';
 import { TransfyRepository } from '../transfy.repository';
 import { Ffmpeg } from './ffmpeg';
@@ -40,14 +41,13 @@ export class TransfyConsumer {
     // 分离音视频文件
     const audioBufedFile = await this.sliceVideoAudio(videoPath);
     // 上传至COS进行识别
-    const subtitlesRawJsonPath = await this.uploadAudioAndRec(audioBufedFile);
-    // 上传本地 Minio 进行保存并存 objectName 至实体
-    await this.uploadRecFile(subtitlesRawJsonPath);
+    await this.uploadAudioAndRec(audioBufedFile);
     this.log(SUCCESS, VIDEO_REC);
     try {
       this.transfyEntity.status = 'to_be_proofread';
     } catch (error) {
       Logger.error(error);
+      throw new Error(error);
     } finally {
       await this.transfyRepository.save(this.transfyEntity);
     }
@@ -64,28 +64,35 @@ export class TransfyConsumer {
   /**
    * RecJsonFile 上传并保存
    * @param subtitlesRawJsonPath RecJsonFile 上传并保存
+   * @param fileProps TransfyEntity 字段
    */
   private async uploadRecFile(
-    subtitlesRawJsonPath: string,
+    data: any,
+    fileProps: 'recResJsonObjectName' | 'recRawJsonObjectName',
     CONTEXT = 'RecJsonFile上传并保存',
   ) {
     this.log(PENDING, CONTEXT);
     try {
-      this.log(subtitlesRawJsonPath, CONTEXT);
+      this.log(fileProps, CONTEXT);
+      const subtitlesRawJsonPath = await writeJson(data, fileProps);
       const res = await this.minioClientService.upload(
         await readFileRetBufedFile(subtitlesRawJsonPath),
       );
-      this.transfyEntity.recResJsonObjectName = res.name;
+      this.transfyEntity[fileProps] = res.name;
       this.log(SUCCESS, CONTEXT);
     } catch (error) {
       Logger.error(error);
       this.error(CONTEXT, error);
+      throw new Error(error);
     } finally {
       await this.transfyRepository.save(this.transfyEntity);
     }
   }
   /**
-   * 上传至COS进行识别
+   * 上传至COS
+   * 进行识别
+   * 并
+   * 进行智能分割
    */
   private async uploadAudioAndRec(
     audioBufedFile: BufferedFile,
@@ -93,19 +100,27 @@ export class TransfyConsumer {
   ) {
     try {
       this.log(PENDING, CONTEXT);
+      // 上传至COS
       const getRes = await this.tencentService.uploadToCOS(audioBufedFile);
-      const subtitlesRawJsonPath = await this.tencentService.recAudioAndGenData(
-        {
-          Name: this.transfyEntity.objectName,
-          Url: getRes.Url,
-          EngineModelType: this.transfyEntity.engineModel,
-        },
-      );
+      const recOpt: RecOpt = {
+        Name: this.transfyEntity.objectName,
+        Url: getRes.Url,
+        EngineModelType: this.transfyEntity.engineModel,
+      };
+      // 进行识别
+      const taskStatusResult = await this.tencentService.recAudio(recOpt);
+      recOpt.taskStatusResult = taskStatusResult;
+      // 保存原始 json 文件至 minio
+      await this.uploadRecFile(taskStatusResult, 'recRawJsonObjectName');
+      // 进行分割
+      const sliceData = await this.tencentService.genSliceSubtitles(recOpt);
+      // 保存分割完 json 文件至 minio
+      await this.uploadRecFile(sliceData, 'recResJsonObjectName');
       this.log(SUCCESS, CONTEXT);
-      return subtitlesRawJsonPath;
     } catch (error) {
       Logger.error(error);
       this.error(CONTEXT, error);
+      throw new Error(error);
     } finally {
       await this.transfyRepository.save(this.transfyEntity);
     }
@@ -127,6 +142,7 @@ export class TransfyConsumer {
       this.log(FAILED, CONTEXT);
       Logger.error(error);
       this.error(CONTEXT, error);
+      throw new Error(error);
     } finally {
       await this.transfyRepository.save(this.transfyEntity);
     }
@@ -156,6 +172,7 @@ export class TransfyConsumer {
       this.log(FAILED, CONTEXT);
       Logger.error(error);
       this.error(CONTEXT, error);
+      throw new Error(error);
     } finally {
       await this.transfyRepository.save(this.transfyEntity);
     }

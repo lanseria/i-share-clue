@@ -1,7 +1,4 @@
-import {
-  EngineModelKeyType,
-  EngineModelType,
-} from '@global-enums/transfy.enum';
+import { EngineModelKeyType } from '@global-enums/transfy.enum';
 import {
   CreateRecTaskResponse,
   DescribeTaskStatusResponse,
@@ -14,6 +11,7 @@ export interface RecOpt {
   Name: string;
   Url: string;
   EngineModelType: EngineModelKeyType;
+  taskStatusResult?: TaskStatus;
 }
 
 export class RecClient {

@@ -1,7 +1,6 @@
 import { BufferedFile } from '@modules/minio-client/file.model';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { writeJson } from 'src/helpers/write';
 import { CosClient } from './cos';
 import { RecClient, RecOpt } from './rec';
 import { Subtitles } from './subtitles';
@@ -41,18 +40,28 @@ export class TencentService {
     }
   }
 
-  public async recAudioAndGenData(recOpt: RecOpt) {
+  public async recAudio(recOpt: RecOpt) {
     try {
-      Logger.log(JSON.stringify(recOpt), '开始识别字幕');
+      Logger.log('recOpt', '开始识别字幕');
       const taskStatusResult = await this.recClient.getDescResultData(recOpt);
-      const subtitles = new Subtitles(taskStatusResult);
-      const sliceData = subtitles.buildSliceData();
-      const subtitlesRawJsonPath = await writeJson(
-        sliceData,
-        `data/${recOpt.Name}`,
-      );
-      Logger.log(subtitlesRawJsonPath, '写入JSON成功');
-      return subtitlesRawJsonPath;
+      Logger.log('taskStatusResult', '识别并获取字幕成功');
+      return taskStatusResult;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  public async genSliceSubtitles(recOpt: RecOpt) {
+    try {
+      Logger.log('recOpt', '开始智能分割字幕');
+      if (recOpt.taskStatusResult) {
+        const subtitles = new Subtitles(recOpt.taskStatusResult);
+        const sliceData = subtitles.buildSliceData();
+        Logger.log('sliceData', '智能分割字幕成功');
+        return sliceData;
+      } else {
+        throw new Error('taskStatusResult 参数未传');
+      }
     } catch (error) {
       throw new Error(error);
     }

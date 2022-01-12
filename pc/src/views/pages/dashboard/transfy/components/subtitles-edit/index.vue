@@ -7,18 +7,16 @@
       <style-tab-pane></style-tab-pane>
     </n-tab-pane>
     <n-tab-pane name="chap3" tab="字幕与视频合并命令" display-directive="show:lazy">
-      <div>
-        <div>Shell</div>
-        <n-code :code="code" language="shell" inline />
-      </div>
+      <code-tab-pane></code-tab-pane>
     </n-tab-pane>
   </n-tabs>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { NTabs, NTabPane, NScrollbar, NButton, NIcon, NCode } from 'naive-ui';
+import { NTabs, NTabPane, NScrollbar, NButton, NIcon } from 'naive-ui';
 import EditTabPane from '../edit/index.vue';
 import StyleTabPane from '../style/index.vue';
+import CodeTabPane from '../code/index.vue';
 export default defineComponent({
   components: {
     NTabs,
@@ -26,15 +24,14 @@ export default defineComponent({
     NScrollbar,
     NButton,
     NIcon,
-    NCode,
     EditTabPane,
     StyleTabPane,
+    CodeTabPane,
   },
   setup(props, { emit }) {
     return {
       // refs
       // ref
-      code: '$ ffmpeg -i test_1280x720_3.mkv -vf subtitles=test_1280x720_3.srt out.mp4',
       // method
     };
   },
