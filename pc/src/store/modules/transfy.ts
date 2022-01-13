@@ -3,12 +3,10 @@ import { defineStore } from 'pinia';
 import WaveSurfer from 'wavesurfer.js';
 import WaveSurferTimeline from 'wavesurfer.js/src/plugin/timeline';
 import WaveSurferCursor from 'wavesurfer.js/src/plugin/cursor';
-import WaveSurferRegions, { RegionParams } from 'wavesurfer.js/src/plugin/regions';
+import WaveSurferRegions from 'wavesurfer.js/src/plugin/regions';
 import { getSubtitlesReq, updateSubtitleForTransfyReq } from '/@/api/Admin/TransfyAi/Transfy';
-import { stringDownload } from '/@/api/File';
 import { SubtitlesItem } from '/@/global-enums/subtitles.enum';
 import { TransfyDTO } from '/@/types/Admin/Transfy/dto';
-import { buildFile } from '/@/utils/transfy';
 
 interface TransfyState {
   transfy: TransfyDTO;
@@ -80,11 +78,17 @@ export const useTransfyStore = defineStore({
       wavesurfer.on('pause', () => {
         console.log('wavesurfer pause');
       });
-      wavesurfer.on('region-click', (region, e) => {
+      wavesurfer.on('region-click', (region) => {
         // e.stopPropagation();
         // Play on click, loop on shift click
         // e.shiftKey ? region.playLoop() : region.play();
         // console.log(region);
+        this.waveId = region.id;
+      });
+      wavesurfer.on('region-in', (region) => {
+        this.waveId = region.id;
+      });
+      wavesurfer.on('region-out', (region) => {
         this.waveId = region.id;
       });
       setTimeout(() => {

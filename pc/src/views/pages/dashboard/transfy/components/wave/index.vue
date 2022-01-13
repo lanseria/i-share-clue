@@ -18,6 +18,8 @@ export default defineComponent({
           start: m.StartMs / 1000,
           end: m.EndMs / 1000,
           loop: false,
+          drag: false,
+          resize: false,
           color: 'hsla(400, 100%, 30%, 0.1)',
         } as unknown as RegionParams;
       });

@@ -24,8 +24,9 @@
       </n-page-header>
     </n-layout-header>
     <n-layout style="height: 550px; margin: 24px" has-sider>
-      <n-layout-sider width="666" content-style="padding: 24px;display: flex;align-items: center;">
+      <n-layout-sider width="666" content-style="padding: 24px; display: flex; align-items: center; position: relative">
         <video id="MediaRef" :src="transfyDto.url" controls style="width: 618px" @canplay="onCanplay"></video>
+        <subtitles-media-wrap></subtitles-media-wrap>
       </n-layout-sider>
       <n-layout-content content-style="padding: 24px;">
         <subtitles-edit></subtitles-edit>
@@ -45,6 +46,7 @@ import { getTransfyReq, resplitSubtitleReq } from '/@/api/Admin/TransfyAi/Transf
 import { useImpRoute } from '/@/hooks/useRoute';
 import { useTransfyStore } from '/@/store/modules/transfy';
 import WaveFooter from '../components/wave/index.vue';
+import SubtitlesMediaWrap from '../components/subtitles-media-wrap/index.vue';
 export default defineComponent({
   components: {
     NPageHeader,
@@ -62,6 +64,7 @@ export default defineComponent({
     NCard,
     SubtitlesEdit,
     WaveFooter,
+    SubtitlesMediaWrap,
   },
   setup() {
     const transfyStore = useTransfyStore();
