@@ -1,11 +1,23 @@
 <template>
-  <div class="subtitle-media-wrap">开发中</div>
+  <div class="subtitle-media-wrap">{{ subtitlesText }}</div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
+import { useTransfyStore } from '/@/store/modules/transfy';
 export default defineComponent({
   setup() {
-    return {};
+    const transfyStore = useTransfyStore();
+    const subtitlesText = computed(() => {
+      const idx = transfyStore.subtitles.findIndex((m) => m.id === transfyStore.waveId);
+      if (idx >= 0) {
+        return transfyStore.subtitles[idx].FinalSentence;
+      } else {
+        return '';
+      }
+    });
+    return {
+      subtitlesText,
+    };
   },
 });
 </script>
@@ -14,6 +26,6 @@ export default defineComponent({
   position: absolute;
   transform: translate3d(-50%, -50%, 0px);
   left: 50%;
-  bottom: 30%;
+  bottom: 25%;
 }
 </style>

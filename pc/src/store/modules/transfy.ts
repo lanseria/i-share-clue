@@ -89,7 +89,7 @@ export const useTransfyStore = defineStore({
         this.waveId = region.id;
       });
       wavesurfer.on('region-out', (region) => {
-        this.waveId = region.id;
+        this.waveId = 0;
       });
       setTimeout(() => {
         wavesurfer.load(document.querySelector('#MediaRef') as HTMLMediaElement);
