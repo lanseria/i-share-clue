@@ -48,6 +48,12 @@ cp .env.example .env
 
 2. 下载 `docker@4.2` 并设置相应镜像
 
+3. 安装与运行 `redis`
+
+```bash
+docker run --name redis1 -p 6379:6379  -d redis
+```
+
 3. 安装 `minio`
 
 ```bash
