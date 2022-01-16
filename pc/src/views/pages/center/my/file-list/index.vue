@@ -17,9 +17,9 @@
         </n-input-group>
       </n-space>
     </div>
-    <n-alert v-if="checkedRowKeysRef.length" style="margin-bottom: 10px" type="info">
+    <n-alert v-if="checkedRowKeysRef.length" :show-icon="false" style="margin-bottom: 10px" type="info">
       <template #header></template>
-      <n-space justify="space-between">
+      <n-space justify="space-between" align="center">
         <div>已选中 {{ checkedRowKeysRef.length }} 项</div>
         <n-button tertiary type="error" @click="handleDel()">删除文档</n-button>
       </n-space>
