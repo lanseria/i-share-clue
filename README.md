@@ -22,18 +22,40 @@
 
 ## 开发工作
 
+- 开发之前你可能需要安装 `pnpm`
+
+```bash
+npm i -g pnpm
+# 未预装 Node.js
+# 在 POSIX 系统上，即使您没有安装 Node.js，您也可以使用以下脚本安装 pnpm：
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+
+#如果您没有安装 curl，也可以使用 wget：
+wget -qO- https://get.pnpm.io/install.sh | sh -
+
+# 在 Windows 下（使用PowerShell）：
+iwr https://get.pnpm.io/install.ps1 -useb | iex
+
+# 已预装 Node.js
+在 Linux 或 macOS 下：
+curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
+
+在 Windows 下（使用PowerShell）：
+Invoke-WebRequest 'https://get.pnpm.io/v6.16.js' -UseBasicParsing -o pnpm.js; node pnpm.js add --global pnpm; Remove-Item pnpm.js
+```
+
 ### 可能工作（在根目录执行）
 
 1. 同步前后端枚举配置
 
 ```
-yarn enums:sync
+pnpm enums:sync
 ```
 
 2. 添加 data 目录
 
 ```
-yarn make:dir
+pnpm make:dir
 ```
 
 ### 后端
@@ -83,25 +105,25 @@ docker run --name pgadmin -d -p 5433:80 -e PGADMIN_DEFAULT_EMAIL=root@root.com -
 9. 执行迁移
 
 ```
-yarn migrate
+pnpm migrate
 ```
 
 10. 同步数据结构
 
 ```
-yarn schema:sync
+pnpm schema:sync
 ```
 
 11. 执行种子发生器
 
 ```
-yarn seed
+pnpm seed
 ```
 
 12. 运行开发模式
 
 ```
-yarn start
+pnpm start
 ```
 
 ### 前端
@@ -109,7 +131,7 @@ yarn start
 1. 安装包
 
 ```
-yarn
+pnpm i
 ```
 
 2. 注册高德地图 key
@@ -122,7 +144,7 @@ cp .env .env.local
 3. 运行开发模式
 
 ```
-yarn dev
+pnpm dev
 ```
 
 ## 目的
