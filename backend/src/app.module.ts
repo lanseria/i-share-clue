@@ -10,11 +10,19 @@ import { TencentModule } from './modules/tencent/tencent.module';
 
 @Module({
   imports: [
-    BullModule.forRoot({
-      redis: {
-        host: 'localhost',
-        port: 6379,
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => {
+        const cfg = {
+          redis: {
+            host: config.get('REDIS_HOST'),
+            port: +config.get('REDIS_PORT'),
+          },
+          name: 'transfy-queue',
+        };
+        return cfg;
       },
+      inject: [ConfigService],
     }),
     ConfigModule.forRoot({
       envFilePath: ['.env'],
