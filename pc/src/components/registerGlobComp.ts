@@ -13,4 +13,19 @@ export function registerGlobComp(app: App) {
   compList.forEach((comp) => {
     app.component(comp.name || comp.displayName, comp);
   });
+  // 注册一个全局自定义指令 `v-focus`
+  app.directive('advanceClick', {
+    mounted(el: HTMLElement, binding) {
+      let move = false;
+      el.addEventListener('mousemove', () => {
+        move = true;
+      });
+      el.addEventListener('mousedown', () => {
+        move = false;
+      });
+      el.addEventListener('mouseup', (e) => {
+        move ? e.preventDefault() : binding.value();
+      });
+    },
+  });
 }

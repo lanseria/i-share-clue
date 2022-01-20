@@ -52,22 +52,6 @@ export default defineComponent({
     NButton,
     TransfyItem,
   },
-  directives: {
-    advanceClick: {
-      mounted(el: HTMLElement, binding) {
-        let move = false;
-        el.addEventListener('mousemove', () => {
-          move = true;
-        });
-        el.addEventListener('mousedown', () => {
-          move = false;
-        });
-        el.addEventListener('mouseup', (e) => {
-          move ? e.preventDefault() : binding.value();
-        });
-      },
-    },
-  },
   setup() {
     const { pushPath } = useImpRoute();
     const searchName = ref('');
