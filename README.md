@@ -44,6 +44,20 @@ curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 Invoke-WebRequest 'https://get.pnpm.io/v6.16.js' -UseBasicParsing -o pnpm.js; node pnpm.js add --global pnpm; Remove-Item pnpm.js
 ```
 
+### 必会遇到的 BUG(如果用 yarn 就不会有这个问题)
+
+```
+node_modules\.pnpm\registry.npmmirror.com+cos-nodejs-sdk-v5@2.11.6\node_modules\cos-nodejs-sdk-v5\index.d.ts
+```
+
+Body 类型找不到
+只要在上面加上 @ts-ignore 即可
+
+```
+// @ts-ignore
+Body?: Body | string,
+```
+
 ### 可能工作（在根目录执行）
 
 1. 同步前后端枚举配置
