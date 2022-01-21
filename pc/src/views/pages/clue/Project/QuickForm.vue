@@ -36,68 +36,47 @@
     </template>
   </imp-modal>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { NForm, NFormItem, NInput, NSpace, NButton, NInputNumber } from 'naive-ui';
 import { defineComponent, onMounted, ref, watchEffect } from 'vue';
 import { createProjectReq } from '/@/api/Admin/Clue/Project';
 import { CreateProjectFormDTO } from '/@/types/Admin/Clue/Project/dto';
-
-export default defineComponent({
-  emits: ['load-page'],
-  components: {
-    NForm,
-    NFormItem,
-    NInput,
-    NSpace,
-    NButton,
-    NInputNumber,
-  },
-  setup(props, { emit }) {
-    // refs
-    const ImpModalRef = ref();
-    const lnglat = ref('');
-    // ref
-    const modelRef = ref(new CreateProjectFormDTO());
-    onMounted(() => {
-      watchEffect(() => {
-        if (lnglat.value) {
-          const arr: string[] = lnglat.value.split(',');
-          modelRef.value.location = {
-            lng: +arr[0],
-            lat: +arr[1],
-          };
-        }
-      });
-    });
-    // method
-    const open = (row?: IObj) => {
-      if (row) {
-        modelRef.value.mergeProperties(row);
-      }
-      ImpModalRef.value.showModal = true;
-    };
-    const close = () => {
-      modelRef.value = new CreateProjectFormDTO();
-      ImpModalRef.value.showModal = false;
-      emit('load-page');
-    };
-    const handleSubmit = async () => {
-      const { payload } = await createProjectReq(modelRef.value);
-      if (payload) {
-        close();
-      }
-    };
-    return {
-      // refs
-      ImpModalRef,
-      // ref
-      lnglat,
-      modelRef,
-      // method
-      open,
-      close,
-      handleSubmit,
-    };
-  },
+const emit = defineEmits(['load-page']);
+// refs
+const ImpModalRef = ref();
+const lnglat = ref('');
+// ref
+const modelRef = ref(new CreateProjectFormDTO());
+onMounted(() => {
+  watchEffect(() => {
+    if (lnglat.value) {
+      const arr: string[] = lnglat.value.split(',');
+      modelRef.value.location = {
+        lng: +arr[0],
+        lat: +arr[1],
+      };
+    }
+  });
+});
+// method
+const open = (row?: IObj) => {
+  if (row) {
+    modelRef.value.mergeProperties(row);
+  }
+  ImpModalRef.value.showModal = true;
+};
+const close = () => {
+  modelRef.value = new CreateProjectFormDTO();
+  ImpModalRef.value.showModal = false;
+  emit('load-page');
+};
+const handleSubmit = async () => {
+  const { payload } = await createProjectReq(modelRef.value);
+  if (payload) {
+    close();
+  }
+};
+defineExpose({
+  open,
 });
 </script>

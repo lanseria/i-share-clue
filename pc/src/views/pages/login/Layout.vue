@@ -17,26 +17,12 @@
   </n-layout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import LandingFooter from './Footer.vue';
 import leftImage from './Left.vue';
 import rightImage from './Right.vue';
 import { NLayout, NLayoutFooter, NH1 } from 'naive-ui';
 import DarkModeToggle from '/@/components/common/DarkModeToggle.vue';
-export default {
-  components: {
-    LandingFooter,
-    leftImage,
-    rightImage,
-    NLayout,
-    NLayoutFooter,
-    NH1,
-    DarkModeToggle,
-  },
-  setup() {
-    return {};
-  },
-};
 </script>
 
 <style scoped>

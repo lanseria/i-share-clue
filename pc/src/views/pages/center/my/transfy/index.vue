@@ -35,67 +35,47 @@
     </n-grid>
   </imp-page-container>
 </template>
-<script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue';
 import { NGrid, NGi, NH3, NCard, NEmpty, NButton } from 'naive-ui';
 import { useImpRoute } from '/@/hooks/useRoute';
 import { useImpDataGrid } from '/@/hooks/useDataGrid';
 import TransfyItem from './TransfyItem.vue';
 import { getTransfyPageReq } from '/@/api/Admin/TransfyAi/Transfy';
-export default defineComponent({
-  components: {
-    NGrid,
-    NGi,
-    NH3,
-    NCard,
-    NEmpty,
-    NButton,
-    TransfyItem,
-  },
-  setup() {
-    const { pushPath } = useImpRoute();
-    const searchName = ref('');
-    // computed
-    const currentQuery = computed(() => {
-      return {
-        name: searchName.value,
-      };
-    });
-    const {
-      loading,
-      pagedTable,
-      pagination,
-      checkedRowKeysRef,
-      //
-      handlePageChange,
-      handlePageSizeChange,
-      handleCheck,
-      initPage,
-      loadPage,
-    } = useImpDataGrid({
-      pageSize: 8,
-      pageReq: getTransfyPageReq,
-      currentQuery,
-    });
-
-    const handleSearch = () => {
-      initPage();
-    };
-    onMounted(() => {
-      loadPage();
-    });
-    const handleAddVideoSrt = () => {
-      pushPath('/dashboard/transfy/add-video-srt');
-    };
-    return {
-      // ref
-      loading,
-      pagedTable,
-      handleAddVideoSrt,
-      loadPage,
-    };
-  },
+const { pushPath } = useImpRoute();
+const searchName = ref('');
+// computed
+const currentQuery = computed(() => {
+  return {
+    name: searchName.value,
+  };
 });
+const {
+  // loading,
+  pagedTable,
+  // pagination,
+  // checkedRowKeysRef,
+  //
+  // handlePageChange,
+  // handlePageSizeChange,
+  // handleCheck,
+  initPage,
+  loadPage,
+} = useImpDataGrid({
+  pageSize: 8,
+  pageReq: getTransfyPageReq,
+  currentQuery,
+});
+
+const handleSearch = () => {
+  initPage();
+};
+onMounted(() => {
+  loadPage();
+});
+const handleAddVideoSrt = () => {
+  pushPath('/dashboard/transfy/add-video-srt');
+};
 </script>
 <style lang="css" scoped>
 .grid-box {

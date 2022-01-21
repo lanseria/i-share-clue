@@ -10,9 +10,9 @@
   </n-config-provider>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue';
-import { NConfigProvider, NMessageProvider, NNotificationProvider, NDialogProvider, darkTheme, zhCN, dateZhCN } from 'naive-ui';
+<script lang="ts" setup>
+import { computed } from 'vue';
+import { NConfigProvider, NMessageProvider, NNotificationProvider, NDialogProvider, darkTheme, zhCN as locale, dateZhCN as dateLocale } from 'naive-ui';
 import { useAppStore } from './store/modules/app';
 import Slot from '/@/views/layouts/Slot.vue';
 import hljs from 'highlight.js/lib/core';
@@ -22,28 +22,10 @@ hljs.registerLanguage('shell', shell);
  * @type import('naive-ui').GlobalThemeOverrides
  */
 const themeOverrides = {};
-export default defineComponent({
-  components: {
-    NConfigProvider,
-    NMessageProvider,
-    NNotificationProvider,
-    NDialogProvider,
-    Slot,
-  },
-  name: 'App',
-  setup() {
-    const appStore = useAppStore();
-    const theme = computed(() => {
-      return appStore.getTheme === 'dark' ? darkTheme : null;
-    });
-    return {
-      hljs,
-      theme,
-      locale: zhCN,
-      dateLocale: dateZhCN,
-      themeOverrides,
-    };
-  },
+
+const appStore = useAppStore();
+const theme = computed(() => {
+  return appStore.getTheme === 'dark' ? darkTheme : null;
 });
 </script>
 

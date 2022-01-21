@@ -25,7 +25,7 @@
   </n-spin>
   <QuickFormModal ref="QuickFormModalRef" @load-page="loadPage()"></QuickFormModal>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { NSpin, NEl } from 'naive-ui';
 import { defineComponent, onMounted, ref, nextTick, watchEffect, watch } from 'vue';
 import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
@@ -50,124 +50,86 @@ class LngLat {
     this.pos = that.pos;
   }
 }
-export default defineComponent({
-  components: {
-    NSpin,
-    NEl,
-    QuickFormModal,
-    PlaceSearch,
-    RightDropdown,
-    Amap,
-    CircleMarker,
-    InfoWindow,
-  },
-  setup() {
-    const mapStore = useMapStore();
-    //
-    let lnglat: LngLat | undefined = undefined;
-    let markerList = ref<any[]>([]);
-    const mapMovingStartFlag = ref(false);
-    const mapMoving = ref(false);
-    const mapLoading = ref(false);
-    // refs
-    const RightDropdownRef = ref();
-    const QuickFormModalRef = ref();
-    const InfoWindowRef = ref();
-    const handleMapClick = () => {};
-    const clickHandler = (e: any) => {
-      RightDropdownRef.value.close();
-      nextTick().then(() => {
-        RightDropdownRef.value.open(e);
-        lnglat = new LngLat(e.lnglat);
-      });
-    };
 
-    const handleAddMsg = (key: string) => {
-      RightDropdownRef.value.close();
-      QuickFormModalRef.value.add({
-        location: {
-          lng: lnglat?.lng,
-          lat: lnglat?.lat,
-        },
-      });
-    };
+const mapStore = useMapStore();
+//
+let lnglat: LngLat | undefined = undefined;
+let markerList = ref<any[]>([]);
+const mapMovingStartFlag = ref(false);
+const mapMoving = ref(false);
+const mapLoading = ref(false);
+// refs
+const RightDropdownRef = ref();
+const QuickFormModalRef = ref();
+const InfoWindowRef = ref();
+const handleMapClick = () => {};
+const clickHandler = (e: any) => {
+  RightDropdownRef.value.close();
+  nextTick().then(() => {
+    RightDropdownRef.value.open(e);
+    lnglat = new LngLat(e.lnglat);
+  });
+};
 
-    const handleMarkerClick = (e: any) => {
-      // TODO: 暂时这么做
-      const iW = {
-        title: e.extData.name,
-        desc: e.extData.desc,
-      };
-      const { lng, lat } = e.extData.location;
-      InfoWindowRef.value.open(lng, lat, iW);
-    };
-    // const onResize = debounceLoadPage(1000);
-    // const onZoomend = debounceLoadPage(1000);
-    const onMoveStart = () => {
-      if (!mapLoading.value) {
-        mapMovingStartFlag.value = true;
+const handleAddMsg = (key: string) => {
+  RightDropdownRef.value.close();
+  QuickFormModalRef.value.add({
+    location: {
+      lng: lnglat?.lng,
+      lat: lnglat?.lat,
+    },
+  });
+};
+
+const handleMarkerClick = (e: any) => {
+  // TODO: 暂时这么做
+  const iW = {
+    title: e.extData.name,
+    desc: e.extData.desc,
+  };
+  const { lng, lat } = e.extData.location;
+  InfoWindowRef.value.open(lng, lat, iW);
+};
+// const onResize = debounceLoadPage(1000);
+// const onZoomend = debounceLoadPage(1000);
+const onMoveStart = () => {
+  if (!mapLoading.value) {
+    mapMovingStartFlag.value = true;
+  }
+};
+const onMapMove = () => {
+  if (!mapLoading.value && mapMovingStartFlag.value) {
+    mapMoving.value = true;
+  }
+};
+const onMoveEnd = () => {
+  mapMoving.value = false;
+};
+
+const onAmapComplete = (e: any) => {
+  // console.log(e);
+  loadPage();
+  const debounceLoad = debounce(() => {
+    mapLoading.value = true;
+    loadPage().then(() => {
+      mapLoading.value = false;
+    });
+  }, 1000);
+  setTimeout(() => {
+    watch(mapMoving, (next, prev) => {
+      if (prev === true && next === false) {
+        debounceLoad();
       }
-    };
-    const onMapMove = () => {
-      if (!mapLoading.value && mapMovingStartFlag.value) {
-        mapMoving.value = true;
-      }
-    };
-    const onMoveEnd = () => {
-      mapMoving.value = false;
-    };
+    });
+  }, 1000);
+};
 
-    const onAmapComplete = (e: any) => {
-      // console.log(e);
-      loadPage();
-      const debounceLoad = debounce(() => {
-        mapLoading.value = true;
-        loadPage().then(() => {
-          mapLoading.value = false;
-        });
-      }, 1000);
-      setTimeout(() => {
-        watch(mapMoving, (next, prev) => {
-          if (prev === true && next === false) {
-            debounceLoad();
-          }
-        });
-      }, 1000);
-    };
-
-    const loadPage = async () => {
-      let map = mapStore.getMap(DASHBOARD_MAP);
-      const bounds = map.getBounds();
-      const { payload } = await searchAreaProjectsReq(bounds);
-      markerList.value = payload;
-    };
-
-    return {
-      // const
-      DASHBOARD_MAP,
-      // ref
-      markerList,
-      mapLoading,
-      // refs
-      RightDropdownRef,
-      QuickFormModalRef,
-      InfoWindowRef,
-
-      // method
-      loadPage,
-      handleAddMsg,
-      handleMapClick,
-      clickHandler,
-      onAmapComplete,
-      // onResize,
-      // onZoomend,
-      onMoveStart,
-      onMapMove,
-      onMoveEnd,
-      handleMarkerClick,
-    };
-  },
-});
+const loadPage = async () => {
+  let map = mapStore.getMap(DASHBOARD_MAP);
+  const bounds = map.getBounds();
+  const { payload } = await searchAreaProjectsReq(bounds);
+  markerList.value = payload;
+};
 </script>
 <style lang="css" scoped>
 .map-wrap {

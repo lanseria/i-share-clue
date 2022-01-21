@@ -45,8 +45,8 @@
     </n-card>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+<script lang="ts" setup>
+import { PropType, ref } from 'vue';
 import { NCard, NTime, NIcon, NButton, NSpace } from 'naive-ui';
 import { TransfyVO } from '/@/types/Admin/Transfy/vo';
 import { TransfyStatus, TransfyCategory } from '/@/types/Admin/Transfy/enum';
@@ -54,84 +54,57 @@ import { useElementHover } from '@vueuse/core';
 import { Play as PlayIcon, TrashOutline as TrashOutlineIcon } from '@vicons/ionicons5';
 import { deleteTransfyReq, runTransfyRecTaskReq } from '/@/api/Admin/TransfyAi/Transfy';
 import { useImpRoute } from '/@/hooks/useRoute';
-export default defineComponent({
-  components: {
-    NCard,
-    NTime,
-    NIcon,
-    NButton,
-    NSpace,
-    PlayIcon,
-    TrashOutlineIcon,
-  },
-  props: {
-    item: {
-      type: Object as PropType<TransfyVO>,
-      required: true,
-    },
-  },
-  emits: ['load-page'],
-  setup(props, { emit }) {
-    const { pushPath } = useImpRoute();
-    const TransfyCardRef = ref();
-    const isHovered = useElementHover(TransfyCardRef);
-    // method
-    const loadPage = () => {
-      emit('load-page');
-    };
-    const handleRunProofread = (row: TransfyVO) => {
-      pushPath(`/dashboard/transfy/${row.id}/video-edit`);
-    };
-    const handleRunRec = (row: TransfyVO) => {
-      window.$dialog.info({
-        title: '注意',
-        content: `即将开始执行识别录音任务？`,
-        positiveText: '执行',
-        negativeText: '取消',
-        onPositiveClick: async () => {
-          const res = await runTransfyRecTaskReq(row.id);
-          console.log(res);
-          window.$message.success('执行成功');
-          loadPage();
-        },
-        onNegativeClick: () => {
-          loadPage();
-        },
-      });
-    };
-    const handleDel = (row: TransfyVO) => {
-      window.$dialog.error({
-        title: '注意',
-        content: `你确定删除这些项目？`,
-        positiveText: '确定',
-        negativeText: '不确定',
-        onPositiveClick: async () => {
-          const ids = [row.id];
-          await deleteTransfyReq(ids);
-          window.$message.success('删除成功');
-          loadPage();
-        },
-        onNegativeClick: () => {
-          loadPage();
-        },
-      });
-    };
-    return {
-      // const
-      // refs
-      TransfyCardRef,
-      // const
-      TransfyStatus,
-      TransfyCategory,
-      // ref
-      isHovered,
-      // method
-      handleDel,
-      handleRunRec,
-      handleRunProofread,
-    };
+const props = defineProps({
+  item: {
+    type: Object as PropType<TransfyVO>,
+    required: true,
   },
 });
+const emit = defineEmits(['load-page']);
+const { pushPath } = useImpRoute();
+const TransfyCardRef = ref();
+const isHovered = useElementHover(TransfyCardRef);
+// method
+const loadPage = () => {
+  emit('load-page');
+};
+const handleRunProofread = (row: TransfyVO) => {
+  pushPath(`/dashboard/transfy/${row.id}/video-edit`);
+};
+const handleRunRec = (row: TransfyVO) => {
+  window.$dialog.info({
+    title: '注意',
+    content: `即将开始执行识别录音任务？`,
+    positiveText: '执行',
+    negativeText: '取消',
+    onPositiveClick: async () => {
+      const res = await runTransfyRecTaskReq(row.id);
+      console.log(res);
+      window.$message.success('执行成功');
+      loadPage();
+    },
+    onNegativeClick: () => {
+      loadPage();
+    },
+  });
+};
+const handleDel = (row: TransfyVO) => {
+  window.$dialog.error({
+    title: '注意',
+    content: `你确定删除这些项目？`,
+    positiveText: '确定',
+    negativeText: '不确定',
+    onPositiveClick: async () => {
+      const ids = [row.id];
+      await deleteTransfyReq(ids);
+      window.$message.success('删除成功');
+      loadPage();
+    },
+    onNegativeClick: () => {
+      loadPage();
+    },
+  });
+};
 </script>
 <style lang="css" scoped>
 .poster-cover {

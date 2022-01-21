@@ -10,19 +10,7 @@
     </template>
   </n-empty>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
 import { NEmpty, NIcon, NButton } from 'naive-ui';
 import { Airplane as AirplaneIcon } from '@vicons/ionicons5';
-export default defineComponent({
-  components: {
-    NEmpty,
-    NIcon,
-    NButton,
-    AirplaneIcon,
-  },
-  setup() {
-    return {};
-  },
-});
 </script>

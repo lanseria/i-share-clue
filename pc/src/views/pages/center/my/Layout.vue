@@ -3,7 +3,7 @@
     has-sider
     position="absolute"
     :style="{
-      top: 'var(--header-height)'
+      top: 'var(--header-height)',
     }"
   >
     <n-layout-sider
@@ -14,11 +14,7 @@
       show-trigger="bar"
       trigger-style="top: calc(50% - var(--header-height));"
     >
-      <n-menu
-        :value="activeKey"
-        @update:value="handleUpdateValue"
-        :options="options"
-      />
+      <n-menu :value="activeKey" @update:value="handleUpdateValue" :options="options" />
     </n-layout-sider>
     <n-layout
       ref="layoutInstRef"
@@ -32,11 +28,11 @@
     </n-layout>
   </n-layout>
 </template>
-<script lang="ts">
-import { defineComponent, h, computed } from "vue";
-import { NLayout, NLayoutSider, NMenu, NIcon } from "naive-ui";
-import { myRoute } from "./route";
-import { useImpRoute } from "/@/hooks/useRoute";
+<script lang="ts" setup>
+import { defineComponent, h, computed } from 'vue';
+import { NLayout, NLayoutSider, NMenu, NIcon } from 'naive-ui';
+import { myRoute } from './route';
+import { useImpRoute } from '/@/hooks/useRoute';
 /**
  * <svg class="icon" aria-hidden="true">
     <use xlink:href="#icon-xxx"></use>
@@ -45,48 +41,28 @@ import { useImpRoute } from "/@/hooks/useRoute";
 function renderIcon(icon: string) {
   return () =>
     h(NIcon, null, {
-      default: () =>
-        h("svg", { "class": "icon", "aria-hidden": true }, [
-          h("use", { "xlink:href": `#${icon}` })
-        ])
+      default: () => h('svg', { class: 'icon', 'aria-hidden': true }, [h('use', { 'xlink:href': `#${icon}` })]),
     });
 }
-export default defineComponent({
-  name: "MyLayout",
-  components: {
-    NLayout,
-    NLayoutSider,
-    NMenu
-  },
-  setup() {
-    // use
-    const { pushName, crtName } = useImpRoute();
-    // ref
-    const activeKey = computed(() => {
-      return crtName.value;
-    });
-    // method
-    const handleUpdateValue = (key: string) => {
-      pushName(key);
-    };
-    return {
-      // const
-      options: myRoute
-        .filter(m => !m.meta.hidden)
-        .map(m => {
-          return {
-            label: m.meta.title,
-            key: m.name,
-            icon: renderIcon(m.meta.icon as string)
-          };
-        }),
-      // ref
-      activeKey,
-      // method
-      handleUpdateValue
-    };
-  }
+// use
+const { pushName, crtName } = useImpRoute();
+// ref
+const activeKey = computed(() => {
+  return crtName.value;
 });
+// method
+const handleUpdateValue = (key: string) => {
+  pushName(key);
+};
+const options = myRoute
+  .filter((m) => !m.meta.hidden)
+  .map((m) => {
+    return {
+      label: m.meta.title,
+      key: m.name,
+      icon: renderIcon(m.meta.icon as string),
+    };
+  });
 </script>
 <style lang="css">
 .content {

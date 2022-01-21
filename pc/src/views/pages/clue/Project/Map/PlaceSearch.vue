@@ -16,60 +16,48 @@
     </n-el>
   </teleport>
 </template>
-<script lang="ts">
-import { defineComponent, ref, watchEffect, onMounted, getCurrentInstance, inject, Ref } from 'vue';
+<script lang="ts" setup>
+import { defineComponent, ref, watchEffect, onMounted } from 'vue';
 import { NAutoComplete, NEl } from 'naive-ui';
 import { useMapStore } from '/@/store/modules/map';
 import { nanoid } from 'nanoid';
-export default defineComponent({
-  props: {
-    mid: {
-      type: String,
-      default: nanoid(),
-    },
+const props = defineProps({
+  mid: {
+    type: String,
+    default: nanoid(),
   },
-  components: {
-    NAutoComplete,
-    NEl,
-  },
-  setup(props) {
-    // global
-    const mapStore = useMapStore();
-    const $Amap = mapStore.Amap;
-    let placeSearch: any = null;
-    // ref
-    const searchText = ref('');
-    const options = ref<any[]>([]);
-    onMounted(() => {
-      const map = mapStore.getMap(props.mid);
-      //构造地点查询类
-      placeSearch = new $Amap.PlaceSearch({
-        pageSize: 5, // 单页显示结果条数
-        pageIndex: 1, // 页码
-        city: '杭州', // 兴趣点城市
-        citylimit: true, //是否强制限制在设置的城市内搜索
-        map, // 展现结果的地图实例
-        autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
-      });
+});
+// global
+const mapStore = useMapStore();
+const $Amap = mapStore.Amap;
+let placeSearch: any = null;
+// ref
+const searchText = ref('');
+const options = ref<any[]>([]);
+onMounted(() => {
+  const map = mapStore.getMap(props.mid);
+  //构造地点查询类
+  placeSearch = new $Amap.PlaceSearch({
+    pageSize: 5, // 单页显示结果条数
+    pageIndex: 1, // 页码
+    city: '杭州', // 兴趣点城市
+    citylimit: true, //是否强制限制在设置的城市内搜索
+    map, // 展现结果的地图实例
+    autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+  });
 
-      watchEffect(() => {
-        placeSearch.search(searchText.value, (status: string, result: any) => {
-          // console.log(result);
-          options.value =
-            result.poiList?.pois.map((m: any) => {
-              return {
-                label: m.name,
-                value: m.id,
-              };
-            }) ?? [];
-        });
-      });
+  watchEffect(() => {
+    placeSearch.search(searchText.value, (status: string, result: any) => {
+      // console.log(result);
+      options.value =
+        result.poiList?.pois.map((m: any) => {
+          return {
+            label: m.name,
+            value: m.id,
+          };
+        }) ?? [];
     });
-    return {
-      options,
-      searchText,
-    };
-  },
+  });
 });
 </script>
 <style lang="css" scoped>

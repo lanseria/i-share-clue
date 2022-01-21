@@ -3,41 +3,25 @@
     bordered
     class="footer"
     :class="{
-      ['footer--centered']: centered
+      ['footer--centered']: centered,
     }"
   >
     <div class="footer-links">
       <div class="footer-links-col">
         <n-text depth="1" class="col-header">resources</n-text>
         <n-button disabled text>designResources</n-button>
-        <n-button text tag="a" target="_blank" href="https://www.xicons.org"
-          >icons</n-button
-        >
+        <n-button text tag="a" target="_blank" href="https://www.xicons.org">icons</n-button>
       </div>
       <div class="footer-links-col">
         <n-text depth="1" class="col-header">help</n-text>
         <n-button text>commonIssues</n-button>
         <n-button text>changelog</n-button>
-        <n-button
-          text
-          tag="a"
-          target="_blank"
-          href="https://naive-ui.github.io/issue-helper/"
-        >
-          reportBug
-        </n-button>
+        <n-button text tag="a" target="_blank" href="https://naive-ui.github.io/issue-helper/">reportBug</n-button>
       </div>
       <div class="footer-links-col">
         <n-text depth="1" class="col-header">community</n-text>
-        <n-button text tag="a" target="_blank"> GitHub </n-button>
-        <n-button
-          text
-          tag="a"
-          href="https://discord.gg/Pqv7Mev5Dd"
-          target="_blank"
-        >
-          Discord
-        </n-button>
+        <n-button text tag="a" target="_blank">GitHub</n-button>
+        <n-button text tag="a" href="https://discord.gg/Pqv7Mev5Dd" target="_blank">Discord</n-button>
         <n-tooltip>
           <template #trigger>
             <n-button text>dingTalk</n-button>
@@ -47,9 +31,7 @@
       </div>
       <div class="footer-links-col footer-links-col--last">
         <n-text depth="1" class="col-header">contact</n-text>
-        <n-button text tag="a" target="_blank" href="https://www.tusimple.com/"
-          >tusimple</n-button
-        >
+        <n-button text tag="a" target="_blank" href="https://www.tusimple.com/">tusimple</n-button>
         <n-button text tag="a" target="_blank">joinUs</n-button>
       </div>
     </div>
@@ -60,20 +42,11 @@
   </n-layout-footer>
 </template>
 
-<script lang="ts">
-import { NLayoutFooter, NText, NDivider, NButton, NTooltip } from "naive-ui";
-export default {
-  props: {
-    centered: Boolean
-  },
-  components: {
-    NLayoutFooter,
-    NText,
-    NDivider,
-    NButton,
-    NTooltip
-  }
-};
+<script lang="ts" setup>
+import { NLayoutFooter, NText, NDivider, NButton, NTooltip } from 'naive-ui';
+defineProps<{
+  centered: boolean;
+}>();
 </script>
 
 <style scoped>

@@ -20,25 +20,11 @@
     </n-grid>
   </imp-page-container>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
 import { NGi, NGrid, NCard, NH3 } from 'naive-ui';
-export default defineComponent({
-  components: {
-    NGi,
-    NGrid,
-    NCard,
-    NH3,
-  },
-  setup() {
-    const handleDownload = () => {
-      //
-    };
-    return {
-      handleDownload,
-    };
-  },
-});
+const handleDownload = () => {
+  //
+};
 </script>
 <style lang="css" scoped>
 .grid-box {

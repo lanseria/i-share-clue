@@ -39,77 +39,55 @@
     </template>
   </imp-modal>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { NForm, NFormItem, NInput, NSpace, NButton, NInputNumber, NDatePicker } from 'naive-ui';
-import { defineComponent, onMounted, ref, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import { createProjectReq } from '/@/api/Admin/Clue/Project';
 import { CreateProjectFormDTO } from '/@/types/Admin/Clue/Project/dto';
-
-export default defineComponent({
-  emits: ['load-page'],
-  components: {
-    NForm,
-    NFormItem,
-    NInput,
-    NSpace,
-    NButton,
-    NInputNumber,
-    NDatePicker,
-  },
-  setup(props, { emit }) {
-    // refs
-    const ImpModalRef = ref();
-    const lnglat = ref('');
-    const actionName = ref('添加');
-    // ref
-    const modelRef = ref(new CreateProjectFormDTO());
-    onMounted(() => {
-      watchEffect(() => {
-        if (lnglat.value) {
-          const arr: string[] = lnglat.value.split(',');
-          modelRef.value.location = {
-            lng: +arr[0],
-            lat: +arr[1],
-          };
-        }
-      });
-    });
-    // method
-    const add = (row?: IObj) => {
-      actionName.value = '添加';
-      if (row) {
-        modelRef.value.mergeProperties(row);
-      }
-      ImpModalRef.value.showModal = true;
-    };
-    const edit = (row: IObj) => {
-      actionName.value = '编辑';
-      modelRef.value.mergeProperties(row);
-      ImpModalRef.value.showModal = true;
-    };
-    const close = () => {
-      modelRef.value = new CreateProjectFormDTO();
-      ImpModalRef.value.showModal = false;
-      emit('load-page');
-    };
-    const handleSubmit = async () => {
-      const { payload } = await createProjectReq(modelRef.value.toDto());
-      if (payload) {
-        close();
-      }
-    };
-    return {
-      // refs
-      ImpModalRef,
-      // ref
-      lnglat,
-      modelRef,
-      // method
-      add,
-      edit,
-      close,
-      handleSubmit,
-    };
-  },
+const emit = defineEmits(['load-page']);
+// refs
+const ImpModalRef = ref();
+const lnglat = ref('');
+const actionName = ref('添加');
+// ref
+const modelRef = ref(new CreateProjectFormDTO());
+onMounted(() => {
+  watchEffect(() => {
+    if (lnglat.value) {
+      const arr: string[] = lnglat.value.split(',');
+      modelRef.value.location = {
+        lng: +arr[0],
+        lat: +arr[1],
+      };
+    }
+  });
+});
+// method
+const add = (row?: IObj) => {
+  actionName.value = '添加';
+  if (row) {
+    modelRef.value.mergeProperties(row);
+  }
+  ImpModalRef.value.showModal = true;
+};
+const edit = (row: IObj) => {
+  actionName.value = '编辑';
+  modelRef.value.mergeProperties(row);
+  ImpModalRef.value.showModal = true;
+};
+const close = () => {
+  modelRef.value = new CreateProjectFormDTO();
+  ImpModalRef.value.showModal = false;
+  emit('load-page');
+};
+const handleSubmit = async () => {
+  const { payload } = await createProjectReq(modelRef.value.toDto());
+  if (payload) {
+    close();
+  }
+};
+defineExpose({
+  add,
+  edit,
 });
 </script>

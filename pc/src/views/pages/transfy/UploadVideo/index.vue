@@ -23,85 +23,58 @@
     </div>
   </n-upload>
 </template>
-<script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, ref } from 'vue';
 import { NUpload, NUploadDragger, NUploadFileList, NUploadTrigger, NIcon, NP, NText, NCard, useThemeVars } from 'naive-ui';
 import { Archive as ArchiveIcon } from '@vicons/ionicons5';
 import { uploadFileReq } from '/@/api/File';
 import { CustomRequest } from 'naive-ui/lib/upload/src/interface';
 import { useVModel } from '@vueuse/core';
-export default defineComponent({
-  name: 'TransfyUploadVideo',
-  components: {
-    NUpload,
-    NUploadDragger,
-    NIcon,
-    NP,
-    NText,
-    ArchiveIcon,
-    NUploadFileList,
-    NUploadTrigger,
-    NCard,
-  },
-  props: {
-    objectName: {
-      type: String,
-      required: true,
-    },
-  },
-  setup(props, { emit }) {
-    const uploadObjectName = useVModel(props, 'objectName', emit);
-    const uploadUrl = ref('');
-    const UploadRef = ref();
-    const accept = ref('.mkv,.mp4,.flv,.avi,.mov');
-    const showVideo = ref(false);
-    const options = computed(() => {
-      const themeVars = useThemeVars();
-      return {
-        autoPlay: false,
-        width: '480px', //播放器高度
-        height: '240px', //播放器高度
-        color: themeVars.value.primaryColor, //主题色
-        src: uploadUrl.value, //视频源
-      };
-    });
-    const customRequest: CustomRequest = ({ file, withCredentials, onFinish, onError, onProgress }) => {
-      uploadFileReq(file, withCredentials, onProgress)
-        .then(({ payload }: any) => {
-          onFinish();
-          setTimeout(() => {
-            handleFinish(payload);
-          }, 1000);
-        })
-        .catch((error) => {
-          console.log(error);
-          onError();
-        });
-    };
-    const handleFinish = (payload: any) => {
-      showVideo.value = true;
-      // console.log(payload);
-      uploadObjectName.value = payload.name;
-      uploadUrl.value = payload.url;
-    };
-    const handleRemove = () => {
-      console.log('remove');
-      showVideo.value = false;
-      uploadObjectName.value = '';
-      uploadUrl.value = '';
-    };
-    return {
-      UploadRef,
-      // ref
-      accept,
-      showVideo,
-      uploadUrl,
-      // computed
-      options,
-      // method
-      customRequest,
-      handleRemove,
-    };
+const props = defineProps({
+  objectName: {
+    type: String,
+    required: true,
   },
 });
+const emit = defineEmits(['update:objectName']);
+const uploadObjectName = useVModel(props, 'objectName', emit);
+const uploadUrl = ref('');
+const UploadRef = ref();
+const accept = ref('.mkv,.mp4,.flv,.avi,.mov');
+const showVideo = ref(false);
+const options = computed(() => {
+  const themeVars = useThemeVars();
+  return {
+    autoPlay: false,
+    width: '480px', //播放器高度
+    height: '240px', //播放器高度
+    color: themeVars.value.primaryColor, //主题色
+    src: uploadUrl.value, //视频源
+  };
+});
+const customRequest: CustomRequest = ({ file, withCredentials, onFinish, onError, onProgress }) => {
+  uploadFileReq(file, withCredentials, onProgress)
+    .then(({ payload }: any) => {
+      onFinish();
+      setTimeout(() => {
+        handleFinish(payload);
+      }, 1000);
+    })
+    .catch((error) => {
+      console.log(error);
+      onError();
+    });
+};
+const handleFinish = (payload: any) => {
+  showVideo.value = true;
+  // console.log(payload);
+  uploadObjectName.value = payload.name;
+  uploadUrl.value = payload.url;
+};
+const handleRemove = () => {
+  console.log('remove');
+  showVideo.value = false;
+  uploadObjectName.value = '';
+  uploadUrl.value = '';
+};
 </script>

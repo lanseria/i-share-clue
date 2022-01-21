@@ -25,152 +25,113 @@
       :columns="columns"
       :data="pagedTable"
       :pagination="pagination"
-      :row-key="row => row.userId"
+      :row-key="(row) => row.userId"
       @update:page="handlePageChange"
       @update:page-size="handlePageSizeChange"
     />
   </imp-page-container>
   <form-modal ref="FormModalRef" @load-page="loadPage()"></form-modal>
 </template>
-<script lang="ts">
-import {
-  NDataTable,
-  NButton,
-  NSpace,
-  NInputGroup,
-  NInput,
-  NIcon
-} from "naive-ui";
-import { TableColumn } from "naive-ui/lib/data-table/src/interface";
-import { defineComponent, onMounted, ref } from "vue";
-import { operateColums, OptList } from "./Actions";
-import { SearchOutline as SearchOutlineIcon } from "@vicons/ionicons5";
-import { adminUserPageReq } from "/@/api/Admin/User";
-import FormModal from "./FormModal.vue";
+<script lang="ts" setup>
+import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon } from 'naive-ui';
+import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
+import { onMounted, ref } from 'vue';
+import { operateColums, OptList } from './Actions';
+import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
+import FormModal from './FormModal.vue';
+import { adminUserPageReq } from '/@/api/Admin/Access/User';
 class PaginationDTO {
   page = 1;
   pageSize = 10;
   pageCount = 1;
   showSizePicker = true;
 }
-export default defineComponent({
-  components: {
-    NDataTable,
-    NSpace,
-    NButton,
-    NInputGroup,
-    NInput,
-    NIcon,
-    SearchOutlineIcon,
-    FormModal
-  },
-  setup() {
-    // refs
-    const FormModalRef = ref();
-    // ref
-    const loading = ref(false);
-    const searchName = ref("");
-    const pagedTable = ref<AdminUserPageItemVO[]>([]);
-    const pagination = ref(new PaginationDTO());
-    // method
-    const loadPage = async (
-      params: IObj = {
-        current: pagination.value.page,
-        size: pagination.value.pageSize
-      }
-    ) => {
-      if (!loading.value) {
-        loading.value = true;
-        const { code, msg, data } = await adminUserPageReq(params);
-        if (code) {
-          window.$message.warning(msg);
-        } else {
-          pagedTable.value = data.records;
-          pagination.value.page = +data.current;
-          pagination.value.pageCount = +data.pages;
-        }
-        loading.value = false;
-      }
-    };
-    const handleSearch = () => {
-      loadPage({
-        current: 1,
-        size: pagination.value.pageSize,
-        realName: searchName.value
-      });
-    };
-    const handlePageChange = async (currentPage: number) => {
-      loadPage({
-        current: currentPage,
-        size: pagination.value.pageSize
-      });
-    };
-    const handlePageSizeChange = async (currentPageSize: number) => {
-      loadPage({
-        current: 1,
-        size: currentPageSize
-      });
-    };
-    const handleAdd = () => {
-      FormModalRef.value.open();
-    };
-    const handleEdit = (row: IObj) => {
-      FormModalRef.value.open(row);
-    };
-    const handleDel = (row: IObj) => {
-      console.log(row);
-    };
-
-    onMounted(() => {
-      loadPage();
-    });
-
-    const operateOptions: OptList[] = [
-      {
-        name: "编辑",
-        func: handleEdit
-      },
-      {
-        name: "删除",
-        func: handleDel
-      }
-    ];
-    const columns: TableColumn[] = [
-      {
-        type: "selection"
-      },
-      {
-        title: "用户名",
-        key: "username"
-      },
-      {
-        title: "真实姓名",
-        key: "realName"
-      },
-      {
-        title: "手机",
-        key: "phone"
-      },
-      operateColums(operateOptions)
-    ];
-    return {
-      // refs
-      FormModalRef,
-      // ref
-      searchName,
-      loading,
-      columns,
-      pagedTable,
-      pagination,
-      // method
-      loadPage,
-      handleAdd,
-      handleSearch,
-      handlePageChange,
-      handlePageSizeChange
-    };
+// refs
+const FormModalRef = ref();
+// ref
+const loading = ref(false);
+const searchName = ref('');
+const pagedTable = ref<any[]>([]);
+const pagination = ref(new PaginationDTO());
+// method
+const loadPage = async (
+  params: IObj = {
+    current: pagination.value.page,
+    size: pagination.value.pageSize,
   }
+) => {
+  if (!loading.value) {
+    loading.value = true;
+    const { payload } = await adminUserPageReq(params);
+    if (payload) {
+      pagedTable.value = payload.records;
+      pagination.value.page = +payload.current;
+      pagination.value.pageCount = +payload.pages;
+    }
+    loading.value = false;
+  }
+};
+const handleSearch = () => {
+  loadPage({
+    current: 1,
+    size: pagination.value.pageSize,
+    realName: searchName.value,
+  });
+};
+const handlePageChange = async (currentPage: number) => {
+  loadPage({
+    current: currentPage,
+    size: pagination.value.pageSize,
+  });
+};
+const handlePageSizeChange = async (currentPageSize: number) => {
+  loadPage({
+    current: 1,
+    size: currentPageSize,
+  });
+};
+const handleAdd = () => {
+  FormModalRef.value.open();
+};
+const handleEdit = (row: IObj) => {
+  FormModalRef.value.open(row);
+};
+const handleDel = (row: IObj) => {
+  console.log(row);
+};
+
+onMounted(() => {
+  loadPage();
 });
+
+const operateOptions: OptList[] = [
+  {
+    name: '编辑',
+    func: handleEdit,
+  },
+  {
+    name: '删除',
+    func: handleDel,
+  },
+];
+const columns: TableColumn[] = [
+  {
+    type: 'selection',
+  },
+  {
+    title: '用户名',
+    key: 'username',
+  },
+  {
+    title: '真实姓名',
+    key: 'realName',
+  },
+  {
+    title: '手机',
+    key: 'phone',
+  },
+  operateColums(operateOptions),
+];
 </script>
 <style lang="css" scoped>
 .data-table-header {

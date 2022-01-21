@@ -22,74 +22,54 @@
     </template>
   </imp-modal>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { NForm, NFormItem, NInput, NSpace, NButton } from 'naive-ui';
-import { computed, defineComponent, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { createUserReq, updateUserReq } from '/@/api/Admin/Access/User';
 import { CreateUserFormDTO } from '/@/types/Admin/User/dto';
-export default defineComponent({
-  emits: ['load-page'],
-  components: {
-    NForm,
-    NFormItem,
-    NInput,
-    NSpace,
-    NButton,
-  },
-  setup(props, { emit }) {
-    // refs
-    const ImpModalRef = ref();
-    const isEdit = ref(false);
-    // ref
-    const modelRef = ref(new CreateUserFormDTO());
-    const actionProp = computed(() => {
-      if (isEdit.value) {
-        return {
-          actionName: '编辑',
-          actionMethod: updateUserReq,
-        };
-      } else {
-        return {
-          actionName: '创建',
-          actionMethod: createUserReq,
-        };
-      }
-    });
-    // method
-    const open = (row?: IObj) => {
-      if (row) {
-        isEdit.value = true;
-        modelRef.value.mergeProperties(row);
-      } else {
-        isEdit.value = false;
-      }
-      ImpModalRef.value.showModal = true;
-    };
-    const close = () => {
-      modelRef.value = new CreateUserFormDTO();
-      ImpModalRef.value.showModal = false;
-      emit('load-page');
-    };
-    const onSubmit = async () => {
-      const { errorType } = await actionProp.value.actionMethod(modelRef.value);
-      if (!errorType) {
-        window.$message.success('操作成功');
-        close();
-      }
-    };
+const emit = defineEmits(['load-page']);
+// refs
+const ImpModalRef = ref();
+const isEdit = ref(false);
+// ref
+const modelRef = ref(new CreateUserFormDTO());
+const actionProp = computed(() => {
+  if (isEdit.value) {
     return {
-      // refs
-      ImpModalRef,
-      // ref
-      modelRef,
-      isEdit,
-      // computed
-      actionProp,
-      // method
-      open,
-      close,
-      onSubmit,
+      actionName: '编辑',
+      actionMethod: updateUserReq,
     };
-  },
+  } else {
+    return {
+      actionName: '创建',
+      actionMethod: createUserReq,
+    };
+  }
+});
+// method
+const open = (row?: IObj) => {
+  if (row) {
+    isEdit.value = true;
+    modelRef.value.mergeProperties(row);
+  } else {
+    isEdit.value = false;
+  }
+  ImpModalRef.value.showModal = true;
+};
+const close = () => {
+  modelRef.value = new CreateUserFormDTO();
+  ImpModalRef.value.showModal = false;
+  emit('load-page');
+};
+const onSubmit = async () => {
+  const { errorType } = await actionProp.value.actionMethod(modelRef.value);
+  if (!errorType) {
+    window.$message.success('操作成功');
+    close();
+  }
+};
+defineExpose({
+  open,
+  close,
 });
 </script>

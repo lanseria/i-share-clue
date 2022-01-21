@@ -19,51 +19,35 @@
     </template>
   </imp-modal>
 </template>
-<script lang="ts">
-import { NForm, NFormItem, NInput, NSpace, NButton } from "naive-ui";
-import { defineComponent, ref } from "vue";
-import { CommonDTO } from "/@/types/Common/dto";
+<script lang="ts" setup>
+import { NForm, NFormItem, NInput, NSpace, NButton } from 'naive-ui';
+import { ref } from 'vue';
+import { CommonDTO } from '/@/types/Common/dto';
+const emit = defineEmits(['load-page']);
 class UserFormDTO extends CommonDTO {
   userId = 0;
-  username = "";
-  realName = "";
-  phone = "";
+  username = '';
+  realName = '';
+  phone = '';
 }
-export default defineComponent({
-  emits: ["load-page"],
-  components: {
-    NForm,
-    NFormItem,
-    NInput,
-    NSpace,
-    NButton
-  },
-  setup(props, { emit }) {
-    // refs
-    const ImpModalRef = ref();
-    // ref
-    const modelRef = ref(new UserFormDTO());
-    // method
-    const open = (row?: IObj) => {
-      if (row) {
-        modelRef.value.mergeProperties(row);
-      }
-      ImpModalRef.value.showModal = true;
-    };
-    const close = () => {
-      modelRef.value = new UserFormDTO();
-      ImpModalRef.value.showModal = false;
-      emit("load-page");
-    };
-    return {
-      // refs
-      ImpModalRef,
-      // ref
-      modelRef,
-      // method
-      open,
-      close
-    };
+// refs
+const ImpModalRef = ref();
+// ref
+const modelRef = ref(new UserFormDTO());
+// method
+const open = (row?: IObj) => {
+  if (row) {
+    modelRef.value.mergeProperties(row);
   }
+  ImpModalRef.value.showModal = true;
+};
+const close = () => {
+  modelRef.value = new UserFormDTO();
+  ImpModalRef.value.showModal = false;
+  emit('load-page');
+};
+defineExpose({
+  open,
+  close,
 });
 </script>

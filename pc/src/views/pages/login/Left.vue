@@ -1,19 +1,8 @@
 <template>
   <n-el>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      viewBox="30 0 579.43 484.77"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="30 0 579.43 484.77">
       <defs>
-        <filter
-          id="filter-1"
-          x="-80.0%"
-          y="-80.0%"
-          width="260.0%"
-          height="260.0%"
-          filterUnits="objectBoundingBox"
-        >
+        <filter id="filter-1" x="-80.0%" y="-80.0%" width="260.0%" height="260.0%" filterUnits="objectBoundingBox">
           <feGaussianBlur stdDeviation="12" in="SourceGraphic" />
         </filter>
       </defs>
@@ -31,7 +20,7 @@
             :style="{
               transition: `fill .3s var(--cubic-bezier-ease-in-out)`,
               fill: 'var(--info-color)',
-              fillRule: 'evenodd'
+              fillRule: 'evenodd',
             }"
           />
         </g>
@@ -48,7 +37,7 @@
             :style="{
               transition: `fill .3s var(--cubic-bezier-ease-in-out)`,
               fill: 'var(--error-color)',
-              fillRule: 'evenodd'
+              fillRule: 'evenodd',
             }"
           />
         </g>
@@ -65,7 +54,7 @@
             :style="{
               transition: `fill .3s var(--cubic-bezier-ease-in-out)`,
               fill: 'var(--warning-color)',
-              fillRule: 'evenodd'
+              fillRule: 'evenodd',
             }"
           />
         </g>
@@ -82,7 +71,7 @@
             :style="{
               transition: `fill .3s var(--cubic-bezier-ease-in-out)`,
               fill: 'var(--warning-color)',
-              fillRule: 'evenodd'
+              fillRule: 'evenodd',
             }"
           />
         </g>
@@ -99,7 +88,7 @@
             :style="{
               transition: `fill .3s var(--cubic-bezier-ease-in-out)`,
               fill: 'var(--error-color)',
-              fillRule: 'evenodd'
+              fillRule: 'evenodd',
             }"
           />
         </g>
@@ -116,7 +105,7 @@
             :style="{
               transition: `fill .3s var(--cubic-bezier-ease-in-out)`,
               fill: 'var(--success-color)',
-              fillRule: 'evenodd'
+              fillRule: 'evenodd',
             }"
           />
         </g>
@@ -132,25 +121,18 @@
             :style="{
               transition: `fill .3s var(--cubic-bezier-ease-in-out)`,
               fill: 'var(--success-color)',
-              fillRule: 'evenodd'
+              fillRule: 'evenodd',
             }"
           />
         </g>
-        <circle
-          fill-opacity="0.3"
-          fill="#000000"
-          filter="url(#filter-1)"
-          cx="477.54"
-          cy="66.09"
-          r="20"
-        />
+        <circle fill-opacity="0.3" fill="#000000" filter="url(#filter-1)" cx="477.54" cy="66.09" r="20" />
         <circle
           cx="477.54"
           cy="66.09"
           r="22.5"
           :style="{
             transition: `fill .3s var(--cubic-bezier-ease-in-out)`,
-            fill: 'var(--info-color)'
+            fill: 'var(--info-color)',
           }"
         />
       </g>
@@ -158,15 +140,6 @@
   </n-el>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import { NElement } from "naive-ui";
-export default defineComponent({
-  components: {
-    NEl: NElement
-  },
-  setup() {
-    return {};
-  }
-});
+<script lang="ts" setup>
+import { NEl } from 'naive-ui';
 </script>
