@@ -1,16 +1,16 @@
 <template>
-  <div ref="ContainerRef" class="cpt-fast-map" :style="{ height: height }">
-    <n-el>
+  <n-el :style="{ height: height }">
+    <div ref="ContainerRef" class="cpt-fast-map" :style="{ height: height }">
       <div class="fast-map-slot-container">
         <slot v-if="mapLoaded"></slot>
       </div>
-    </n-el>
-  </div>
+    </div>
+  </n-el>
 </template>
 <script lang="ts" setup>
 import { nanoid } from 'nanoid';
 import { NEl } from 'naive-ui';
-import { computed, defineComponent, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import { addEvents, events } from './events';
 import { useAppStore } from '/@/store/modules/app';
 import { useMapStore } from '/@/store/modules/map';
