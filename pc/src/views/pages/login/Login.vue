@@ -25,7 +25,7 @@
         </template>
       </n-input>
     </n-form-item>
-    <n-form-item label="验证码" path="code">
+    <!-- <n-form-item label="验证码" path="code">
       <n-input placeholder="请输入验证码" :maxlength="2" v-model:value="modelRef.code" @keyup.enter="handleSubmit()">
         <template #prefix>
           <n-icon>
@@ -36,7 +36,7 @@
           <code-img ref="CodeImgRef" @refresh="refreshRandomStr"></code-img>
         </template>
       </n-input>
-    </n-form-item>
+    </n-form-item> -->
     <n-form-item>
       <n-grid x-gap="12" :cols="2">
         <n-grid-item>
