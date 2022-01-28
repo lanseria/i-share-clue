@@ -13,13 +13,12 @@ export class ProjectLocation {
 
 class CreateProjectFormDTO extends CommonDTO {
   name = '';
-  desc = '描述疫情';
-  // desc = '2022年1月31日（除夕）至2月6日（正月初六），全区道路公共泊位停车免收费';
+  desc = '';
   happenedAt = dayjs().valueOf();
-  category = '2';
+  category = '1';
   region = '1';
   location: ProjectLocation | undefined = undefined;
-  website = 'http://ivhik.cn';
+  website = '';
 
   toDto() {
     this.happenedAt = dayjs(this.happenedAt).unix();

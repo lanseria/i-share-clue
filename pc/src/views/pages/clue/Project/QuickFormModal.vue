@@ -11,10 +11,10 @@
         <n-date-picker v-model:value="modelRef.happenedAt" type="datetime" clearable />
       </n-form-item>
       <n-form-item path="category" label="类型">
-        <n-input v-model:value="modelRef.category" />
+        <n-select v-model:value="modelRef.category" :options="categoryOptions" />
       </n-form-item>
       <n-form-item path="region" label="地域类型">
-        <n-input v-model:value="modelRef.region" />
+        <n-select v-model:value="modelRef.region" :options="regionOptions" />
       </n-form-item>
       <template v-if="modelRef.location">
         <n-form-item path="lng" label="经度">
@@ -40,7 +40,7 @@
   </imp-modal>
 </template>
 <script lang="ts" setup>
-import { NForm, NFormItem, NInput, NSpace, NButton, NInputNumber, NDatePicker } from 'naive-ui';
+import { NForm, NFormItem, NInput, NSpace, NButton, NInputNumber, NDatePicker, NSelect } from 'naive-ui';
 import { onMounted, ref, watchEffect } from 'vue';
 import { createProjectReq } from '/@/api/Admin/Clue/Project';
 import { CreateProjectFormDTO } from '/@/types/Admin/Clue/Project/dto';
@@ -49,6 +49,26 @@ const emit = defineEmits(['load-page']);
 const ImpModalRef = ref();
 const lnglat = ref('');
 const actionName = ref('添加');
+const categoryOptions = [
+  {
+    label: '疫情',
+    value: '1',
+  },
+  {
+    label: '2022年春节免费停车位',
+    value: '2',
+  },
+];
+const regionOptions = [
+  {
+    label: '杭州',
+    value: '1',
+  },
+  {
+    label: '舟山',
+    value: '2',
+  },
+];
 // ref
 const modelRef = ref(new CreateProjectFormDTO());
 onMounted(() => {
