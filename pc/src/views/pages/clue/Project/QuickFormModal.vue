@@ -90,7 +90,7 @@ const add = (row?: IObj) => {
   }
   ImpModalRef.value.showModal = true;
 };
-const edit = (row: IObj) => {
+const edit = (row: CreateProjectFormDTO) => {
   actionName.value = '编辑';
   modelRef.value.mergeProperties(row);
   ImpModalRef.value.showModal = true;

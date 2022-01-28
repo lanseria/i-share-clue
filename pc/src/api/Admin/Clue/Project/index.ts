@@ -40,6 +40,12 @@ export const exportProjectReq = () => {
   });
 };
 
+export const importProjectReq = (objectName: string) => {
+  return r.request<R<any[]>>({
+    url: `${api.import}/${objectName}`,
+  });
+};
+
 export const downloadFiles = (url: string, filename: string) => {
   fetch(url).then((res) =>
     res.blob().then((blob) => {

@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { nanoid } from 'nanoid';
 import { NEl } from 'naive-ui';
-import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { addEvents, events } from './events';
 import { useAppStore } from '/@/store/modules/app';
 import { useMapStore } from '/@/store/modules/map';
@@ -116,6 +116,7 @@ onMounted(() => {
     viewMode: '2D', // 地图模式
     mapStyle: `amap://styles/${mapStyle.value}`, //设置地图的显示样式
     features: ['bg', 'road', 'building', 'point'],
+    showIndoorMap: false,
   };
 
   try {
@@ -136,10 +137,10 @@ onMounted(() => {
     });
 
     // watch
-    watchEffect(() => {
-      const styleName = 'amap://styles/' + mapStyle.value;
-      newMap.setMapStyle(styleName);
-    });
+    // watchEffect(() => {
+    //   const styleName = 'amap://styles/' + mapStyle.value;
+    //   newMap.setMapStyle(styleName);
+    // });
     //
     const geolocation = new $Amap.Geolocation({
       // 是否使用高精度定位，默认：true
@@ -156,6 +157,7 @@ onMounted(() => {
     newMap.addControl(geolocation);
 
     function onComplete(data: any) {
+      console.log(data);
       emit('location-complete', {
         data,
         map: newMap,
@@ -199,7 +201,8 @@ onUnmounted(() => {
 }
 .cpt-fast-map :deep(.amap-content-body),
 .cpt-fast-map :deep(.amap-lib-infowindow-title),
-.cpt-fast-map :deep(.amap-lib-infowindow-content) {
+.cpt-fast-map :deep(.amap-lib-infowindow-content),
+.cpt-fast-map :deep(.amap-marker-label) {
   background-color: var(--base-color);
 }
 .cpt-fast-map :deep(.amap-info-sharp) {

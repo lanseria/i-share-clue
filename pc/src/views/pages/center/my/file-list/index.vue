@@ -39,139 +39,100 @@
   </imp-page-container>
   <FileUploadModal ref="FileUploadModalRef" @leave="loadPage()"></FileUploadModal>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { NDataTable, NButton, NSpace, NInputGroup, NInput, NIcon, NTag, NSwitch, NTreeSelect, NEllipsis, NAlert } from 'naive-ui';
 import { TableColumn } from 'naive-ui/lib/data-table/src/interface';
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { deleteFileReq, downloadFileReq, filePageReq } from '/@/api/File/index';
 import { useImpDataTable } from '/@/hooks/useDataTable';
 import { SearchOutline as SearchOutlineIcon } from '@vicons/ionicons5';
-import FileUploadModal from './FileUploadModal.vue';
-export default defineComponent({
-  components: {
-    NDataTable,
-    NButton,
-    NSpace,
-    NInputGroup,
-    NInput,
-    NIcon,
-    NTag,
-    NTreeSelect,
-    NSwitch,
-    NAlert,
-    SearchOutlineIcon,
-    FileUploadModal,
+import FileUploadModal from './FileUploadModal.vue'; // refs
+const FileUploadModalRef = ref();
+// ref
+const cols: TableColumn[] = [
+  {
+    type: 'selection',
   },
-  setup() {
-    // refs
-    const FileUploadModalRef = ref();
-    // ref
-    const cols: TableColumn[] = [
-      {
-        type: 'selection',
-      },
-      {
-        title: '文件名',
-        key: 'name',
-      },
-      {
-        title: '文件大小',
-        key: 'size',
-      },
-      {
-        title: '最后修改时间',
-        key: 'lastModified',
-      },
-    ];
-    const searchName = ref('');
-    // method
-    const handleDownload = (row: IObj) => {
-      downloadFileReq(row.name);
-    };
-    const handleAdd = () => {
-      FileUploadModalRef.value.open();
-    };
-    const handleDel = (row?: IObj) => {
-      const actionName = '删除';
-      const actionMethod = deleteFileReq;
-      window.$dialog.error({
-        title: '注意',
-        content: `你确定${actionName}这些文件？`,
-        positiveText: '确定',
-        negativeText: '不确定',
-        onPositiveClick: async () => {
-          const names = row ? [row.name] : checkedRowKeysRef.value;
-          await actionMethod(names);
-          window.$message.success('删除成功');
-          loadPage();
-        },
-        onNegativeClick: () => {
-          loadPage();
-        },
-      });
-    }; // computed
-    const currentQuery = computed(() => {
-      return {
-        name: searchName.value,
-      };
-    });
-    const operateOptions = [
-      {
-        name: '下载',
-        func: handleDownload,
-      },
-      {
-        name: '删除',
-        func: handleDel,
-      },
-    ];
-    const {
-      loading,
-      columns,
-      pagedTable,
-      pagination,
-      checkedRowKeysRef,
-      //
-      handlePageChange,
-      handlePageSizeChange,
-      handleSorterChange,
-      handleCheck,
-      initPage,
-      loadPage,
-    } = useImpDataTable({
-      cols,
-      operateOptions,
-      pageReq: filePageReq,
-      currentQuery,
-    });
-    const handleSearch = () => {
-      initPage();
-    };
-    onMounted(() => {
+  {
+    title: '文件名',
+    key: 'name',
+  },
+  {
+    title: '文件大小',
+    key: 'size',
+  },
+  {
+    title: '最后修改时间',
+    key: 'lastModified',
+  },
+];
+const searchName = ref('');
+// method
+const handleDownload = (row: IObj) => {
+  downloadFileReq(row.name);
+};
+const handleAdd = () => {
+  FileUploadModalRef.value.open();
+};
+const handleDel = (row?: IObj) => {
+  const actionName = '删除';
+  const actionMethod = deleteFileReq;
+  window.$dialog.error({
+    title: '注意',
+    content: `你确定${actionName}这些文件？`,
+    positiveText: '确定',
+    negativeText: '不确定',
+    onPositiveClick: async () => {
+      const names = row ? [row.name] : checkedRowKeysRef.value;
+      await actionMethod(names);
+      window.$message.success('删除成功');
       loadPage();
-      // loadDictTree();
-    });
-    return {
-      // refs
-      FileUploadModalRef,
-      // ref
-      searchName,
-      loading,
-      columns,
-      pagedTable,
-      pagination,
-      checkedRowKeysRef,
-      //
-      handlePageChange,
-      handlePageSizeChange,
-      handleSorterChange,
-      handleCheck,
-      handleAdd,
-      handleDel,
-      loadPage,
-      handleSearch,
-    };
+    },
+    onNegativeClick: () => {
+      loadPage();
+    },
+  });
+}; // computed
+const currentQuery = computed(() => {
+  return {
+    name: searchName.value,
+  };
+});
+const operateOptions = [
+  {
+    name: '下载',
+    func: handleDownload,
   },
+  {
+    name: '删除',
+    func: handleDel,
+  },
+];
+const {
+  loading,
+  columns,
+  pagedTable,
+  pagination,
+  checkedRowKeysRef,
+  //
+  handlePageChange,
+  handlePageSizeChange,
+  handleSorterChange,
+  handleCheck,
+  initPage,
+  loadPage,
+} = useImpDataTable({
+  cols,
+  operateOptions,
+  pageReq: filePageReq,
+  currentQuery,
+});
+const handleSearch = () => {
+  initPage();
+};
+onMounted(() => {
+  loadPage();
+  // loadDictTree();
 });
 </script>
 

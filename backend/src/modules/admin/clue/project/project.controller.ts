@@ -34,6 +34,18 @@ import { ProjectService } from './project.service';
 export class ProjectController {
   constructor(private projectService: ProjectService) {}
   /**
+   * 导入项目
+   * @returns
+   */
+  @ApiOperation({ description: '导出所导入项目有项目' })
+  @Get('/import/:objectName')
+  public importProject(
+    @Param('objectName') objectName: string,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.projectService.importProject(objectName, user);
+  }
+  /**
    * 导出所有项目
    * @returns
    */

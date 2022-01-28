@@ -12,15 +12,19 @@
 </template>
 <script lang="ts" setup>
 import { NDropdown, useMessage } from 'naive-ui';
-import { defineComponent, ref } from 'vue';
+import { ref } from 'vue';
 // global
 const ddOptions = [
   {
     label: '添加信息',
     key: 'add-msg',
   },
+  {
+    label: '手动刷新',
+    key: 'refresh',
+  },
 ];
-const emit = defineEmits(['add-msg']);
+const emit = defineEmits(['add-msg', 'refresh']);
 const message = useMessage();
 // ref
 const x = ref(0);
@@ -42,6 +46,9 @@ const handleSelect = (key: string) => {
   message.info(key);
   if (key === 'add-msg') {
     emit('add-msg');
+  }
+  if (key === 'refresh') {
+    emit('refresh');
   }
 };
 defineExpose({

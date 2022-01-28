@@ -6,6 +6,7 @@ const api = {
   area: `${prefix}/area`,
   page: `${prefix}/page`,
   export: `${prefix}/export`,
+  import: `${prefix}/import`,
 };
 
 export { api };

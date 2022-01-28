@@ -1,6 +1,6 @@
 <template>
   <imp-modal ref="ImpModalRef" title="添加文件" @leave="leave">
-    <n-upload action="/api/file-upload/file">
+    <n-upload action="/api/file-upload/file" @finish="handleFinish">
       <n-upload-dragger>
         <div style="margin-bottom: 12px">
           <n-icon size="48" :depth="3">
@@ -13,33 +13,19 @@
     </n-upload>
   </imp-modal>
 </template>
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import { NUpload, NUploadDragger, NIcon, NP, NText } from 'naive-ui';
 import { Archive as ArchiveIcon } from '@vicons/ionicons5';
-export default defineComponent({
-  components: {
-    NUpload,
-    NUploadDragger,
-    NIcon,
-    NP,
-    NText,
-    ArchiveIcon,
-  },
-  emits: ['leave'],
-  setup(props, { emit }) {
-    const ImpModalRef = ref();
-    const open = () => {
-      ImpModalRef.value.showModal = true;
-    };
-    const leave = () => {
-      emit('leave');
-    };
-    return {
-      ImpModalRef,
-      open,
-      leave,
-    };
-  },
-});
+const emit = defineEmits(['leave']);
+const ImpModalRef = ref();
+const open = () => {
+  ImpModalRef.value.showModal = true;
+};
+const leave = () => {
+  emit('leave');
+};
+const handleFinish = ({ file, event }) => {
+  window.$message.success(event.target.response);
+};
 </script>
