@@ -24,7 +24,7 @@
   </teleport>
 </template>
 <script lang="ts" setup>
-import { ref, watchEffect, onMounted, nextTick } from 'vue';
+import { watchEffect, onMounted, nextTick, shallowRef } from 'vue';
 import { NAutoComplete, NEl, NInput, NSpace, NInputNumber } from 'naive-ui';
 import { useMapStore } from '/@/store/modules/map';
 import { nanoid } from 'nanoid';
@@ -39,10 +39,10 @@ const mapStore = useMapStore();
 const $Amap = mapStore.Amap;
 let placeSearch: any = null;
 // ref
-const searchText = ref('');
-const pageSize = ref(5);
-const cityName = ref('杭州');
-const options = ref<any[]>([]);
+const searchText = shallowRef('');
+const pageSize = shallowRef(5);
+const cityName = shallowRef('杭州');
+const options = shallowRef<any[]>([]);
 onMounted(() => {
   const map = mapStore.getMap(props.mid);
 
@@ -54,7 +54,6 @@ onMounted(() => {
     }
     //构造地点查询类
     placeSearch = new $Amap.PlaceSearch({
-      type: '汽车服务|汽车销售|汽车维修|摩托车服务|餐饮服务|购物服务|生活服务|体育休闲服务|医疗保健服务|住宿服务|风景名胜|商务住宅|政府机构及社会团体|科教文化服务|交通设施服务|金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施',
       pageSize: pageSize.value, // 单页显示结果条数
       pageIndex: 1, // 页码
       city: cityName.value, // 兴趣点城市

@@ -17,7 +17,7 @@
 <script lang="ts" setup>
 import { NEl } from 'naive-ui';
 import { nanoid } from 'nanoid';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, shallowRef } from 'vue';
 import { events } from './events';
 import { useMapStore } from '/@/store/modules/map';
 const props = defineProps({
@@ -30,8 +30,8 @@ const emit = defineEmits([...events]);
 // global
 const mapStore = useMapStore();
 const $Amap = mapStore.Amap;
-const el = ref<HTMLElement>();
-const iW = ref<IObj>({
+const el = shallowRef<HTMLElement>();
+const iW = shallowRef<IObj>({
   title: '',
   desc: '',
 });

@@ -48,6 +48,10 @@ const refresh = (massList: any[]) => {
       marker.setPosition(e.data.lnglat);
       marker.setLabel({ content: e.data.name });
     });
+    mass.on('mouseout', function (e: any) {
+      marker.setPosition(e.data.lnglat);
+      marker.setLabel({ content: '' });
+    });
 
     mass.setMap(map);
   }

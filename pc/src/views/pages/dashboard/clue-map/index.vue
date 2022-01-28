@@ -10,7 +10,7 @@
   <QuickFormModal ref="QuickFormModalRef" @load-page="loadPage()"></QuickFormModal>
 </template>
 <script lang="ts" setup>
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, shallowRef } from 'vue';
 import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
 import QuickFormModal from '/@/views/pages/clue/Project/QuickFormModal.vue';
 import { PlaceSearch, Amap, InfoWindow, MassMarker } from '/@/views/pages/clue/Project/Map';
@@ -37,10 +37,10 @@ const mapStore = useMapStore();
 //
 let lnglat: LngLat | undefined = undefined;
 // refs
-const RightDropdownRef = ref();
-const QuickFormModalRef = ref();
-const InfoWindowRef = ref();
-const MassMakerRef = ref();
+const RightDropdownRef = shallowRef();
+const QuickFormModalRef = shallowRef();
+const InfoWindowRef = shallowRef();
+const MassMakerRef = shallowRef();
 // const handleMapClick = () => {};
 const clickHandler = (e: any) => {
   RightDropdownRef.value.close();

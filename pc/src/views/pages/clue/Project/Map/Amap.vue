@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { nanoid } from 'nanoid';
 import { NEl } from 'naive-ui';
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, shallowRef } from 'vue';
 import { addEvents, events } from './events';
 import { useAppStore } from '/@/store/modules/app';
 import { useMapStore } from '/@/store/modules/map';
@@ -49,9 +49,9 @@ const appStore = useAppStore();
 const mapStore = useMapStore();
 const $Amap = mapStore.Amap;
 // refs
-const ContainerRef = ref();
+const ContainerRef = shallowRef();
 // ref
-const mapLoaded = ref(false);
+const mapLoaded = shallowRef(false);
 // computed
 const mapStyle = computed(() => {
   const theme = appStore.getTheme;
