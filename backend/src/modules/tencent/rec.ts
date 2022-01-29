@@ -87,7 +87,7 @@ export class RecClient {
             } else {
               this.log(JSON.stringify(descResult));
               this.log('执行失败', 'getDescResultData-getDescResultData');
-              reject('执行失败');
+              reject(JSON.stringify(descResult));
             }
           }
         }, 5000);

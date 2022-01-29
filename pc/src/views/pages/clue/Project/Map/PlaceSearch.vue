@@ -2,9 +2,6 @@
   <teleport to="#dashboard-map">
     <n-el tag="div" class="myPageTop">
       <table style="width: 100%">
-        <tr v-show="searchText">
-          <div id="panel"></div>
-        </tr>
         <tr style="width: 100%">
           <td style="width: 100%">
             <n-space align="center">
@@ -16,7 +13,10 @@
         </tr>
         <tr style="width: 100%">
           <td style="width: 100%">
-            <n-auto-complete id="tipinput" :options="options" v-model:value="searchText" type="text" placeholder="请输入关键词" clearable />
+            <n-space>
+              <n-input v-model:value="searchText" type="text" placeholder="请输入关键词" :on-clear="clearSearch()" clearable />
+              <n-button @click="search()">搜索</n-button>
+            </n-space>
           </td>
         </tr>
       </table>
@@ -24,8 +24,8 @@
   </teleport>
 </template>
 <script lang="ts" setup>
-import { watchEffect, onMounted, nextTick, shallowRef } from 'vue';
-import { NAutoComplete, NEl, NInput, NSpace, NInputNumber } from 'naive-ui';
+import { shallowRef } from 'vue';
+import { NEl, NInput, NSpace, NInputNumber, NButton } from 'naive-ui';
 import { useMapStore } from '/@/store/modules/map';
 import { nanoid } from 'nanoid';
 const props = defineProps({
@@ -43,37 +43,60 @@ const searchText = shallowRef('');
 const pageSize = shallowRef(5);
 const cityName = shallowRef('杭州');
 const options = shallowRef<any[]>([]);
-onMounted(() => {
-  const map = mapStore.getMap(props.mid);
-
-  watchEffect(() => {
-    if (searchText.value === '') {
-      nextTick(() => {
-        placeSearch.search('');
-      });
-    }
-    //构造地点查询类
-    placeSearch = new $Amap.PlaceSearch({
-      pageSize: pageSize.value, // 单页显示结果条数
-      pageIndex: 1, // 页码
-      city: cityName.value, // 兴趣点城市
-      citylimit: true, //是否强制限制在设置的城市内搜索
-      map, // 展现结果的地图实例
-      panel: 'panel', // 结果列表将在此容器中进行展示。
-      autoFitView: false, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
-    });
-    placeSearch.search(searchText.value, (status: string, result: any) => {
-      // console.log(result);
-      options.value =
-        result.poiList?.pois.map((m: any) => {
-          return {
-            label: `${m.name}[${m.address}]`,
-            value: m.id,
-          };
-        }) ?? [];
-    });
-  });
+const map = mapStore.getMap(props.mid);
+let markers: any[] = [];
+//构造地点查询类
+placeSearch = new $Amap.PlaceSearch({
+  pageSize: pageSize.value, // 单页显示结果条数
+  pageIndex: 1, // 页码
+  city: cityName.value, // 兴趣点城市
+  citylimit: true, //是否强制限制在设置的城市内搜索
 });
+const setConfig = () => {
+  placeSearch.setPageSize(pageSize.value);
+  placeSearch.setCity(cityName.value);
+};
+// 清除 marker
+const _clearMarker = (marker: any) => {
+  if (marker) {
+    marker.setMap(null);
+    marker = null;
+  }
+};
+const clearSearch = () => {
+  markers.forEach((m) => {
+    _clearMarker(m);
+  });
+  markers = [];
+  console.log(markers);
+};
+const search = () => {
+  setConfig();
+  if (searchText.value === '') {
+    clearSearch();
+  } else {
+    clearSearch();
+    placeSearch.searchInBounds(searchText.value, map.getBounds(), (status: string, result: any) => {
+      // 查询成功时，result即对应匹配的POI信息
+      console.log(result);
+      const pois = result.poiList.pois;
+      for (var i = 0; i < pois.length; i++) {
+        const poi = pois[i];
+        markers[i] = new $Amap.Marker({
+          position: poi.location, // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+          title: poi.name,
+        });
+        // 将创建的点标记添加到已有的地图实例：
+        map.add(markers[i]);
+      }
+      map.setFitView(
+        markers, // 覆盖物数组
+        false, // 动画过渡到制定位置
+        [200, 200, 200, 200] // 周围边距，上、下、左、右
+      );
+    });
+  }
+};
 </script>
 <style lang="css" scoped>
 .myPageTop {

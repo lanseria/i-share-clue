@@ -2,9 +2,10 @@
   <div class="map-wrap" id="dashboard-map">
     <Amap :mid="DASHBOARD_MAP" @rightclick="clickHandler" @location-complete="loadPage()">
       <PlaceSearch :mid="DASHBOARD_MAP"></PlaceSearch>
-      <RightDropdown ref="RightDropdownRef" @add-msg="handleAddMsg" @refresh="loadPage()"></RightDropdown>
+      <RightDropdown ref="RightDropdownRef" @add-msg="handleAddMsg" @add-area="handleAddArea" @refresh="loadPage()"></RightDropdown>
       <MassMarker ref="MassMakerRef" :mid="DASHBOARD_MAP"></MassMarker>
       <InfoWindow :mid="DASHBOARD_MAP" ref="InfoWindowRef"></InfoWindow>
+      <Polygon :mid="DASHBOARD_MAP" ref="PolygonRef"></Polygon>
     </Amap>
   </div>
   <QuickFormModal ref="QuickFormModalRef" @load-page="loadPage()"></QuickFormModal>
@@ -13,7 +14,7 @@
 import { ref, nextTick, shallowRef } from 'vue';
 import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
 import QuickFormModal from '/@/views/pages/clue/Project/QuickFormModal.vue';
-import { PlaceSearch, Amap, InfoWindow, MassMarker } from '/@/views/pages/clue/Project/Map';
+import { PlaceSearch, Amap, InfoWindow, MassMarker, Polygon } from '/@/views/pages/clue/Project/Map';
 import RightDropdown from './RightDropdown.vue';
 import { useMapStore } from '/@/store/modules/map';
 import { DASHBOARD_MAP } from './const';
@@ -41,6 +42,7 @@ const RightDropdownRef = shallowRef();
 const QuickFormModalRef = shallowRef();
 const InfoWindowRef = shallowRef();
 const MassMakerRef = shallowRef();
+const PolygonRef = shallowRef();
 // const handleMapClick = () => {};
 const clickHandler = (e: any) => {
   RightDropdownRef.value.close();
@@ -58,6 +60,10 @@ const handleAddMsg = (key: string) => {
       lat: lnglat?.lat,
     },
   });
+};
+
+const handleAddArea = () => {
+  PolygonRef.value.createPolygon();
 };
 
 const loadPage = async () => {

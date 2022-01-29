@@ -1,22 +1,31 @@
 import { defineStore } from 'pinia';
 import AMapLoader from '@amap/amap-jsapi-loader';
+import { getMapArea, setMapArea } from '/@/utils/map';
 
+interface AreaAmap {
+  id: string;
+  name: string;
+  path: number[];
+  // 0- 封控区 1- 管控区 2- 防范区
+  type: number;
+}
 interface MapState {
   Amap: IObj;
-  mapRegistry: Map<string, IObj>;
+  areaList: AreaAmap[];
 }
 const AMapClass = await AMapLoader.load({
   //首次调用 load
   key: import.meta.env.VITE_AMAP_KEY, //首次load key为必填
   version: '2.0',
-  plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.PlaceSearch', 'AMap.Geolocation'],
+  plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.PlaceSearch', 'AMap.Geolocation', 'AMap.PolygonEditor'],
 });
+const mapRegistry: Map<string, IObj> = new Map();
 export const useMapStore = defineStore({
   id: 'map',
   state: (): MapState => ({
     // 设置地图
     Amap: AMapClass,
-    mapRegistry: new Map(),
+    areaList: getMapArea(),
   }),
   actions: {
     /**
@@ -25,18 +34,33 @@ export const useMapStore = defineStore({
      * @param map map实例
      */
     addMap(id: string, map: IObj) {
-      this.mapRegistry.set(id, map);
+      mapRegistry.set(id, map);
     },
     removeMap(id: string) {
-      this.mapRegistry.delete(id);
+      mapRegistry.delete(id);
     },
     getMap(id: string) {
-      if (this.mapRegistry.has(id)) {
-        let map = this.mapRegistry.get(id)!;
+      if (mapRegistry.has(id)) {
+        let map = mapRegistry.get(id)!;
         return map;
       } else {
         throw 'map is not ready!';
       }
+    },
+    addArea(id: string, area: AreaAmap) {
+      const idx = this.areaList.findIndex((m) => m.id === id);
+      // 如果id存在就替换
+      if (idx >= 0) {
+        this.areaList[idx] = area;
+        setMapArea(this.areaList);
+      } else {
+        this.areaList.push(area);
+        setMapArea(this.areaList);
+      }
+    },
+    clearArea() {
+      this.areaList = [];
+      setMapArea(this.areaList);
     },
   },
 });

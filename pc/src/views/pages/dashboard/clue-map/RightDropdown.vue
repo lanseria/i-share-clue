@@ -20,11 +20,15 @@ const ddOptions = [
     key: 'add-msg',
   },
   {
+    label: '添加区域',
+    key: 'add-area',
+  },
+  {
     label: '手动刷新',
     key: 'refresh',
   },
 ];
-const emit = defineEmits(['add-msg', 'refresh']);
+const emit = defineEmits(['add-msg', 'add-area', 'refresh']);
 const message = useMessage();
 // ref
 const x = ref(0);
@@ -43,9 +47,11 @@ const close = () => {
 };
 const handleSelect = (key: string) => {
   showDropdownRef.value = false;
-  message.info(key);
   if (key === 'add-msg') {
     emit('add-msg');
+  }
+  if (key === 'add-area') {
+    emit('add-area');
   }
   if (key === 'refresh') {
     emit('refresh');

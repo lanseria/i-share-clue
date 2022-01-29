@@ -4,5 +4,6 @@ import MassMarker from './MassMarker.vue';
 import InfoWindow from './InfoWindow.vue';
 import MapSelect from './MapSelect.vue';
 import PlaceSearch from './PlaceSearch.vue';
+import Polygon from './Polygon.vue';
 
-export { Amap, CircleMarker, MassMarker, InfoWindow, MapSelect, PlaceSearch };
+export { Amap, CircleMarker, MassMarker, InfoWindow, MapSelect, PlaceSearch, Polygon };
