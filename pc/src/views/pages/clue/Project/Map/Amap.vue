@@ -117,6 +117,7 @@ onMounted(() => {
     mapStyle: `amap://styles/${mapStyle.value}`, //设置地图的显示样式
     features: ['bg', 'road', 'building', 'point'],
     showIndoorMap: false,
+    isHotspot: false,
   };
 
   try {

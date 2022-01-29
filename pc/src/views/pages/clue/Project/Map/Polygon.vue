@@ -1,48 +1,76 @@
 <template>
   <teleport to="#dashboard-map">
     <n-el class="input-card">
+      <n-space item-style="display: flex;" align="center">
+        <n-checkbox
+          v-for="(item, idx) in overlayGroupList"
+          :key="item.key"
+          :checked="item.show"
+          @update:checked="
+            (value) => {
+              overlayGroupList[idx].show = value;
+            }
+          "
+        >
+          {{ item.name }}
+        </n-checkbox>
+        <n-button @click="clearArea()">清除所有区域</n-button>
+      </n-space>
       <n-space>
-        <n-dropdown trigger="hover" @select="handleSelect" :options="options">
-          <n-button @click="createPolygon()">新建</n-button>
+        <n-dropdown trigger="hover" @select="handleSelect" :options="addOptions">
+          <n-button>新建</n-button>
         </n-dropdown>
         <n-button @click="open()">开始编辑</n-button>
         <n-button @click="close()">结束编辑</n-button>
-        <n-button @click="clearArea()">清除所有区域</n-button>
       </n-space>
     </n-el>
   </teleport>
 </template>
 <script lang="ts" setup>
-import { NButton, NEl, NSpace, NDropdown } from 'naive-ui';
+import { NButton, NEl, NSpace, NDropdown, NCheckbox } from 'naive-ui';
 import { nanoid } from 'nanoid';
-import { onMounted } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import { useMapStore } from '/@/store/modules/map';
+import { validNull } from '/@/utils/Validation';
+import { addOptions, OverlayItem, setPolygonOpt } from './Polygon';
 const props = defineProps({
   mid: {
     type: String,
     default: nanoid(),
   },
 });
-let currentType = 0;
-const options = [
-  {
-    label: '封控区',
-    key: 0,
-  },
-  {
-    label: '管控区',
-    key: 1,
-  },
-  {
-    label: '防范区',
-    key: 2,
-  },
-];
 
-let polyEditor: any = null;
+let currentType = 0;
 // global
 const mapStore = useMapStore();
+const overlayGroupList = ref<OverlayItem[]>([]);
 const $Amap = mapStore.Amap;
+const map = mapStore.getMap(props.mid);
+const polyEditor = new $Amap.PolygonEditor(map);
+const overlayGroups = addOptions.map((m) => {
+  const overlayGroup = new $Amap.OverlayGroup([]);
+  map.add(overlayGroup);
+  return overlayGroup;
+});
+overlayGroupList.value = overlayGroups.map((m, i) => {
+  return {
+    name: addOptions[i].label,
+    key: i,
+    show: true,
+  };
+});
+watchEffect(() => {
+  overlayGroups.map((m, i) => {
+    if (m) {
+      console.log(overlayGroupList.value[i].show);
+      if (overlayGroupList.value[i].show) {
+        m.show();
+      } else {
+        m.hide();
+      }
+    }
+  });
+});
 const createPolygon = () => {
   polyEditor.close();
   polyEditor.setTarget();
@@ -54,76 +82,55 @@ const open = () => {
 const close = () => {
   polyEditor.close();
   const poly = polyEditor.getTarget();
-  const area = poly.getExtData();
-  console.log(area);
-  mapStore.addArea(area.id, {
-    ...area,
-    path: poly.getPath(),
-  });
+  let area = poly.getExtData();
+  // 如果是编辑的话
+  if (!validNull(area)) {
+    console.log(area);
+    area = {
+      ...area,
+      path: poly.getPath(),
+    };
+    mapStore.addArea(area.id, area);
+  }
+  // 新增则跳过
 };
 const clearArea = () => {
   mapStore.clearArea();
 };
 const handleSelect = (key: number) => {
   currentType = key;
+  createPolygon();
 };
 const addPolygon = (area: any) => {
-  const map = mapStore.getMap(props.mid);
-  const typeColorMap = {
-    0: '#ba4e41',
-    1: '#e49a83',
-    2: '#eccfb1',
-  };
-  let polygon = new $Amap.Polygon({
-    path: area.path,
-    // @ts-ignore
-    fillColor: typeColorMap[area.type],
-    strokeOpacity: 1,
-    fillOpacity: 0.5,
-    strokeColor: '#2b8cbe',
-    strokeWeight: 1,
-    strokeStyle: 'dashed',
-    strokeDasharray: [5, 5],
-    extData: area,
-  });
-  polygon.on('mouseover', () => {
-    polygon.setOptions({
-      fillOpacity: 0.7,
-      fillColor: '#7bccc4',
-    });
-  });
-  polygon.on('mouseout', () => {
-    polygon.setOptions({
-      fillOpacity: 0.5,
-      // @ts-ignore
-      fillColor: typeColorMap[area.type],
-    });
-  });
+  const polygon = new $Amap.Polygon({});
+  setPolygonOpt(polygon, area);
   polygon.on('dblclick', () => {
     polyEditor.setTarget(polygon);
     polyEditor.open();
   });
-  map.add(polygon);
+  overlayGroups[area.type].addOverlay(polygon);
 };
 onMounted(() => {
-  const map = mapStore.getMap(props.mid);
   const areaList = mapStore.areaList;
   areaList.forEach((m) => {
     addPolygon(m);
   });
-  polyEditor = new $Amap.PolygonEditor(map);
   polyEditor.on('add', (data: any) => {
     const polygon = data.target;
     const path = polygon.getPath();
-    console.log(path);
     const id = nanoid();
-    mapStore.addArea(id, {
+    const area = {
       path,
       name: '未命名',
       id,
       type: currentType,
-    });
+    };
+    console.log(area);
+    mapStore.addArea(id, area);
     polyEditor.addAdsorbPolygons(polygon);
+    polygon.setOptions({
+      extData: area,
+    });
     polygon.on('dblclick', () => {
       polyEditor.setTarget(polygon);
       polyEditor.open();
