@@ -20,10 +20,6 @@ const ddOptions = [
     key: 'add-msg',
   },
   {
-    label: '添加区域',
-    key: 'add-area',
-  },
-  {
     label: '手动刷新',
     key: 'refresh',
   },

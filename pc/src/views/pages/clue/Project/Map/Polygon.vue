@@ -15,10 +15,11 @@
           {{ item.name }}
         </n-checkbox>
         <n-button @click="clearArea()">清除所有区域</n-button>
+        <n-button @click="refreshArea()">刷新区域</n-button>
       </n-space>
-      <n-space>
+      <n-space style="margin-top: 6px">
         <n-dropdown trigger="hover" @select="handleSelect" :options="addOptions">
-          <n-button>新建</n-button>
+          <n-button>添加区域</n-button>
         </n-dropdown>
         <n-button @click="open()">开始编辑</n-button>
         <n-button @click="close()">结束编辑</n-button>
@@ -29,7 +30,7 @@
 <script lang="ts" setup>
 import { NButton, NEl, NSpace, NDropdown, NCheckbox } from 'naive-ui';
 import { nanoid } from 'nanoid';
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import { useMapStore } from '/@/store/modules/map';
 import { validNull } from '/@/utils/Validation';
 import { addOptions, OverlayItem, setPolygonOpt } from './Polygon';
@@ -60,9 +61,8 @@ overlayGroupList.value = overlayGroups.map((m, i) => {
   };
 });
 watchEffect(() => {
-  overlayGroups.map((m, i) => {
+  overlayGroups.forEach((m, i) => {
     if (m) {
-      console.log(overlayGroupList.value[i].show);
       if (overlayGroupList.value[i].show) {
         m.show();
       } else {
@@ -82,7 +82,7 @@ const open = () => {
 const close = () => {
   polyEditor.close();
   const poly = polyEditor.getTarget();
-  let area = poly.getExtData();
+  let area = poly?.getExtData();
   // 如果是编辑的话
   if (!validNull(area)) {
     console.log(area);
@@ -93,9 +93,23 @@ const close = () => {
     mapStore.addArea(area.id, area);
   }
   // 新增则跳过
+  refreshArea();
+  map.remove(poly);
 };
 const clearArea = () => {
-  mapStore.clearArea();
+  window.$dialog.warning({
+    title: '警告',
+    content: '你确定清空所有区域记录？',
+    positiveText: '确定',
+    negativeText: '不确定',
+    onPositiveClick: () => {
+      mapStore.clearArea();
+      refreshArea();
+    },
+    onNegativeClick: () => {
+      //
+    },
+  });
 };
 const handleSelect = (key: number) => {
   currentType = key;
@@ -108,13 +122,25 @@ const addPolygon = (area: any) => {
     polyEditor.setTarget(polygon);
     polyEditor.open();
   });
+  polyEditor.addAdsorbPolygons(polygon);
   overlayGroups[area.type].addOverlay(polygon);
 };
-onMounted(() => {
+const overlayClear = () => {
+  overlayGroups.forEach((m, i) => {
+    if (m) {
+      m.clearOverlays();
+    }
+  });
+};
+const refreshArea = () => {
+  overlayClear();
   const areaList = mapStore.areaList;
   areaList.forEach((m) => {
     addPolygon(m);
   });
+};
+onMounted(() => {
+  refreshArea();
   polyEditor.on('add', (data: any) => {
     const polygon = data.target;
     const path = polygon.getPath();
@@ -125,7 +151,6 @@ onMounted(() => {
       id,
       type: currentType,
     };
-    console.log(area);
     mapStore.addArea(id, area);
     polyEditor.addAdsorbPolygons(polygon);
     polygon.setOptions({
@@ -136,6 +161,9 @@ onMounted(() => {
       polyEditor.open();
     });
   });
+});
+onUnmounted(() => {
+  overlayClear();
 });
 defineExpose({
   createPolygon,
