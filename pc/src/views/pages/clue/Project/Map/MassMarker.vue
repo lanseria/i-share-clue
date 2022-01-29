@@ -52,7 +52,10 @@ const refresh = (massList: any[]) => {
       marker.setPosition(e.data.lnglat);
       marker.setLabel({ content: '' });
     });
-
+    mass.on('click', (e: any) => {
+      console.log(e.data);
+      emit('click', e.data);
+    });
     mass.setMap(map);
   }
 };

@@ -2,6 +2,12 @@ import r from '/@/router/axios';
 import { api } from './config';
 import { CreateProjectFormDTO } from '/@/types/Admin/Clue/Project/dto';
 
+export const getProjectById = (id: string) => {
+  return r.request({
+    url: `${api.project}/${id}`,
+  });
+};
+
 export const createProjectReq = (dto: CreateProjectFormDTO) => {
   return r.request<R<CreateProjectFormDTO>>({
     url: `${api.project}`,

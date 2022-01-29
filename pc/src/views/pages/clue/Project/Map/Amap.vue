@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { nanoid } from 'nanoid';
 import { NEl } from 'naive-ui';
-import { computed, onMounted, onUnmounted, shallowRef } from 'vue';
+import { computed, onMounted, onUnmounted, shallowRef, watchEffect } from 'vue';
 import { addEvents, events } from './events';
 import { useAppStore } from '/@/store/modules/app';
 import { useMapStore } from '/@/store/modules/map';
@@ -138,11 +138,11 @@ onMounted(() => {
     });
 
     // watch
-    // watchEffect(() => {
-    //   const styleName = 'amap://styles/' + mapStyle.value;
-    //   newMap.setMapStyle(styleName);
-    // });
-    //
+    watchEffect(() => {
+      const styleName = 'amap://styles/' + mapStyle.value;
+      newMap.setMapStyle(styleName);
+    });
+
     const geolocation = new $Amap.Geolocation({
       // 是否使用高精度定位，默认：true
       enableHighAccuracy: true,

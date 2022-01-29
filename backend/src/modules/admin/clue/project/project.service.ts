@@ -159,4 +159,26 @@ export class ProjectService {
       throw new InternalServerErrorException();
     }
   }
+  /**
+   * 单个项目
+   * @param id uuid
+   * @returns
+   */
+  public async getProjectById(id: string) {
+    try {
+      const projectEntity = await this.projectRepository.findOne(id);
+      console.log(JSON.stringify(projectEntity));
+      return ProjectMapper.toDto(projectEntity);
+    } catch (error) {
+      Logger.error(error);
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException();
+      }
+      if (error instanceof TimeoutError) {
+        throw new RequestTimeoutException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
 }

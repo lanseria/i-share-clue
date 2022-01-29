@@ -15,6 +15,7 @@ import {
   Get,
   Param,
   ParseFloatPipe,
+  ParseUUIDPipe,
   Post,
   UseGuards,
   ValidationPipe,
@@ -108,5 +109,16 @@ export class ProjectController {
     @Param('swlng', ParseFloatPipe) swlng: number,
   ): Promise<ProjectResponseDto[]> {
     return this.projectService.searchAreaProjects([nelat, nelng, swlat, swlng]);
+  }
+
+  /**
+   * 单个项目
+   * @param id
+   * @returns
+   */
+  @ApiOperation({ description: '单个项目' })
+  @Get('/:id')
+  public getProjectById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.projectService.getProjectById(id);
   }
 }

@@ -177,10 +177,8 @@ defineExpose({
   word-wrap: break-word;
   background-color: var(--base-color);
   background-clip: border-box;
-  border-radius: 0.25rem;
   border-width: 0;
   border-radius: 0.4rem;
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, 0.5);
   position: absolute;
   top: 5px;
   left: 10px;

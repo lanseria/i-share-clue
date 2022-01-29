@@ -3,7 +3,7 @@
     <Amap :mid="DASHBOARD_MAP" @rightclick="clickHandler" @location-complete="loadPage()">
       <PlaceSearch :mid="DASHBOARD_MAP"></PlaceSearch>
       <RightDropdown ref="RightDropdownRef" @add-msg="handleAddMsg" @add-area="handleAddArea" @refresh="loadPage()"></RightDropdown>
-      <MassMarker ref="MassMakerRef" :mid="DASHBOARD_MAP"></MassMarker>
+      <MassMarker ref="MassMakerRef" :mid="DASHBOARD_MAP" @click="handleMassClick"></MassMarker>
       <InfoWindow :mid="DASHBOARD_MAP" ref="InfoWindowRef"></InfoWindow>
       <Polygon :mid="DASHBOARD_MAP" ref="PolygonRef"></Polygon>
     </Amap>
@@ -12,7 +12,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, nextTick, shallowRef } from 'vue';
-import { searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
+import { getProjectById, searchAreaProjectsReq } from '/@/api/Admin/Clue/Project';
 import QuickFormModal from '/@/views/pages/clue/Project/QuickFormModal.vue';
 import { PlaceSearch, Amap, InfoWindow, MassMarker, Polygon } from '/@/views/pages/clue/Project/Map';
 import RightDropdown from './RightDropdown.vue';
@@ -62,6 +62,10 @@ const handleAddMsg = (key: string) => {
   });
 };
 
+const handleMassClick = async (row: any) => {
+  const form = await getProjectById(row.id);
+  QuickFormModalRef.value.edit(form);
+};
 const handleAddArea = () => {
   PolygonRef.value.createPolygon();
 };
@@ -73,6 +77,7 @@ const loadPage = async () => {
   const massList = payload.map((m) => ({
     lnglat: [m.location.lng, m.location.lat],
     name: m.name,
+    id: m.id,
     style: +m.category - 1,
   }));
   MassMakerRef.value.refresh(massList);

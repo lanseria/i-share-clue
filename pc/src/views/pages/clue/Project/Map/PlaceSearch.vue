@@ -106,9 +106,7 @@ const search = () => {
   right: 10px;
   font-size: 14px;
   background-color: var(--base-color);
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(204, 204, 204);
+  border-radius: 0.4rem;
   border-image: initial;
   margin: 10px auto;
   padding: 6px;
