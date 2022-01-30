@@ -2,6 +2,7 @@
 <script lang="ts" setup>
 import { nanoid } from 'nanoid';
 import { events } from './events';
+import { massStyle } from './MassStyle';
 import { useMapStore } from '/@/store/modules/map';
 const props = defineProps({
   mid: {
@@ -13,36 +14,17 @@ const emit = defineEmits([...events]);
 // global
 const mapStore = useMapStore();
 const $Amap = mapStore.Amap;
-
-const style = [
-  {
-    url: 'https://webapi.amap.com/images/mass/mass0.png',
-    anchor: new $Amap.Pixel(6, 6),
-    size: new $Amap.Size(11, 11),
-    zIndex: 3,
-  },
-  {
-    url: 'https://webapi.amap.com/images/mass/mass1.png',
-    anchor: new $Amap.Pixel(4, 4),
-    size: new $Amap.Size(7, 7),
-    zIndex: 2,
-  },
-  {
-    url: 'https://webapi.amap.com/images/mass/mass2.png',
-    anchor: new $Amap.Pixel(3, 3),
-    size: new $Amap.Size(5, 5),
-    zIndex: 1,
-  },
-];
+let mass: any = new $Amap.MassMarks([], {
+  opacity: 0.8,
+  zIndex: 10,
+  cursor: 'pointer',
+  style: massStyle($Amap),
+});
 const map = mapStore.getMap(props.mid);
 const marker = new $Amap.Marker({ content: ' ', map: map });
 const refresh = (massList: any[]) => {
-  const mass = new $Amap.MassMarks(massList, {
-    opacity: 0.8,
-    zIndex: 111,
-    cursor: 'pointer',
-    style: style,
-  });
+  mass.clear();
+  mass.setData(massList);
   if (map) {
     mass.on('mouseover', function (e: any) {
       marker.setPosition(e.data.lnglat);
