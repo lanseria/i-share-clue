@@ -47,6 +47,9 @@ export const useMapStore = defineStore({
         throw 'map is not ready!';
       }
     },
+    setArea(newAreaList: AreaAmap[]) {
+      this.areaList = newAreaList;
+    },
     addArea(id: string, area: AreaAmap) {
       const idx = this.areaList.findIndex((m) => m.id === id);
       // 如果id存在就替换

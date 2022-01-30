@@ -23,24 +23,30 @@
         </n-dropdown>
         <n-button @click="open()">开始编辑</n-button>
         <n-button @click="close()">结束编辑</n-button>
+        <n-button @click="exportData()">导出数据</n-button>
+        <n-upload ref="NUploadRef" :max="1" :show-file-list="false" :on-change="importData">
+          <n-button>导入数据</n-button>
+        </n-upload>
       </n-space>
     </n-el>
   </teleport>
 </template>
 <script lang="ts" setup>
-import { NButton, NEl, NSpace, NDropdown, NCheckbox } from 'naive-ui';
+import { NButton, NEl, NSpace, NDropdown, NCheckbox, NUpload } from 'naive-ui';
 import { nanoid } from 'nanoid';
-import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, shallowRef, watchEffect } from 'vue';
 import { useMapStore } from '/@/store/modules/map';
 import { validNull } from '/@/utils/Validation';
 import { addOptions, OverlayItem, setPolygonOpt } from './Polygon';
+import { stringDownload } from '/@/api/File';
+import dayjs from 'dayjs';
 const props = defineProps({
   mid: {
     type: String,
     default: nanoid(),
   },
 });
-
+const NUploadRef = shallowRef();
 let currentType = 0;
 // global
 const mapStore = useMapStore();
@@ -71,6 +77,27 @@ watchEffect(() => {
     }
   });
 });
+const exportData = () => {
+  stringDownload(JSON.stringify(mapStore.areaList, undefined, 2), `area-${dayjs().unix()}.json`);
+};
+const importData = async (options: any) => {
+  window.$dialog.warning({
+    title: '警告',
+    content: '你确定替换所有区域记录？',
+    positiveText: '确定',
+    negativeText: '不确定',
+    onPositiveClick: async () => {
+      const text = await options.file.file.text();
+      const data = JSON.parse(text);
+      mapStore.setArea(data);
+      refreshArea();
+      NUploadRef.value.clear();
+    },
+    onNegativeClick: () => {
+      //
+    },
+  });
+};
 const createPolygon = () => {
   polyEditor.close();
   polyEditor.setTarget();

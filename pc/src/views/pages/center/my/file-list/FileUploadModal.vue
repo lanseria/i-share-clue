@@ -28,4 +28,7 @@ const leave = () => {
 const handleFinish = ({ file, event }) => {
   window.$message.success(event.target.response);
 };
+defineExpose({
+  open,
+});
 </script>
