@@ -19,6 +19,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    width: {
+      type: Number,
+      default: 600,
+    },
   },
   emits: ['leave'],
   components: {
@@ -31,7 +35,7 @@ export default defineComponent({
     };
     return {
       bodyStyle: {
-        width: '600px',
+        width: `${props.width}px`,
       },
       showModal,
       handleLeave,

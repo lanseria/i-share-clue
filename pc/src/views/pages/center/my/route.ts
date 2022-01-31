@@ -35,6 +35,14 @@ export const myRoute: AppRouteRecordRaw[] = [
     component: () => import('./project-list/index.vue'),
   },
   {
+    path: 'clue-list',
+    name: 'ClueList',
+    meta: authMetaFunc('挖掘线索', {
+      icon: 'icon-clue',
+    }),
+    component: () => import('./clue-list/index.vue'),
+  },
+  {
     path: 'file-list',
     name: 'FileList',
     meta: authMetaFunc('文件管理', {
@@ -54,7 +62,7 @@ export const myRoute: AppRouteRecordRaw[] = [
     path: 'youtubedl-control',
     name: 'YoutubedlControl',
     meta: authMetaFunc('音视频下载', {
-      icon: 'icon-youtubedl',
+      icon: 'icon-media',
     }),
     component: () => import('./youtubedl/index.vue'),
   },

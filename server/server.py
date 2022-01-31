@@ -1,18 +1,26 @@
+# coding=utf-8
+import imp
 from sanic import Sanic
 from sanic.response import text, html, json, file, stream, HTTPResponse, StreamingHTTPResponse
 from sanic.request import Request
-from sanic_jwt import initialize
+import jieba
+import paddle
+import jieba.posseg as pseg
+from split import split_string
+app = Sanic("jieba")
 
-
-from backend.routes.userRoute.UserRoute import user_route, authenticate, retrieve_user
-app = Sanic("DeepLearnApp")
+@app.listener("before_server_start")
+async def setup_deep_learn(app, loop):
+    paddle.enable_static()
+    jieba.enable_paddle()  # 启动 paddle 模式。0.40版之后开始支持，早期版本不支持
 
 
 @app.get("/")
 async def hello_world(request: Request) -> HTTPResponse:
-    return text('Hello World')
+    return text('Hello Jieba')
 
-initialize(app,
-           authenticate=authenticate,
-           retrieve_user=retrieve_user,
-           url_prefix='/v1/api/auth')
+@app.post('/split')
+async def split(request: Request) -> HTTPResponse:
+    test_sent = str(request.body, 'utf-8')
+    split_arr = split_string(test_sent)
+    return json(split_arr)

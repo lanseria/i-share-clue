@@ -58,6 +58,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           ws: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
+        '/sanic-api': {
+          target: env.VITE_SANIC_BASEURL,
+          changeOrigin: true,
+          ws: true,
+          rewrite: (path) => path.replace(/^\/sanic-api/, ''),
+        },
       },
       hmr: {
         overlay: false,

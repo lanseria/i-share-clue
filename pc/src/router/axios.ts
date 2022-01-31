@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import qs from 'qs';
 import { getUserToken } from '/@/utils/auth';
-import { requestTimeout, requestBaseURL } from './config';
+import { requestTimeout, requestBaseURL, requestSanicURL } from './config';
 import { useUserStore } from '../store/modules/user';
 import { router } from './index';
 
@@ -12,6 +12,11 @@ const commonConfig = {
   validateStatus: (status: number) => {
     return status >= 200 && status <= 600; // 全部允许, 不会遇到错误就停止
   },
+};
+
+const sanicConfig = {
+  ...commonConfig,
+  baseURL: requestSanicURL,
 };
 
 const requestInterceptors = (config: AxiosRequestConfig) => {
@@ -123,6 +128,7 @@ const responseInterceptors = (res: AxiosResponse<any>) => {
 };
 
 const requestWithRes = axios.create(commonConfig);
+const requestWithSanic = axios.create(sanicConfig);
 
 const request = axios.create(commonConfig);
 
@@ -134,4 +140,4 @@ requestWithRes.interceptors.request.use(requestInterceptors, errorInterceptors);
 
 export default request;
 
-export { requestWithRes };
+export { requestWithRes, requestWithSanic };

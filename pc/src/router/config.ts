@@ -1,24 +1,20 @@
-import type { Dictionary } from "lodash";
+import type { Dictionary } from 'lodash';
 
 export const requestTimeout = 30000;
-export const requestBaseURL =
-  (import.meta.env.VITE_USE_MOCK as unknown as string) === "true"
-    ? "/basic-api"
-    : "/api";
+export const requestBaseURL = (import.meta.env.VITE_USE_MOCK as unknown as string) === 'true' ? '/basic-api' : '/api';
+export const requestSanicURL = (import.meta.env.VITE_USE_MOCK as unknown as string) === 'true' ? '/sanic-basic-api' : '/sanic-api';
 
 export const noAuthMeta = {
   keepAlive: false,
-  isAuth: false
+  isAuth: false,
 };
 export const hadAuthMeta = {
   keepAlive: false,
-  isAuth: true
+  isAuth: true,
 };
 
-export const hadAuthMetaFunc = (
-  obj: Dictionary<string | number | boolean>
-) => ({
+export const hadAuthMetaFunc = (obj: Dictionary<string | number | boolean>) => ({
   keepAlive: false,
   isAuth: true,
-  ...obj
+  ...obj,
 });

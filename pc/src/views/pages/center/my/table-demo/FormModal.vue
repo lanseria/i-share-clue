@@ -23,13 +23,13 @@
 import { NForm, NFormItem, NInput, NSpace, NButton } from 'naive-ui';
 import { ref } from 'vue';
 import { CommonDTO } from '/@/types/Common/dto';
-const emit = defineEmits(['load-page']);
 class UserFormDTO extends CommonDTO {
   userId = 0;
   username = '';
   realName = '';
   phone = '';
 }
+const emit = defineEmits(['load-page']);
 // refs
 const ImpModalRef = ref();
 // ref
