@@ -42,11 +42,21 @@
                       text
                       @click="
                         () => {
+                          handleDiff(item);
+                        }
+                      "
+                    >
+                      对比
+                    </n-button>
+                    <n-button
+                      text
+                      @click="
+                        () => {
                           handleCorrect(item);
                         }
                       "
                     >
-                      数据纠正
+                      纠正
                     </n-button>
                     <n-button
                       text
@@ -56,7 +66,7 @@
                         }
                       "
                     >
-                      数据分词
+                      分词
                     </n-button>
                   </n-space>
                 </template>
@@ -81,6 +91,7 @@
   <clue-modal ref="ClueModalRef" @load-page="loadPage()"></clue-modal>
   <correct-modal ref="CorrectModalRef" @load-page="loadPage()"></correct-modal>
   <split-modal ref="SplitModalRef" @load-page="loadPage()"></split-modal>
+  <diff-modal ref="DiffModalRef" @load-page="loadPage()"></diff-modal>
 </template>
 <script lang="ts" setup>
 import { NGi, NGrid, NCard, NH3, NTabs, NTabPane, NEllipsis, NButton, NSpace } from 'naive-ui';
@@ -88,6 +99,7 @@ import { computed, ref } from 'vue';
 import ClueModal from './ClueModal.vue';
 import CorrectModal from './CorrectModal.vue';
 import SplitModal from './SplitModal.vue';
+import DiffModal from './DiffModal.vue';
 import { splitArticleReq } from '/@/api/Server/jieba';
 import { RawClueFormDTO, useClueStore } from '/@/store/modules/clue';
 const clueStore = useClueStore();
@@ -95,11 +107,15 @@ const clueStore = useClueStore();
 const ClueModalRef = ref();
 const CorrectModalRef = ref();
 const SplitModalRef = ref();
+const DiffModalRef = ref();
 const rawClueList = computed(() => {
   return clueStore.rawClueList;
 });
 const handleAddClue = () => {
   ClueModalRef.value.open();
+};
+const handleDiff = (row: RawClueFormDTO) => {
+  DiffModalRef.value.diff(row);
 };
 const handleCorrect = (row: RawClueFormDTO) => {
   CorrectModalRef.value.correct(row);

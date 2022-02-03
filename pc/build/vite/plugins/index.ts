@@ -19,7 +19,9 @@ export function createVitePlugins(env: Record<string, string>, command: string, 
   let prodMock = true;
   const vitePlugins: (Plugin | Plugin[])[] = [
     // have to
-    vue(),
+    vue({
+      customElement: 'Diff',
+    }),
     // have to
     vueJsx(),
     html({
