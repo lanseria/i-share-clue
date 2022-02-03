@@ -93,9 +93,9 @@ export class TimeFormDTO extends CommonDTO {
 export class EventFormDTO extends CommonDTO {
   metadata = '';
   id = '';
-  user = '';
+  thing = '';
   place = '';
-  time: number | null = null;
+  time = '';
   constructor(row?: any) {
     super();
     this.id = row?.id || nanoid();
@@ -157,7 +157,7 @@ export const useClueStore = defineStore({
       }
       setPlaceList(this.placeList);
     },
-    delPlace(row: ThingFormDTO) {
+    delPlace(row: PlaceFormDTO) {
       this.placeList = this.placeList.filter((m) => m.id !== row.id);
       setPlaceList(this.placeList);
     },

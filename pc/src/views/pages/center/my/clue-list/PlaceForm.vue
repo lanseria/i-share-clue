@@ -15,7 +15,7 @@
       </Amap>
     </div>
     <n-form-item>
-      <n-button @click="handleSubPlace()">提交</n-button>
+      <n-button @click="handleSub()">提交</n-button>
     </n-form-item>
   </n-form>
 </template>
@@ -90,7 +90,7 @@ const search = () => {
     );
   });
 };
-const handleSubPlace = () => {
+const handleSub = () => {
   clueStore.addPlace(modelPlace.value);
   window.$message.success('保存成功');
   init();

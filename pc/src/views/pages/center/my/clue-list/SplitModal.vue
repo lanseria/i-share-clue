@@ -4,7 +4,10 @@
       <n-gi path="splitdata" label="数据分词">
         <n-scrollbar style="max-height: 500px" @contextmenu="handleContextMenu">
           <n-el tag="p">
-            <span :class="dotType(item.flag)" :title="item.flag" v-for="(item, idx) in modelRef.splitdata" :key="idx">{{ item.word }}</span>
+            <template v-for="(item, idx) in modelRef.splitdata" :key="idx">
+              <br v-if="item.flag === 'TIME'" />
+              <span :class="dotType(item.flag)" :title="item.flag">{{ item.word }}</span>
+            </template>
           </n-el>
         </n-scrollbar>
         <n-dropdown
@@ -24,7 +27,7 @@
         <thing-form v-show="value === 'thing'" ref="ThingFormRef"></thing-form>
         <place-form v-show="value === 'place'" ref="PlaceFormRef"></place-form>
         <time-form v-show="value === 'time'" ref="TimeFormRef"></time-form>
-        <!-- <template v-if="value === 'event'"></template> -->
+        <event-form v-show="value === 'event'" ref="EventFormRef"></event-form>
       </n-gi>
     </n-grid>
     <template #footer>
@@ -42,6 +45,7 @@ import { RawClueFormDTO, useClueStore } from '/@/store/modules/clue';
 import ThingForm from './ThingForm.vue';
 import PlaceForm from './PlaceForm.vue';
 import TimeForm from './TimeForm.vue';
+import EventForm from './EventForm.vue';
 const emit = defineEmits(['load-page']);
 const clueStore = useClueStore();
 // refs
@@ -90,6 +94,7 @@ const modelRef = ref(new RawClueFormDTO());
 const ThingFormRef = ref();
 const PlaceFormRef = ref();
 const TimeFormRef = ref();
+const EventFormRef = ref();
 watchEffect(() => {
   if (ThingFormRef.value || PlaceFormRef.value) {
     if (value.value === 'thing') {
@@ -100,6 +105,9 @@ watchEffect(() => {
     }
     if (value.value === 'time') {
       TimeFormRef.value.init();
+    }
+    if (value.value === 'event') {
+      EventFormRef.value.init();
     }
   }
 });

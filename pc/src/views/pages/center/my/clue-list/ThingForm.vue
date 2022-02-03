@@ -25,7 +25,7 @@
       <n-date-picker v-model:value="modelThing.end" type="date" clearable />
     </n-form-item>
     <n-form-item>
-      <n-button @click="handleSubThing()">提交</n-button>
+      <n-button @click="handleSub()">提交</n-button>
     </n-form-item>
   </n-form>
 </template>
@@ -39,7 +39,7 @@ const clueStore = useClueStore();
 
 const modelThing = ref(new ThingFormDTO());
 
-const handleSubThing = () => {
+const handleSub = () => {
   clueStore.addThing(modelThing.value);
   window.$message.success('保存成功');
   init();

@@ -79,10 +79,18 @@
         <div class="green grid-box">
           <n-h3 prefix="bar" type="info">找到的线索</n-h3>
           <n-tabs type="line">
-            <n-tab-pane name="person" tab="人物">人物</n-tab-pane>
-            <n-tab-pane name="place" tab="地点">地点</n-tab-pane>
-            <n-tab-pane name="time" tab="时间">时间</n-tab-pane>
-            <n-tab-pane name="event" tab="事件">事件</n-tab-pane>
+            <n-tab-pane name="person" tab="人物">
+              <thing-pane></thing-pane>
+            </n-tab-pane>
+            <n-tab-pane name="place" tab="地点">
+              <place-pane></place-pane>
+            </n-tab-pane>
+            <n-tab-pane name="time" tab="时间">
+              <time-pane></time-pane>
+            </n-tab-pane>
+            <n-tab-pane name="event" tab="事件">
+              <event-pane></event-pane>
+            </n-tab-pane>
           </n-tabs>
         </div>
       </n-gi>
@@ -100,6 +108,10 @@ import ClueModal from './ClueModal.vue';
 import CorrectModal from './CorrectModal.vue';
 import SplitModal from './SplitModal.vue';
 import DiffModal from './DiffModal.vue';
+import ThingPane from './ThingPane.vue';
+import PlacePane from './PlacePane.vue';
+import TimePane from './TimePane.vue';
+import EventPane from './EventPane.vue';
 import { splitArticleReq } from '/@/api/Server/jieba';
 import { RawClueFormDTO, useClueStore } from '/@/store/modules/clue';
 const clueStore = useClueStore();
