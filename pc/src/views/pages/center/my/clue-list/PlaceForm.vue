@@ -60,7 +60,6 @@ const clearSearch = () => {
     _clearMarker(m);
   });
   markers = [];
-  console.log(markers);
 };
 const search = () => {
   placeSearch.search(modelPlace.value.metadata, (status: string, result: any) => {
@@ -76,7 +75,6 @@ const search = () => {
       markers[i].on('click', (e: any) => {
         const title = poi.name;
         const position = poi.location;
-        console.log(title, position);
         modelPlace.value.name = title;
         modelPlace.value.location = new ProjectLocation(position);
       });
@@ -100,7 +98,7 @@ const init = () => {
     lnglat: [m.location!.lng, m.location!.lat],
     name: m.name,
     id: m.id,
-    style: 1,
+    style: 0,
   }));
   MassMakerRef.value.refresh(massList);
   modelPlace.value = new PlaceFormDTO();
