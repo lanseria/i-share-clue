@@ -40,6 +40,7 @@ import { validNull } from '/@/utils/Validation';
 import { addOptions, OverlayItem, setPolygonOpt } from './Polygon';
 import { stringDownload } from '/@/api/File';
 import dayjs from 'dayjs';
+import axios from 'axios';
 const props = defineProps({
   mid: {
     type: String,
@@ -59,6 +60,7 @@ const overlayGroups = addOptions.map((m) => {
   map.add(overlayGroup);
   return overlayGroup;
 });
+let geojsonOverlayGroup = null;
 overlayGroupList.value = overlayGroups.map((m, i) => {
   return {
     name: addOptions[i].label,
@@ -166,8 +168,40 @@ const refreshArea = () => {
     addPolygon(m);
   });
 };
+const loadArea = async () => {
+  const res = await axios.get('/json/330100_full.json');
+  geojsonOverlayGroup = new $Amap.GeoJSON({
+    geoJSON: res.data,
+    // 还可以自定义getMarker和getPolyline
+    getPolygon: function (geojson, lnglats) {
+      // 计算面积
+      const area = $Amap.GeometryUtil.ringArea(lnglats[0]);
+
+      const geoPolygon = new $Amap.Polygon({
+        path: lnglats,
+        strokeOpacity: 0.3,
+        strokeColor: '#ffffff',
+        fillOpacity: 0.3,
+        fillColor: '#ccebc5',
+      });
+      geoPolygon.on('mouseover', () => {
+        geoPolygon.setOptions({
+          fillColor: '#7bccc4',
+        });
+      });
+      geoPolygon.on('mouseout', () => {
+        geoPolygon.setOptions({
+          fillColor: '#ccebc5',
+        });
+      });
+      return geoPolygon;
+    },
+  });
+  map.add(geojsonOverlayGroup);
+};
 onMounted(() => {
   refreshArea();
+  loadArea();
   polyEditor.on('add', (data: any) => {
     const polygon = data.target;
     const path = polygon.getPath();
@@ -191,6 +225,7 @@ onMounted(() => {
 });
 onUnmounted(() => {
   overlayClear();
+  geojsonOverlayGroup.clearOverlays();
 });
 defineExpose({
   createPolygon,

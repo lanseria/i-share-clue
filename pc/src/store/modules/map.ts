@@ -17,7 +17,7 @@ const AMapClass = await AMapLoader.load({
   //首次调用 load
   key: import.meta.env.VITE_AMAP_KEY, //首次load key为必填
   version: '2.0',
-  plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.PlaceSearch', 'AMap.Geolocation', 'AMap.PolygonEditor'],
+  plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.PlaceSearch', 'AMap.Geolocation', 'AMap.PolygonEditor', 'AMap.GeoJSON'],
 });
 const mapRegistry: Map<string, IObj> = new Map();
 export const useMapStore = defineStore({
