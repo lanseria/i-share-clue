@@ -58,6 +58,10 @@ const categoryOptions = [
     label: '2022年春节免费停车位',
     value: '2',
   },
+  {
+    label: '2022年春节千岛湖旅游',
+    value: '3',
+  },
 ];
 const regionOptions = [
   {

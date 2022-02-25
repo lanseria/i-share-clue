@@ -1,6 +1,6 @@
 <template>
   <div class="map-wrap" id="dashboard-map">
-    <Amap :mid="DASHBOARD_MAP" @rightclick="clickHandler" @location-complete="loadPage()">
+    <Amap :mid="DASHBOARD_MAP" @rightclick="handleContextMenu" @location-complete="loadPage()">
       <PlaceSearch :mid="DASHBOARD_MAP"></PlaceSearch>
       <RightDropdown ref="RightDropdownRef" @add-msg="handleAddMsg" @add-area="handleAddArea" @refresh="loadPage()"></RightDropdown>
       <MassMarker ref="MassMakerRef" :mid="DASHBOARD_MAP" @click="handleMassClick"></MassMarker>
@@ -44,10 +44,13 @@ const InfoWindowRef = shallowRef();
 const MassMakerRef = shallowRef();
 const PolygonRef = shallowRef();
 // const handleMapClick = () => {};
-const clickHandler = (e: any) => {
+const handleContextMenu = (e: any) => {
+  (e.originEvent as MouseEvent).stopImmediatePropagation();
+  e.originEvent.preventDefault();
   RightDropdownRef.value.close();
   nextTick().then(() => {
-    RightDropdownRef.value.open(e);
+    console.log(e);
+    RightDropdownRef.value.open(e.originEvent);
     lnglat = new LngLat(e.lnglat);
   });
 };

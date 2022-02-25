@@ -1,5 +1,4 @@
 # coding=utf-8
-import imp
 from sanic import Sanic
 from sanic.response import text, html, json, file, stream, HTTPResponse, StreamingHTTPResponse
 from sanic.request import Request

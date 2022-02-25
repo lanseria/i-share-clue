@@ -33,9 +33,9 @@ const showDropdownRef = ref(false);
 const onClickoutside = (e: MouseEvent) => {
   showDropdownRef.value = false;
 };
-const open = (e: any) => {
-  x.value = e.originEvent.clientX;
-  y.value = e.originEvent.clientY;
+const open = (e: MouseEvent) => {
+  x.value = e.clientX;
+  y.value = e.clientY;
   showDropdownRef.value = true;
 };
 const close = () => {

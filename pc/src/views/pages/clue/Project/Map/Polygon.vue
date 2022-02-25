@@ -28,11 +28,16 @@
           <n-button>导入数据</n-button>
         </n-upload>
       </n-space>
+      <n-space style="margin-top: 6px">
+        <n-switch v-model:value="activeArea">
+          <template #icon>🤔</template>
+        </n-switch>
+      </n-space>
     </n-el>
   </teleport>
 </template>
 <script lang="ts" setup>
-import { NButton, NEl, NSpace, NDropdown, NCheckbox, NUpload } from 'naive-ui';
+import { NButton, NEl, NSpace, NDropdown, NCheckbox, NUpload, NSwitch } from 'naive-ui';
 import { nanoid } from 'nanoid';
 import { onMounted, onUnmounted, ref, shallowRef, watchEffect } from 'vue';
 import { useMapStore } from '/@/store/modules/map';
@@ -60,7 +65,7 @@ const overlayGroups = addOptions.map((m) => {
   map.add(overlayGroup);
   return overlayGroup;
 });
-let geojsonOverlayGroup = null;
+let geojsonOverlayGroup: any = null;
 overlayGroupList.value = overlayGroups.map((m, i) => {
   return {
     name: addOptions[i].label,
@@ -68,7 +73,13 @@ overlayGroupList.value = overlayGroups.map((m, i) => {
     show: true,
   };
 });
+const activeArea = ref(true);
 watchEffect(() => {
+  if (activeArea.value) {
+    geojsonOverlayGroup && geojsonOverlayGroup.show();
+  } else {
+    geojsonOverlayGroup && geojsonOverlayGroup.hide();
+  }
   overlayGroups.forEach((m, i) => {
     if (m) {
       if (overlayGroupList.value[i].show) {
@@ -169,11 +180,11 @@ const refreshArea = () => {
   });
 };
 const loadArea = async () => {
-  const res = await axios.get('/json/330100_full.json');
+  const res: any = await axios.get('/json/330100_full.json');
   geojsonOverlayGroup = new $Amap.GeoJSON({
     geoJSON: res.data,
     // 还可以自定义getMarker和getPolyline
-    getPolygon: function (geojson, lnglats) {
+    getPolygon: function (gj: any, lnglats: any) {
       // 计算面积
       const area = $Amap.GeometryUtil.ringArea(lnglats[0]);
 
